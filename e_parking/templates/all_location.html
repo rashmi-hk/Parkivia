@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map with Fixed Locations</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkrNAXjMGeM-HukizFu88BrgtU7DomJqI&libraries=places"></script>
+    <script>
+        var fixedLocations = {{ fixed_locations|safe }};
+
+        function initMap() {
+            var mapOptions = {
+                center: {lat: 12.455558657572665, lng: 75.94912661758033}, // Default center
+                zoom: 10 // Default zoom level
+            };
+
+            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            fixedLocations.forEach(function(location) {
+                var markerColor = (location.title === "Me") ? "green" : "red";
+                console.log("markerColor",markerColor)
+
+                var marker = new google.maps.Marker({
+                    position: {lat: location.lat, lng: location.lng},
+                    map: map,
+                    title: location.title,
+                    icon: {
+                        url: `http://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`
+                    }
+                });
+            });
+        }
+    </script>
+</head>
+<body onload="initMap()">
+    <div id="map" style="width: 100%; height: 500px;"></div>
+</body>
+</html>

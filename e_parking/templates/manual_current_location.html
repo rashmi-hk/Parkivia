@@ -1,46 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Enter Current Location</title>
-    <script>
-
-         function SendAddress() {
-            // Construct the URL for the GET endpoint with latitude and longitude as query parameters
-
-            var address = document.getElementById("address").value;
-             console.log("address****",address)
-             var url = '/gmap?address=' + encodeURIComponent(address);
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                // Check if the response was successful
-                if (response.ok) {
-                    // Refresh the page to update the cart items
-                    window.location.reload();
-                } else {
-                    // Handle unsuccessful response if needed
-                    console.error('Error In user address:', response.statusText);
-                }
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error('Error In user address:', error);
-            });
-        }
-
-    </script>
+    <title>Address to GMAT API</title>
 </head>
-<body> <h1>Enter Your Address</h1>
+<body>
+    <h1>Enter Your Address</h1>
+    <form id="productForm" method="get" action="{% url 'gmap' %}">
+        <label for="address">Enter the address:</label>
+        <input type="text" id="address" name="address" placeholder="Enter the address" required>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
 
-    <label for="address">Enter the address:</label>
-    <input type="text" id="address" placeholder="Enter the address">
-    <br>
+    <script>
+        function submitProductForm(productId) {
+            // Get the address from the input field
+            const addressInput = document.getElementById('address');
+            const address = addressInput.value;
 
-    <button onclick="SendAddress()">Convert and Submit</button>
+            // Append the address as a query parameter to the form's action URL
+            const form = document.getElementById('productForm');
+            form.action = form.action + '?address=' + encodeURIComponent(address);
+
+            // Submit the form
+            form.submit();
+        }
+    </script>
 </body>
 </html>

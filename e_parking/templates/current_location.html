@@ -1,55 +1,115 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Get Current Location</title>-->
+<!--    <script>-->
+<!--        function getCurrentLocationAndCallGet() {-->
+<!--            if ("geolocation" in navigator) {-->
+<!--                navigator.geolocation.getCurrentPosition(function(position) {-->
+<!--                    var latitude = position.coords.latitude;-->
+<!--                    var longitude = position.coords.longitude;-->
+
+<!--                    const url = `${'gmap'}?latitude=${latitude}&longitude=${longitude}`;-->
+
+<!--                    // Make the GET request using the Fetch API-->
+<!--                    fetch(url)-->
+<!--                     .then(response => {-->
+<!--                    // Check if the response was successful-->
+<!--                        if (response.ok) {-->
+<!--                            // Refresh the page to update the cart items-->
+
+<!--                        } else {-->
+<!--                            // Handle unsuccessful response if needed-->
+<!--                            console.error('Error in current location:', response.statusText);-->
+<!--                        }-->
+<!--                        })-->
+<!--                        .catch(error => {-->
+<!--                            // Handle any errors-->
+<!--                            console.error('Error in current location:', error);-->
+<!--                        });-->
+
+
+
+<!--                }, function(error) {-->
+<!--                    // Handle geolocation error-->
+<!--                    console.error(error.message);-->
+<!--                });-->
+<!--            } else {-->
+<!--                alert("Geolocation is not available in this browser.");-->
+<!--            }-->
+<!--        }-->
+
+
+
+<!--         function redirectToFindLocationPage() {-->
+<!--            window.location.href = "/manuall_location"; // Redirect to your find location page-->
+<!--        }-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Get Current Location</h1>-->
+<!--    <p>Click the button to allow the browser to access your current location:</p>-->
+<!--    <button onclick="getCurrentLocationAndCallGet()">Allow Current Location</button>-->
+<!--    <button onclick="redirectToFindLocationPage()">Dont Want To Share Current Location</button>-->
+<!--    <p id="location"></p>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Get Current Location</title>
-    <script>
-        function getCurrentLocationAndCallGet() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var latitude = position.coords.latitude;
-                    var longitude = position.coords.longitude;
-
-                    // Call the get method with current location
-                    callGetMethodWithLocation(latitude, longitude);
-
-                    // Display the location information
-                    document.getElementById("location").innerText = "Latitude: " + latitude + ", Longitude: " + longitude;
-                }, function(error) {
-                    // Handle geolocation error
-                    console.error(error.message);
-                });
-            } else {
-                alert("Geolocation is not available in this browser.");
-            }
-        }
-
-        function callGetMethodWithLocation(latitude, longitude) {
-            // Construct the URL for the GET endpoint with latitude and longitude as query parameters
-            var url = "/your-get-endpoint?lat=" + latitude + "&lng=" + longitude;
-
-            // Make a fetch request to the URL
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    // Handle the response data if needed
-                    console.log(data);
-                })
-                .catch(error => {
-                    // Handle errors if needed
-                    console.error(error);
-                });
-        }
-
-         function redirectToFindLocationPage() {
-            window.location.href = "/manuall_location"; // Redirect to your find location page
-        }
-    </script>
+    <title>Location Form</title>
+    <!-- Include any necessary libraries or stylesheets -->
 </head>
 <body>
-    <h1>Get Current Location</h1>
-    <p>Click the button to allow the browser to access your current location:</p>
-    <button onclick="getCurrentLocationAndCallGet()">Allow Current Location</button>
-    <button onclick="redirectToFindLocationPage()">Dont Want To Share Current Location</button>
-    <p id="location"></p>
+    <form id="productForm" method="get" action="{% url 'all_location' %}">
+        <h1>Get Current Location</h1>
+        <p>Click the button to allow the browser to access your current location:</p>
+        <input type="hidden" id="latitudeInput" name="latitude">
+        <input type="hidden" id="longitudeInput" name="longitude">
+        <button id="allowLocationBtn">Allow Current Location</button>
+    </form>
+
+    <form id="denyCurrentLocation" method="get" action="{% url 'manuall_location' %}">
+        <button id="denyLocationBtn">Don't Want To Share Current Location</button>
+    </form>
+
+    <script>
+        function submitProductForm(form, latitude, longitude) {
+            // Update the hidden input values
+            document.getElementById('latitudeInput').value = latitude;
+            document.getElementById('longitudeInput').value = longitude;
+
+            // Submit the form
+            form.submit();
+        }
+
+        document.getElementById("allowLocationBtn").addEventListener("click", function() {
+            if ("geolocation" in navigator) {
+                console.log("Inside current location");
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        var latitude = position.coords.latitude;
+                        var longitude = position.coords.longitude;
+
+                        console.log("latitude", latitude);
+                        console.log("longitude", longitude);
+
+                        var form = document.getElementById('productForm');
+                        submitProductForm(form, latitude, longitude);
+                    },
+                    function(error) {
+                        console.log("Error getting geolocation:", error);
+                    }
+                );
+            } else {
+                console.log("Geolocation not available");
+            }
+        });
+
+        document.getElementById("denyLocationBtn").addEventListener("click", function() {
+            var form = document.getElementById('denyCurrentLocation');
+            form.submit();
+        });
+    </script>
 </body>
 </html>

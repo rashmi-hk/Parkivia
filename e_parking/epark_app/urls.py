@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from .api.views.home import HomeAPIList
-from .api.views.geo_map import GMapsGeocoding,CurrentLocation,ManualCurrentLocation
+from .api.views.geo_map import GMapsGeocoding,CurrentLocation,ManualCurrentLocation,AllLocationGeocoding
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -12,6 +12,7 @@ urlpatterns = [
     path('home', HomeAPIList.as_view() , name='home'),
     path('current_location', CurrentLocation.as_view() , name='current_location'),
     path('manuall_location', ManualCurrentLocation.as_view() , name='manuall_location'),
+    path('all_location', AllLocationGeocoding.as_view() , name='all_location'),
 
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('admin_utility_logout/', LogoutView.as_view(next_page='admin_utility_login'), name='admin_utility_logout'),

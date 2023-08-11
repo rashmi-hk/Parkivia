@@ -4,35 +4,9 @@
     <title>Directions Map</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkrNAXjMGeM-HukizFu88BrgtU7DomJqI"></script>
     <script>
-
-         function getCurrentLocation() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var latitude = position.coords.latitude;
-                    var longitude = position.coords.longitude;
-
-                    // Display the location information
-                    document.getElementById("location").innerText = "Latitude: " + latitude + ", Longitude: " + longitude;
-                });
-            } else {
-                alert("Geolocation is not available in this browser.");
-            }
-        }
-
         function initMap() {
-            var latitude = 0
-             var longitude = 0
-             if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var latitude = position.coords.latitude;
-                    var longitude = position.coords.longitude;
-
-                    // Display the location information
-
-                })}
-
             var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: latitude, lng: longitude},
+                center: {lat: 12.417020733478072, lng: 76.60470661806708},
                 zoom: 8
             });
 
@@ -63,62 +37,9 @@
                 });
             }
        }
-
-       var map;
-
-    function getCurrentLocationAndCallGet() {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-
-                // Call the get method with current location
-                callGetMethodWithLocation(latitude, longitude);
-
-                // Display the location information
-                document.getElementById("location").innerText = "Latitude: " + latitude + ", Longitude: " + longitude;
-            });
-        } else {
-            alert("Geolocation is not available in this browser.");
-        }
-    }
-
-    function callGetMethodWithLocation(latitude, longitude) {
-        // Construct the URL for the GET endpoint with latitude and longitude as query parameters
-        var url = "/gmap?lat=" + latitude + "&lng=" + longitude;
-
-        // Make a fetch request to the URL
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response data if needed
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle errors if needed
-                console.error(error);
-            });
-    }
-
-    function handleManualLocationSubmit() {
-        var manualLatitude = document.getElementById("manualLatitude").value;
-        var manualLongitude = document.getElementById("manualLongitude").value;
-
-        // Call the get method with manually entered location
-        callGetMethodWithLocation(manualLatitude, manualLongitude);
-    }
-
-
-
     </script>
 </head>
 <body onload="initMap()">
     <div id="map" style="height: 500px;"></div>
-    <button onclick="getCurrentLocationAndCallGet()">Get Current Location and Call Get Method</button>
-    <p>OR</p>
-    <input type="text" id="manualLatitude" placeholder="Enter Latitude">
-    <input type="text" id="manualLongitude" placeholder="Enter Longitude">
-    <button onclick="handleManualLocationSubmit()">Submit Manual Location</button>
 </body>
-
 </html>

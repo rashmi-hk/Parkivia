@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a8cbf2ee-2300-41e3-bd54-eeeffd54947e" name="Changes" comment="" />
+    <list default="true" id="a8cbf2ee-2300-41e3-bd54-eeeffd54947e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_parking/templates/all_location.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_parking/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/geo_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/geo_map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/current_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/current_location.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/direction.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/direction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/manual_current_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/manual_current_location.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,10 +25,14 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2Tn82ZozUyydFLj3HidUV3vnXMK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -28,6 +42,7 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "last_opened_file_path": "/home/rashmihk/perfect_e_park/e_parking/templates",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
@@ -47,5 +62,16 @@
       <updated>1691667278298</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
