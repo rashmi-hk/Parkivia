@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Current Location</title>
+    <script>
+        function getCurrentLocationAndCallGet() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+
+                    // Call the get method with current location
+                    callGetMethodWithLocation(latitude, longitude);
+
+                    // Display the location information
+                    document.getElementById("location").innerText = "Latitude: " + latitude + ", Longitude: " + longitude;
+                }, function(error) {
+                    // Handle geolocation error
+                    console.error(error.message);
+                });
+            } else {
+                alert("Geolocation is not available in this browser.");
+            }
+        }
+
+        function callGetMethodWithLocation(latitude, longitude) {
+            // Construct the URL for the GET endpoint with latitude and longitude as query parameters
+            var url = "/your-get-endpoint?lat=" + latitude + "&lng=" + longitude;
+
+            // Make a fetch request to the URL
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data if needed
+                    console.log(data);
+                })
+                .catch(error => {
+                    // Handle errors if needed
+                    console.error(error);
+                });
+        }
+
+         function redirectToFindLocationPage() {
+            window.location.href = "/manuall_location"; // Redirect to your find location page
+        }
+    </script>
+</head>
+<body>
+    <h1>Get Current Location</h1>
+    <p>Click the button to allow the browser to access your current location:</p>
+    <button onclick="getCurrentLocationAndCallGet()">Allow Current Location</button>
+    <button onclick="redirectToFindLocationPage()">Dont Want To Share Current Location</button>
+    <p id="location"></p>
+</body>
+</html>

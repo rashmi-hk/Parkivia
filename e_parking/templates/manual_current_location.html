@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Current Location</title>
+    <script>
+
+         function SendAddress() {
+            // Construct the URL for the GET endpoint with latitude and longitude as query parameters
+
+            var address = document.getElementById("address").value;
+             console.log("address****",address)
+             var url = '/gmap?address=' + encodeURIComponent(address);
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error In user address:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error In user address:', error);
+            });
+        }
+
+    </script>
+</head>
+<body> <h1>Enter Your Address</h1>
+
+    <label for="address">Enter the address:</label>
+    <input type="text" id="address" placeholder="Enter the address">
+    <br>
+
+    <button onclick="SendAddress()">Convert and Submit</button>
+</body>
+</html>
