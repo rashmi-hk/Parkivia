@@ -6,11 +6,20 @@
     <script>
         var fixedLocations = {{ fixed_locations|safe }};
 
+
         function initMap() {
-            var mapOptions = {
-                center: {lat: 12.455558657572665, lng: 75.94912661758033}, // Default center
-                zoom: 10 // Default zoom level
-            };
+            console.log("Inside init *********")
+            var centerLocation = fixedLocations.find(function(location) {
+
+                    return location.title === "Me";
+            });
+            console.log("centerLocation",centerLocation)
+            if (centerLocation)
+
+                var mapOptions = {
+                    center: {lat: centerLocation.lat, lng: centerLocation.lng}, // Default center
+                    zoom: 10 // Default zoom level
+                };
 
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 

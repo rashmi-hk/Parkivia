@@ -1,78 +1,48 @@
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--    <title>Get Current Location</title>-->
-<!--    <script>-->
-<!--        function getCurrentLocationAndCallGet() {-->
-<!--            if ("geolocation" in navigator) {-->
-<!--                navigator.geolocation.getCurrentPosition(function(position) {-->
-<!--                    var latitude = position.coords.latitude;-->
-<!--                    var longitude = position.coords.longitude;-->
 
-<!--                    const url = `${'gmap'}?latitude=${latitude}&longitude=${longitude}`;-->
-
-<!--                    // Make the GET request using the Fetch API-->
-<!--                    fetch(url)-->
-<!--                     .then(response => {-->
-<!--                    // Check if the response was successful-->
-<!--                        if (response.ok) {-->
-<!--                            // Refresh the page to update the cart items-->
-
-<!--                        } else {-->
-<!--                            // Handle unsuccessful response if needed-->
-<!--                            console.error('Error in current location:', response.statusText);-->
-<!--                        }-->
-<!--                        })-->
-<!--                        .catch(error => {-->
-<!--                            // Handle any errors-->
-<!--                            console.error('Error in current location:', error);-->
-<!--                        });-->
-
-
-
-<!--                }, function(error) {-->
-<!--                    // Handle geolocation error-->
-<!--                    console.error(error.message);-->
-<!--                });-->
-<!--            } else {-->
-<!--                alert("Geolocation is not available in this browser.");-->
-<!--            }-->
-<!--        }-->
-
-
-
-<!--         function redirectToFindLocationPage() {-->
-<!--            window.location.href = "/manuall_location"; // Redirect to your find location page-->
-<!--        }-->
-<!--    </script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <h1>Get Current Location</h1>-->
-<!--    <p>Click the button to allow the browser to access your current location:</p>-->
-<!--    <button onclick="getCurrentLocationAndCallGet()">Allow Current Location</button>-->
-<!--    <button onclick="redirectToFindLocationPage()">Dont Want To Share Current Location</button>-->
-<!--    <p id="location"></p>-->
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html>
 <head>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <title>Location Form</title>
     <!-- Include any necessary libraries or stylesheets -->
+     <style>
+        /* Center the card on the screen */
+       .center-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Ensures the card is at least the height of the viewport */
+        }
+         .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('/static/images/strip_prking1.jpg') center/cover no-repeat, rgba(0, 0, 0, 0.5);
+            transition: opacity .15s linear;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-    <form id="productForm" method="get" action="{% url 'all_location' %}">
-        <h1>Get Current Location</h1>
-        <p>Click the button to allow the browser to access your current location:</p>
-        <input type="hidden" id="latitudeInput" name="latitude">
-        <input type="hidden" id="longitudeInput" name="longitude">
-        <button id="allowLocationBtn">Allow Current Location</button>
-    </form>
-
-    <form id="denyCurrentLocation" method="get" action="{% url 'manuall_location' %}">
-        <button id="denyLocationBtn">Don't Want To Share Current Location</button>
-    </form>
-
+    <div class="overlay">
+        <div class="card p-5">
+            <h1 class="card-title">Get Current Location</h1>
+            <p class="card-text">Click the button to allow the browser to access your current location:</p>
+            <form id="productForm" method="get" action="{% url 'all_location' %}">
+                <input type="hidden" id="latitudeInput" name="latitude">
+                <input type="hidden" id="longitudeInput" name="longitude">
+                <button id="allowLocationBtn" class="btn btn-primary">Allow Current Location</button>
+            </form>
+            <form id="denyCurrentLocation" method="get" action="{% url 'manuall_location' %}" class="mt-2">
+                <button id="denyLocationBtn" class="btn btn-primary">Don't Want To Share Current Location</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function submitProductForm(form, latitude, longitude) {
             // Update the hidden input values

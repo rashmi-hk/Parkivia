@@ -2,6 +2,9 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from .api.views.home import HomeAPIList
+from .api.views.admin_location import AdminLocationAPIList
+from .api.views.admin_signup import AdminUtilityAPIList
+from .api.views.admin_signin import AdminUtilityLoginAPIList
 from .api.views.geo_map import GMapsGeocoding,CurrentLocation,ManualCurrentLocation,AllLocationGeocoding
 
 from django.conf import settings
@@ -10,6 +13,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('home', HomeAPIList.as_view() , name='home'),
+    path('admin_location', AdminLocationAPIList.as_view() , name='admin_location'),
+    path('admin_signup', AdminUtilityAPIList.as_view() , name='admin_signup'),
+    path('admin_signin', AdminUtilityLoginAPIList.as_view() , name='admin_signin'),
     path('current_location', CurrentLocation.as_view() , name='current_location'),
     path('manuall_location', ManualCurrentLocation.as_view() , name='manuall_location'),
     path('all_location', AllLocationGeocoding.as_view() , name='all_location'),
