@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends 'admin_index.html' %}
+{% extends 'staff_index.html' %}
 {% load humanize %}
 {% load mathfilters %}
 {% load static %}
@@ -32,6 +32,13 @@
 
         }
 
+          .footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            position:fixed;
+            bottom: 0;
+            width:100%;
     </style>
 </head>
 <body>
@@ -52,16 +59,28 @@
     <table class="table table-success table-striped">
         <thead class="table-dark">
             <tr>
-                <th>Name</th>
-                <th>Address</th>
+                <th>Slot</th>
+                <th>Check_in_time</th>
+                <th>Check_out_time</th>
+                <th>Vehicle_number</th>
+                <th>Vehicle_type</th>
+
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for location in locations %}
+            {% for slot in slot_detail %}
 
                 <tr>
-                    <td>{{ location.name }}</td>
-                    <td>{{ location.address }}</td>
+                    <td>{{ slot.slot }}</td>
+                    <td>{{ slot.check_in_time }}</td>
+                    <td>{{ slot.check_out_time }}</td>
+                    <td>{{ slot.vehicle_number }}</td>
+                    <td>{{ slot.vehicle_type }}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" onclick="deleteLocation('{{ location.location_id }}')">Delete</button>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -93,6 +112,31 @@
         .catch(error => {
             console.error('Error adding data to Location:', error);
         });
+    }
+
+    function deleteLocation(location_id)
+    {
+        console.log("Inside deleteLocation")
+        alert('Are you sure,Are you sure you want to delete the location');
+         fetch('/admin_location', {
+                method: 'DELETE',
+                body: JSON.stringify({ location_id: location_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                    alert('Location deleted successfully');
+                } else {
+                    console.error('Error deleting Location:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting Location:', error);
+            });
+
     }
 </script>
 {% endblock %}

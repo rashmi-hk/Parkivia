@@ -29,6 +29,7 @@ class AdminUtilityAPIList(APIView):
                 password = request.data["password"]
                 username = request.data["username"]
                 email = request.data["email"]
+                print("email ***", email)
                 phone_number = request.data["phone_number"]
                 address = request.data["address"]
                 otp = otp
@@ -46,15 +47,19 @@ class AdminUtilityAPIList(APIView):
                     # Send email with OTP
                     subject = 'Verify your email'
                     message = f'Your OTP is {otp}'
+                    print("message", message)
                     from_email = config('email_from')
                     recipient_list = [email]
+
+                    print("*****", from_email,recipient_list)
                     send_mail(subject, message, from_email, recipient_list)
                     # Redirect to verify page
                     context = {"email": email}
-                    return render(request, 'otp_verification.html', context)
+                    print("context", context)
+                    return render(request, 'admin_verify_otp.html', context)
                 else:
                     error_message = 'CustomUser with this email id already exist,Please try with different one'
-                    return render(request, 'sign_up.html', {'error_message': error_message})
+                    return render(request, 'admin_sign_up.html', {'error_message': error_message})
         except  Exception as e:
             print(f"An unexpected error occurred: {e}")
 

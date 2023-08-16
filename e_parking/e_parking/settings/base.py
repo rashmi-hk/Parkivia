@@ -80,7 +80,8 @@ INSTALLED_APPS = [
 
 ]
 
-LOGIN_URL = '/user_api/'
+LOGIN_URL = 'admin:login'
+
 
 # Media files (user-uploaded files) storage location
 MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'media'))

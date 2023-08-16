@@ -64,12 +64,12 @@ class SlotDetail(models.Model):
     ]
 
     name = models.CharField(max_length=50, unique=True)
-    address = models.CharField(max_length=255)
     capacity = models.PositiveIntegerField(default=0)  # Total capacity of the parking slot
     available_slots = models.PositiveIntegerField(default=0)  # Number of available spots
     vehicle_type = models.CharField(max_length=20,choices=VEHICLE_CHOICES,default='2_wheeler')
     hourly_rate = models.DecimalField(max_digits=8, decimal_places=2,default=0.00)  # Hourly parking rate
     opening_hours = models.CharField(max_length=100,default=0)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
             return self.name
@@ -79,10 +79,21 @@ class SlotDetail(models.Model):
 
 
 class SlotBooking(models.Model):
+    VEHICLE_CHOICES = [
+        ('2_wheeler', '2 Wheeler'),
+        ('4_wheeler', '4 Wheeler'),
+        ('Truck', 'Truck'),
+        ('Bus', 'Bus'),
+        ('Heavy Vehicle', 'Heavy Vehicle')
+
+        # Add more choices as needed
+    ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     slot = models.ForeignKey(SlotDetail, on_delete=models.CASCADE)
     check_in_time = models.DateTimeField(null=True, blank=True)
     check_out_time = models.DateTimeField(null=True, blank=True)
+    vehicle_number = models.CharField(max_length=20)
+    vehicle_type = models.CharField(max_length=20, choices=VEHICLE_CHOICES, default='2_wheeler')
 
     def __str__(self):
         return f"{self.user.username} - {self.slot.name}"
