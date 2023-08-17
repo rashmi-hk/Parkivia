@@ -1,11 +1,12 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
-from .api.views.home import HomeAPIList
-from .api.views.slot_booking import SlotBookingAPIList
+from .api.views.staff_home import HomeAPIList
+from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
 from .api.views.admin_signup import AdminUtilityAPIList
 from .api.views.staff_signin import AdminUtilityLoginAPIList
 from .api.views.verify_otp import VerifyOtpAPIList
+from .api.views.slot_detail import SlotDetailAPIList
 
 from .api.views.geo_map import GMapsGeocoding,CurrentLocation,ManualCurrentLocation,AllLocationGeocoding
 from django.urls import reverse_lazy
@@ -39,7 +40,10 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 
 urlpatterns = [
 
-    path('home', HomeAPIList.as_view() , name='home'),
+    path('staff_home', HomeAPIList.as_view() , name='staff_home'),
+    path('single_slot', SlotBookingFormAPIList.as_view() , name='single_slot'),
+    path('edit_booking', SlotBookingEditAPIList.as_view() , name='edit_booking'),
+    path('slot_detail', SlotDetailAPIList.as_view() , name='slot_detail'),
     path('admin_password_reset/', CustomPasswordResetView.as_view(), name='admin_password_reset'),
     path('admin_password_reset/done/', CustomPasswordResetDoneView.as_view(), name='admin_password_reset_done'),
     path('admin_reset/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(),

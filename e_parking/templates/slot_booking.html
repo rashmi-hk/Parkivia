@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Location Details</title>
     <!-- Bootstrap CSS -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <style>
         .sub-class { padding-top: 10px; margin: 20px; }
@@ -43,101 +44,120 @@
 </head>
 <body>
 {% block content %}
-<div class="container mt-5 hero">
-    <h2 class="text-center">Add New Location</h2>
-    <div class="card p-4 content-hero">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" name="name" required>
-        <label for="address" class="form-label mt-3">Address</label>
-        <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-        <button type="button" class="btn btn-primary mt-3" onclick="addLocation()">Submit</button>
+
+ <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Slot Booking Form</h2>
+                        <form>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="user">User:</label>
+                                <select id="user" name="user" class="form-control">
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.email }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="slot">Slot:</label>
+
+                                <select id="slot" name="slot" class="form-control">
+
+                                    {% for slot in slot_detail_list %}
+                                        <option value="{{ slot.slot_id }}">{{ slot.slot_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="check_in_time">Check-in Time:</label>
+                                <input type="datetime-local" id="check_in_time" name="check_in_time" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="check_out_time">Check-out Time:</label>
+                                <input type="datetime-local" id="check_out_time" name="check_out_time" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vehicle_number">Vehicle Number:</label>
+                                <input type="text" id="vehicle_number" name="vehicle_number" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vehicle_type">Vehicle Type:</label>
+
+                                <select id="vehicle_type" name="vehicle_type" class="form-control">
+                                    {% for choice in all_vehicle_types %}
+                                        <option value="{{ choice }}">{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" onclick="slotBook()" >Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<div class="container mt-5">
-    <h2 class="text-center">Location List</h2>
-    <table class="table table-success table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Slot</th>
-                <th>Check_in_time</th>
-                <th>Check_out_time</th>
-                <th>Vehicle_number</th>
-                <th>Vehicle_type</th>
 
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for slot in slot_detail %}
-
-                <tr>
-                    <td>{{ slot.slot }}</td>
-                    <td>{{ slot.check_in_time }}</td>
-                    <td>{{ slot.check_out_time }}</td>
-                    <td>{{ slot.vehicle_number }}</td>
-                    <td>{{ slot.vehicle_type }}</td>
-                    <td>
-                        <a href="#" class="btn btn-primary">Edit</a>
-                        <button class="btn btn-danger" onclick="deleteLocation('{{ location.location_id }}')">Delete</button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function addLocation() {
-        const name = document.getElementById('name').value;
-        const address = document.getElementById('address').value;
-        // Send a POST request to the admin_location API
-        fetch('/admin_location', {
+
+
+
+
+    function slotBook() {
+        const user = document.getElementById('user').value;
+        const slot = document.getElementById('slot').value;
+        const checkInTime = document.getElementById('check_in_time').value;
+        const checkOutTime = document.getElementById('check_out_time').value;
+        const vehicleNumber = document.getElementById('vehicle_number').value;
+        const vehicleType = document.getElementById('vehicle_type').value;
+
+        // Data to be sent in the POST request
+        const data = {
+            user: user,
+            slot: slot,
+            check_in_time: checkInTime,
+            check_out_time: checkOutTime,
+            vehicle_number: vehicleNumber,
+            vehicle_type: vehicleType
+        };
+
+        // Send a POST request to the API endpoint
+        fetch('/slot_booking', {
             method: 'POST',
-            body: JSON.stringify({ name: name, address: address }),
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
         })
         .then(response => {
+            console.log("response",response)
+            console.log("response",{{response}})
             if (response.ok) {
+                alert('Booking successful!');
                 window.location.reload();
-                alert('Location added successfully');
             } else {
-                console.error('Error adding data to Location:', response.statusText);
+                alert('Booking failed. Please try again.');
             }
         })
         .catch(error => {
-            console.error('Error adding data to Location:', error);
+            console.error('Error:', error);
+            alert('An error occurred while processing the booking.');
         });
     }
 
-    function deleteLocation(location_id)
-    {
-        console.log("Inside deleteLocation")
-        alert('Are you sure,Are you sure you want to delete the location');
-         fetch('/admin_location', {
-                method: 'DELETE',
-                body: JSON.stringify({ location_id: location_id }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                    alert('Location deleted successfully');
-                } else {
-                    console.error('Error deleting Location:', response.statusText);
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting Location:', error);
-            });
-
-    }
 </script>
 {% endblock %}
 </body>

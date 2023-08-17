@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+{% extends 'staff_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <style>
+            input[type="text"], textarea {
+            width: 300px;
+            height: 40px; /* Add this line to set the height */
+            box-sizing: border-box;
+        }
+        .hero { padding-bottom: 40px; margin: 20px; }
+        .card {
+            border: 1px solid #d1d1d1;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+{% block content %}
+
+   <div class="card">
+          <div class="card-body" style="width:40%;height:100%">
+              <h1 class="card-title">Edit Slot</h1>
+              <form id="editForm">
+                  <div class="mb-3">
+                      <label for="slot" class="form-label">Slot:</label>
+
+                      <input type="text" id="slot" name="slot" class="form-control" value="{{ slot }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="check_in_time" class="form-label">Check-in Time:</label>
+                      <input type="text" id="check_in_time" name="check_in_time" class="form-control" value="{{ check_in_time }}" >
+                  </div>
+                  <div class="mb-3">
+                      <label for="check_out_time" class="form-label">Check-out Time:</label>
+                      <input type="datetime-local" id="check_out_time" name="check_out_time" class="form-control" value="{{ check_out_time }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="vehicle_number" class="form-label">Vehicle Number:</label>
+                      <input type="text" id="vehicle_number" name="vehicle_number" class="form-control" value="{{ vehicle_number }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="vehicle_type" class="form-label">Vehicle Type:</label>
+                      <input type="text" id="vehicle_type" name="vehicle_type" class="form-control" value="{{ vehicle_type }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="hourly_amount_type" class="form-label">Amount per hour:</label>
+                      <input type="text" id="hourly_amount_type" name="hourly_amount_type" class="form-control" value="{{ hourly_rate }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="amount_type" class="form-label">Billing Amount:</label>
+                      <input type="text" id="amount_type" name="amount_type" class="form-control" value="{{ amount }}">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+              </form>
+          </div>
+      </div>
+
+    <script>
+        const editForm = document.getElementById('editForm');
+
+        editForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(editForm);
+
+            const editedData = {
+                slot: formData.get('slot'),
+                check_in_time: formData.get('check_in_time'),
+                check_out_time: formData.get('check_out_time'),
+                vehicle_number: formData.get('vehicle_number'),
+                vehicle_type: formData.get('vehicle_type')
+            };
+
+            try {
+                const response = await fetch('your_edit_endpoint_url_here', {
+                    method: 'PATCH', // Assuming you're using PUT for updating data
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(editedData)
+                });
+
+                if (response.ok) {
+                    alert('Data updated successfully');
+                    // Redirect or perform other actions as needed
+                } else {
+                    alert('Error updating data');
+                }
+            } catch (error) {
+                console.error('Error updating data:', error);
+            }
+        });
+    </script>
+{% endblock %}
+</body>
+</html>

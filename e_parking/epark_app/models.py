@@ -87,13 +87,13 @@ class SlotBooking(models.Model):
 
         # Add more choices as needed
     ]
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     slot = models.ForeignKey(SlotDetail, on_delete=models.CASCADE)
     check_in_time = models.DateTimeField(null=True, blank=True)
     check_out_time = models.DateTimeField(null=True, blank=True)
     vehicle_number = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=20, choices=VEHICLE_CHOICES, default='2_wheeler')
-
+    amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     def __str__(self):
         return f"{self.user.username} - {self.slot.name}"
 

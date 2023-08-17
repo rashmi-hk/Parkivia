@@ -23,4 +23,4 @@ class HomeAPIList(APIView):
 
     def get(self,request):
         print("Inside get homeapi")
-        return render(request, 'home.html')
+        return render(request, 'staff_home.html')
