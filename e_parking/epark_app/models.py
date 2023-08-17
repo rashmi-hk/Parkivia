@@ -22,7 +22,6 @@ class CustomUser(AbstractUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, blank=True)
     is_verified = models.BooleanField(default=False)
     username = models.CharField(max_length=150, unique=True, null=True, blank=False)
-    password = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(unique=True, blank=False)
     address = models.TextField(max_length=250, blank=False)
     otp = models.CharField(max_length=20, blank=True, null=True)
@@ -33,7 +32,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
     # Use 'phone_number' as the unique identifier for authentication
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username','phone_number']
+    REQUIRED_FIELDS = ['phone_number']
 
     class Meta:
         db_table = 'customuser'

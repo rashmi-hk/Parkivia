@@ -18,7 +18,7 @@ class AdminUtilityLoginAPIList(APIView):
 
         try:
             print("request", request)
-            return render(request, 'admin_login.html')
+            return render(request, 'staff_login.html')
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template admin_login.html does not exist'},
@@ -42,21 +42,13 @@ class AdminUtilityLoginAPIList(APIView):
             if not password_matched:
                 print("invalid")
 
-                return render(request, 'login.html', {'error_message': 'Invalid credentials'})
+                return render(request, 'staff_login.html', {'error_message': 'Invalid credentials'})
             else:
                 print("valid")
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
-                return_list = []
 
-
-
-                # context = {
-                #     'user_is_authenticated': customer.is_verified,
-                #     'category_data': data_list,
-                # }
-                # print("context", context)
-            return render(request, 'admin_home.html')
+            return render(request, 'staff_home.html')
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response

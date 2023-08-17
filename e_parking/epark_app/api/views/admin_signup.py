@@ -40,7 +40,8 @@ class AdminUtilityAPIList(APIView):
                     user = CustomUser.objects.create_user(username=username, email=email,
                                                           password=password, otp=otp, phone_number=phone_number,
                                                           address=address,
-                                                          is_superuser=True)
+                                                          is_superuser=True,
+                                                          is_staff=True)
 
                     print("db save password", user.password)
 
@@ -56,7 +57,7 @@ class AdminUtilityAPIList(APIView):
                     # Redirect to verify page
                     context = {"email": email}
                     print("context", context)
-                    return render(request, 'admin_verify_otp.html', context)
+                    return redirect('admin:login')
                 else:
                     error_message = 'CustomUser with this email id already exist,Please try with different one'
                     return render(request, 'admin_sign_up.html', {'error_message': error_message})
