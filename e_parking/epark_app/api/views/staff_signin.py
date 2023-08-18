@@ -12,7 +12,7 @@ from django.http import JsonResponse
 from django.template import TemplateDoesNotExist
 
 
-class AdminUtilityLoginAPIList(APIView):
+class StaffLoginAPIList(APIView):
 
     def get(self, request):
 

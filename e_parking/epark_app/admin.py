@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import messages,admin
-from .models import CustomUser,Location,SlotDetail,SlotBooking
+from .models import CustomUser,Location,SlotDetail,SlotBooking,SlotDetailVariant
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 
@@ -44,6 +44,7 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 
 admin.site.register(Location)
+admin.site.register(SlotDetailVariant)
 admin.site.register(SlotDetail)
 admin.site.register(SlotBooking)
 

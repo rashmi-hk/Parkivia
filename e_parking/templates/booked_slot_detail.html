@@ -91,9 +91,11 @@
                     <td>{{ slot.vehicle_type }}</td>
                     <td>{{ slot.amount }}</td>
                     <td>
-                        <a href="{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&amount={{ slot.amount }}&hourly_rate={{slot.hourly_amount}}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" onclick="deleteLocation('{{ location.location_id }}')">Slot Open</button>
                     </td>
+
+
                 </tr>
             {% endfor %}
         </tbody>

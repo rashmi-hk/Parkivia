@@ -4,9 +4,11 @@ from django.contrib.auth.views import LogoutView
 from .api.views.staff_home import HomeAPIList
 from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
 from .api.views.admin_signup import AdminUtilityAPIList
-from .api.views.staff_signin import AdminUtilityLoginAPIList
-from .api.views.verify_otp import VerifyOtpAPIList
+from .api.views.staff_signin import StaffLoginAPIList
+from .api.views.staff_signup import StaffSignupAPIList
+from .api.views.staff_verify_otp import StaffVerifyOtpAPIList
 from .api.views.slot_detail import SlotDetailAPIList
+from .api.views.staff_location import StaffLocationAPIList
 
 from .api.views.geo_map import GMapsGeocoding,CurrentLocation,ManualCurrentLocation,AllLocationGeocoding
 from django.urls import reverse_lazy
@@ -42,6 +44,7 @@ urlpatterns = [
 
     path('staff_home', HomeAPIList.as_view() , name='staff_home'),
     path('single_slot', SlotBookingFormAPIList.as_view() , name='single_slot'),
+    path('staff_location', StaffLocationAPIList.as_view() , name='staff_location'),
     path('edit_booking', SlotBookingEditAPIList.as_view() , name='edit_booking'),
     path('slot_detail', SlotDetailAPIList.as_view() , name='slot_detail'),
     path('admin_password_reset/', CustomPasswordResetView.as_view(), name='admin_password_reset'),
@@ -52,11 +55,12 @@ urlpatterns = [
 
     path('slot_booking', SlotBookingAPIList.as_view() , name='slot_booking'),
     path('admin_signup', AdminUtilityAPIList.as_view() , name='admin_signup'),
-    path('staff_signin', AdminUtilityLoginAPIList.as_view() , name='staff_signin'),
+    path('staff_signin', StaffLoginAPIList.as_view() , name='staff_signin'),
+    path('staff_signup', StaffSignupAPIList.as_view() , name='staff_signup'),
     path('current_location', CurrentLocation.as_view() , name='current_location'),
     path('manuall_location', ManualCurrentLocation.as_view() , name='manuall_location'),
     path('all_location', AllLocationGeocoding.as_view() , name='all_location'),
-    path('verify_otp', VerifyOtpAPIList.as_view(), name='verify_otp'),
+    path('staff_verify_otp', StaffVerifyOtpAPIList.as_view(), name='staff_verify_otp'),
 
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('admin_utility_logout/', LogoutView.as_view(next_page='admin_utility_login'), name='admin_utility_logout'),

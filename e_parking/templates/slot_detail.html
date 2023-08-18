@@ -45,6 +45,42 @@
 {% block content %}
 
 
+<!--<div class="container mt-5">-->
+<!--    <h2 class="text-center">Slot Detail List</h2>-->
+<!--    <table class="table table-success table-striped">-->
+<!--        <thead class="table-dark">-->
+<!--            <tr>-->
+<!--                <th>Slot Name</th>-->
+<!--                <th>capacity</th>-->
+<!--                <th>available_slots</th>-->
+<!--                <th>vehicle_type</th>-->
+<!--                <th>hourly_rate</th>-->
+<!--                <th>opening_hours</th>-->
+<!--                <th>location</th>-->
+
+<!--                <th>Action</th>-->
+<!--            </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--            {% for slot in slot_detail %}-->
+
+<!--                <tr>-->
+<!--                    <td>{{ slot.name }}</td>-->
+<!--                    <td>{{ slot.capacity }}</td>-->
+<!--                    <td>{{ slot.available_slots }}</td>-->
+<!--                    <td>{{ slot.vehicle_type }}</td>-->
+<!--                    <td>{{ slot.hourly_rate }}</td>-->
+<!--                    <td>{{ slot.opening_hours }}</td>-->
+<!--                    <td>{{ slot.location }}</td>-->
+<!--                    <td>-->
+<!--                        <a href="#" class="btn btn-primary">Edit</a>-->
+<!--                        <button class="btn btn-danger" onclick="deleteLocation('{{ location.location_id }}')">Delete</button>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            {% endfor %}-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
 <div class="container mt-5">
     <h2 class="text-center">Slot Detail List</h2>
     <table class="table table-success table-striped">
@@ -57,31 +93,30 @@
                 <th>hourly_rate</th>
                 <th>opening_hours</th>
                 <th>location</th>
-
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for slot in slot_detail %}
-
-                <tr>
-                    <td>{{ slot.name }}</td>
-                    <td>{{ slot.capacity }}</td>
-                    <td>{{ slot.available_slots }}</td>
-                    <td>{{ slot.vehicle_type }}</td>
-                    <td>{{ slot.hourly_rate }}</td>
-                    <td>{{ slot.opening_hours }}</td>
-                    <td>{{ slot.location }}</td>
-                    <td>
-                        <a href="#" class="btn btn-primary">Edit</a>
-                        <button class="btn btn-danger" onclick="deleteLocation('{{ location.location_id }}')">Delete</button>
-                    </td>
-                </tr>
+            {% for slot_data in slot_detail %}
+                {% for variant in slot_data.variant_dict %}
+                    <tr>
+                        <td>{{ variant.name }}</td>
+                        <td>{{ variant.capacity }}</td>
+                        <td>{{ variant.available_slots }}</td>
+                        <td>{{ variant.vehicle_type }}</td>
+                        <td>{{ variant.hourly_rate }}</td>
+                        <td>{{ slot_data.opening_hours }}</td>
+                        <td>{{ slot_data.location }}</td>
+                        <td>
+                            <a href="#" class="btn btn-primary">Edit</a>
+                            <button class="btn btn-danger" onclick="deleteLocation('{{ slot_data.location.location_id }}')">Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
         </tbody>
     </table>
 </div>
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>

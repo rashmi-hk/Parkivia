@@ -87,8 +87,8 @@
       <img  src="/static/images/LOGO_PARKING.webp" class="" height="50" width="150" alt="...">
 </header>
    <div class="main-body">
-            <h2 class="title text-center">Verify OTP</h2>
-                <form id="otpForm" method="post" action="/verify_otp">
+            <h2 class="title text-center">Staff Verify OTP</h2>
+                <form id="otpForm" method="post" action="/staff_verify_otp">
                     {% csrf_token %}
                     <label for="otp" >Enter OTP :</label>
                     <input type="text"  name="otp" id="otp" required><br>

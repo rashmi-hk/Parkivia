@@ -55,6 +55,7 @@
         label[for="email"],
         label[for="address"],
         label[for="password"],
+        label[for="locationDropdown"],
         p {
             color: gray;
             margin-right: 10px;
@@ -116,7 +117,7 @@
     <div class="registration-form">
         <h2 class="text-center">Staff Registration</h2>
         <div class="main-form">
-        <form method="post" action="/admin_signup">
+        <form method="post" action="/staff_signup">
             <!-- Username -->
             <div class="form-group">
             <label for="username">Username:</label>
@@ -148,6 +149,15 @@
                 <textarea id="address" name="address" rows="4" cols="50" required></textarea><br>
             </div>
 
+             <div class="form-group">
+                <label for="locationDropdown" class="form-label">Choose parking lot Location</label>
+                                <select class="form-select" id="locationDropdown" name="location">
+                                    <option value="" selected disabled>Select a location...</option>
+                                    {% for slot in location_detail_list %}
+                                        <option value="{{ slot.location_id }}">{{ slot.location_name }}</option>
+                                    {% endfor %}
+                                </select>
+             </div>
 
             <p>Your personal data will be used to support your experience throughout this website,</p>
             <p> to manage access to your account, and for other purposes described in our privacy policy.</p>

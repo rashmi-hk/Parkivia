@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% extends 'staff_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<html lang="en">
+<head>
+
+</head>
+
+<body>
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Select Location</h5>
+                    <form id="locationForm">
+                        <div class="mb-3">
+                            <label for="locationDropdown" class="form-label">Choose a Location</label>
+                            <select class="form-select" id="locationDropdown" name="location">
+                                <option value="" selected disabled>Select a location...</option>
+                                {% for slot in location_detail_list %}
+                                    <option value="{{ slot.location_id }}">{{ slot.location_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="fetchLocation()">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function fetchLocation() {
+    var selectedLocation = document.getElementById('locationDropdown').value;
+
+    // Construct the URL for the PATCH request
+    var url = '{% url "staff_location" %}';
+
+    // Define the data to be sent in the request
+    var data = {
+        location: selectedLocation
+    };
+
+    // Send the PATCH request using the Fetch API
+    fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'  // Add the CSRF token
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+
+        if (response.ok) {
+                console.log("Sucess")
+                alert('Location updated successful!');
+                window.location.reload();
+            }
+        else {
+                alert('Location update failed. Please try again.');
+            }
+        // Handle the response here (e.g., display a success message)
+    })
+    .catch(error => {
+        // Handle errors here (e.g., display an error message)
+    });
+}
+</script>
+
+
+{% endblock %}
+</body>
+</html>

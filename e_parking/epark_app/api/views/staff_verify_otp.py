@@ -23,11 +23,11 @@ from django.http import HttpResponseRedirect
 LOGGER = logging.getLogger(__name__)
 
 # Item api
-class VerifyOtpAPIList(APIView):
+class StaffVerifyOtpAPIList(APIView):
 
     def get(self,request):
         print("Inside  get   otp form")
-        return render(request, 'otp_verification.html')
+        return render(request, 'staff_otp_verification.html')
         # return render(request, 'new_lohin.html')
 
     def post(self,request):
@@ -48,7 +48,7 @@ class VerifyOtpAPIList(APIView):
                 'success': False,
                 'message': 'User with this email does not exist.',
             }
-            return render(request, 'login.html', context=response_data)
+            return render(request, 'staff_location.html', context=response_data)
 
         # verification_status = verify_otp(phone_number, entered_otp)
         # print("verification_status", verification_status)
@@ -71,13 +71,13 @@ class VerifyOtpAPIList(APIView):
                     'success': True,
                 }
                 print("response_data", response_data)
-                return redirect('admin:login')  # Return a JSON response indicating success
+                return redirect('staff_signin')  # Return a JSON response indicating success
             else:
                 error_message = 'Error in serializer'
-                return render(request, 'admin_otp_verification.html',{'error_message': error_message,'email':email})
+                return render(request, 'staff_otp_verification.html',{'error_message': error_message,'email':email})
         else:
             # If the entered OTP is invalid, return a response indicating failure
 
             error_message = 'Invalid OTP. Please try again.'
-            return render(request, 'admin_otp_verification.html', {'error_message': error_message,'email':email})
+            return render(request, 'staff_otp_verification.html', {'error_message': error_message,'email':email})
 

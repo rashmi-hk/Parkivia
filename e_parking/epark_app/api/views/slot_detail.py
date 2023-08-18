@@ -18,18 +18,30 @@ class SlotDetailAPIList(APIView):
 
 
     def get(self, request):
-        print("Inside location get", request)
-        print("Inside location get", request.data)
+        print("Inside SlotDetailAPIList get", request)
+        print("Inside SlotDetailAPIList get", request.data)
         try:
-            all_location_obj = SlotDetail.objects.all()
+            user_email = request.session.get('email')
+
+            user = CustomUser.objects.get(email=user_email)
+
+            slot_detail_obj = SlotDetail.objects.filter(location=user.parking_lot_location)
             resulting_list = []
-            for data in all_location_obj:
+            for data in slot_detail_obj:
+                variant_list = []
+                for variant in data.slot_variants.all():
+                    # Update available_slots and vehicle_type
+                    variant_dict = {"available_slots" : variant.available_slots,
+                    "vehicle_type" : variant.vehicle_type,
+                    "capacity" :  variant.capacity,
+                    "hourly_rate" : variant.hourly_rate,
+                    "name": variant.slot,}
+                    variant_list.append(variant_dict)
+
+
                 data_dict = {
-                             "name": data.name,
-                             "capacity": data.capacity,
-                             "available_slots": data.available_slots,
-                             "vehicle_type": data.vehicle_type,
-                             "hourly_rate": data.hourly_rate,
+
+                              "variant_dict": variant_list,
                              "opening_hours": data.opening_hours,
                              "location": data.location}
 
@@ -61,11 +73,7 @@ class SlotDetailAPIList(APIView):
                     {'message': 'Unauthorized', 'error': 'You must be logged in to access this resource'},
                     status=status.HTTP_401_UNAUTHORIZED)
 
-            if not self.is_superuser(user):
-                print("user not superuser")
-                return JsonResponse(
-                    {'message': 'Unauthorized', 'error': 'You do not have permission to access this resource'},
-                    status=status.HTTP_403_FORBIDDEN)
+
 
             print("User athenticated n superuser")
             address = request.data["address"]
