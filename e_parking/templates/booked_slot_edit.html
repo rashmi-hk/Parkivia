@@ -54,17 +54,10 @@
                       <label for="vehicle_type" class="form-label">Vehicle Type:</label>
                       <input type="text" id="vehicle_type" name="vehicle_type" class="form-control" value="{{ vehicle_type }}">
                   </div>
-                  <div class="mb-3">
-                      <label for="hourly_amount_type" class="form-label">Amount per hour:</label>
-                      <input type="text" id="hourly_amount_type" name="hourly_amount_type" class="form-control" value="{{ hourly_rate }}">
-                  </div>
-                  <div class="mb-3">
-                      <label for="amount_type" class="form-label">Billing Amount:</label>
-                      <input type="text" id="amount_type" name="amount_type" class="form-control" value="{{ amount }}">
-                  </div>
-                   <div class="mb-3">
 
-                        <label for="booking_id" class="form-label">Slot_id:</label>
+                   <div class="mb-3" style="display: none;">
+
+                        <label for="booking_id" class="form-label">Booking_id:</label>
                         <input type="text" id="booking_id" name="booking_id" class="form-control" value="{{ booking_id }}">
                    </div>
 
@@ -85,8 +78,7 @@
            const checkOutTime = document.getElementById('check_out_time').value;
            const vehicleNumber = document.getElementById('vehicle_number').value;
            const vehicleType = document.getElementById('vehicle_type').value;
-           const hourlyAmountType = document.getElementById('hourly_amount_type').value;
-           const amountType = document.getElementById('amount_type').value;
+
 
 
            const requestBody = {
@@ -95,8 +87,7 @@
                check_out_time: checkOutTime,
                vehicle_number: vehicleNumber,
                vehicle_type: vehicleType,
-               hourly_amount_type: hourlyAmountType,
-               amount_type: amountType,
+
                booking_id:booking_id,
 
 

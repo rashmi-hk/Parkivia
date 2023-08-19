@@ -242,7 +242,7 @@ class SlotBookingEditAPIList(APIView):
             print(" PATCH SLOT BOOKING request", request)
             print(" patch slot booking request", request.data)
 
-            slot = request.data['slot']
+
             check_in_time = request.data['check_in_time']
             check_out_time = request.data['check_out_time']
             vehicle_number = request.data['vehicle_number']
@@ -255,40 +255,53 @@ class SlotBookingEditAPIList(APIView):
 
             check_in_time_obj = parser.parse(check_in_time, dayfirst=True)
             print("Parsed check-in time:", check_in_time)
+            # if check_out_time:
+            #     check_out_time_obj = parser.parse(check_out_time, dayfirst=True)
+            #     print("check_out_time_obj", check_out_time_obj)
+            #
+            #     duration = check_out_time_obj -  check_in_time_obj
+            #     print("duration", duration)
+            #
+            #     duration_in_hours = duration.total_seconds() / 3600
+            # else:
+            #     print("check_out_time not specified")
+
+            slot_booking_obj = SlotBooking.objects.get(id=booking_id)
+            print("!!!!1")
+            check_out_time_obj = 0
+            payable_amount = 0
             if check_out_time:
                 check_out_time_obj = parser.parse(check_out_time, dayfirst=True)
                 print("check_out_time_obj", check_out_time_obj)
 
-                duration = check_out_time_obj -  check_in_time_obj
+                duration = check_out_time_obj - check_in_time_obj
                 print("duration", duration)
 
                 duration_in_hours = duration.total_seconds() / 3600
+                slot_obj = SlotDetailVariant.objects.filter(slot=slot_booking_obj.slot).first()
+                print("$$$$$$2", slot_obj)
+
+                print("&&&&&&3   hour rate", slot_obj.hourly_rate)
+
+
+                fixed_price_per_hour = slot_obj.hourly_rate
+                payable_amount = fixed_price_per_hour * Decimal(duration_in_hours)
+
+                print("payable_amount", round(payable_amount))
+
+
             else:
                 print("check_out_time not specified")
 
-            slot_booking_obj = SlotBooking.objects.get(id=booking_id)
-            print("!!!!1")
-            slot_obj = SlotDetailVariant.objects.filter(slot=slot_booking_obj.slot).first()
-            print("$$$$$$2", slot_obj)
-
-            print("&&&&&&3   hour rate", slot_obj.hourly_rate)
-
-            fixed_price_per_hour = slot_obj.hourly_rate
-            payable_amount = fixed_price_per_hour * Decimal(duration_in_hours)
-
-            print("payable_amount", round(payable_amount))
-
             check_in_time_aware = timezone.make_aware(check_in_time_obj)
             check_out_time_aware = timezone.make_aware(check_out_time_obj) if check_out_time_obj else None
-
-
             slot_booking_obj.check_in_time = check_in_time_aware
             slot_booking_obj.check_out_time = check_out_time_aware
             slot_booking_obj.vehicle_number = vehicle_number
             slot_booking_obj.vehicle_type = vehicle_type
             slot_booking_obj.amount = round(payable_amount)
-            slot_booking_obj.save()   
-
+            slot_booking_obj.save()
+            print("Saved sucess")
             return JsonResponse({'message': 'Staff location updated successfully'}, status=status.HTTP_201_CREATED)
 
         except CustomUser.DoesNotExist:
