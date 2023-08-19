@@ -54,6 +54,10 @@ class SlotDetailAPIList(APIView):
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},
                 status=404)
+        except CustomUser.DoesNotExist:
+            # If the user does not exist, you can handle it accordingly
+            return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
+                                status=404)
 
     def post(self, request):
         print("Inside location post", request)

@@ -58,7 +58,7 @@ class SlotDetail(models.Model):
     name = models.CharField(max_length=50, unique=True)
     opening_hours = models.CharField(max_length=100,default=0)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    slot_variants = models.ManyToManyField('SlotDetailVariant')
+    slot_variants = models.ManyToManyField('SlotDetailVariant', blank=True)
 
     def __str__(self):
             return self.name

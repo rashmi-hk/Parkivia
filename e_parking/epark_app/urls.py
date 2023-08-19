@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from .api.views.staff_home import HomeAPIList
+from .api.views.single_slot_detail import SingleSlotAPIList
 from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
 from .api.views.admin_signup import AdminUtilityAPIList
 from .api.views.staff_signin import StaffLoginAPIList
@@ -44,6 +45,7 @@ urlpatterns = [
 
     path('staff_home', HomeAPIList.as_view() , name='staff_home'),
     path('single_slot', SlotBookingFormAPIList.as_view() , name='single_slot'),
+    path('single_slot_detail', SingleSlotAPIList.as_view() , name='single_slot_detail'),
     path('staff_location', StaffLocationAPIList.as_view() , name='staff_location'),
     path('edit_booking', SlotBookingEditAPIList.as_view() , name='edit_booking'),
     path('slot_detail', SlotDetailAPIList.as_view() , name='slot_detail'),

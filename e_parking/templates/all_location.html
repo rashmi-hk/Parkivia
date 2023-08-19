@@ -1,41 +1,81 @@
 <!DOCTYPE html>
+{% extends 'user_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+
+{% block content %}
 <html>
 <head>
     <title>Map with Fixed Locations</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkrNAXjMGeM-HukizFu88BrgtU7DomJqI&libraries=places"></script>
     <script>
-        var fixedLocations = {{ fixed_locations|safe }};
 
 
-        function initMap() {
-            console.log("Inside init *********")
-            var centerLocation = fixedLocations.find(function(location) {
 
+
+            var fixedLocations = {{ fixed_locations|safe }};
+            var infoWindow = new google.maps.InfoWindow(); // Create an InfoWindow instance
+
+            function initMap() {
+                var centerLocation = fixedLocations.find(function(location) {
                     return location.title === "Me";
-            });
-            console.log("centerLocation",centerLocation)
-            if (centerLocation)
-
-                var mapOptions = {
-                    center: {lat: centerLocation.lat, lng: centerLocation.lng}, // Default center
-                    zoom: 10 // Default zoom level
-                };
-
-            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-            fixedLocations.forEach(function(location) {
-                var markerColor = (location.title === "Me") ? "green" : "red";
-                console.log("markerColor",markerColor)
-
-                var marker = new google.maps.Marker({
-                    position: {lat: location.lat, lng: location.lng},
-                    map: map,
-                    title: location.title,
-                    icon: {
-                        url: `http://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`
-                    }
                 });
-            });
+
+                if (centerLocation) {
+                    var mapOptions = {
+                        center: {lat: centerLocation.lat, lng: centerLocation.lng},
+                        zoom: 10
+                    };
+
+                    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+                    fixedLocations.forEach(function(location) {
+                        var markerColor = (location.title === "Me") ? "blue" : "red";
+                        var marker = new google.maps.Marker({
+                            position: {lat: location.lat, lng: location.lng},
+                            map: map,
+                            title: location.title,
+                            icon: {
+                                url: `http://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`
+                            }
+                        });
+
+                         var anchor = document.createElement("a");
+                         var url = `single_slot_detail?lat=${location.lat}&lng=${location.lng}&location_id=${location.location_id}`;
+                         anchor.href = url;
+                         anchor.textContent = location.title;
+
+                        marker.addListener('click', function() {
+                              window.location.href = anchor.href;
+
+                        });
+
+                        // Add event listener for marker mouseover
+                        marker.addListener('mouseover', function() {
+                            infoWindow.setContent(location.title); // Change to the desired address content
+                            infoWindow.open(map, marker);
+                        });
+
+                        // Add event listener for marker mouseout
+                        marker.addListener('mouseout', function() {
+                            infoWindow.close();
+                        });
+                    });
+                }
+            }
+
+            function show_path(lat, lng, location_id) {
+            console.log("Inside function")
+            fetch(`single_slot_detail?lat=${lat}&lng=${lng}&location_id=${location_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Process the data returned by the API as needed
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
     </script>
 </head>
@@ -43,3 +83,4 @@
     <div id="map" style="width: 100%; height: 500px;"></div>
 </body>
 </html>
+{% endblock %}

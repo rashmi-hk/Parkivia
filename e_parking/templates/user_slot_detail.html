@@ -1,0 +1,74 @@
+{% extends 'user_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center">Slot Detail List</h2>
+    <div class="row justify-content-center align-items-center">
+        {% for slot_data in slot_detail %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ slot_data.name }}</h5>
+                        <p class="card-text">Opening Hours: {{ slot_data.opening_hours }}</p>
+                        <p class="card-text">Location: {{ slot_data.location }}</p>
+                        {% for variant in slot_data.variant_dict %}
+                            <div class="card data-card mt-3">
+                                <div class="card-body">
+
+                                    <p class="card-text">Capacity: {{ variant.capacity }}</p>
+                                    <p class="card-text">Available Slots: {{ variant.available_slots }}</p>
+                                    <p class="card-text">Vehicle Type: {{ variant.vehicle_type }}</p>
+                                    <p class="card-text">Hourly Rate: {{ variant.hourly_rate }}</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        {% if variant.vehicle_type == 'car' %}
+                                            <div class="d-flex flex-column align-items-center">
+                                                <i class="fas fa-car fa-lg"></i>
+                                                <span class="mt-1">By Car</span>
+                                            </div>
+                                            <!-- ... Repeat for other vehicle types ... -->
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+                           <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-car fa-lg"></i>
+                                    <span class="mt-1">By Car</span>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-bicycle fa-lg"></i>
+                                    <span class="mt-1">By Bike</span>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-train fa-lg"></i>
+                                    <span class="mt-1">By Train</span>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-walking fa-lg"></i>
+                                    <span class="mt-1">By Walking</span>
+                                </div>
+                           </div>
+                        <a href="#" class="btn btn-primary mt-3">Show Direction</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+</script>
+{% endblock %}
