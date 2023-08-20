@@ -1,0 +1,102 @@
+<html>
+{% extends 'user_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!--</style>-->
+
+</head>
+
+{% block content %}
+<div class="container text-center">
+    <div class="card">
+        <div class="card-body">
+            <div id="invoice">
+                <div class="invoice overflow-auto">
+                    <div style="min-width: 600px">
+                        <header>
+                            <div class="row">
+                                <div class="col">
+<!--                                    <a href="javascript:;">-->
+<!--                                        <img src="/static/img/resturant_2.jpeg" width="80" alt="">-->
+<!--                                    </a>-->
+                                </div>
+                                <div class="col company-details">
+                                    <h2 class="name">
+                                        <a target="_blank" href="javascript:;">
+                                            Parkivia
+                                        </a>
+                                    </h2>
+                                    <div>455 Foggy Heights, AZ 85004, US</div>
+                                    <div>(123) 456-789</div>
+                                    <div>company@example.com</div>
+                                </div>
+                            </div>
+                        </header>
+                        <main>
+                            <div class="row contacts">
+                                <div class="col invoice-to">
+                                    <h2 class="text-gray-light">ORDER ID:{{ slot }}</h2>
+
+                                </div>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="text-left fw-bold">check_in_time</th>
+                                        <th class="text-right fw-bold">check_out_time</th>
+                                        <th class="text-right fw-bold">vehicle_number</th>
+                                        <th class="text-right fw-bold">vehicle_type</th>
+                                        <th class="text-right fw-bold">amount</th>
+                                        <th class="text-right fw-bold">hourly_rate</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <td class="text-center">{{ item.check_in_time }}</td>
+                                        <td class="unit text-center">${{ item.check_out_time }}</td>
+                                        <td class="qty text-center">{{ item.vehicle_number }}</td>
+                                        <td class="qty text-center">{{ item.vehicle_type }}</td>
+                                        <td class="qty text-center">{{ item.amount }}</td>
+                                        <td class="qty text-center">{{ item.hourly_rate }}</td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr class="p-3">
+                                        <td colspan="2"></td>
+                                        <td colspan="2">GRAND TOTAL</td>
+                                        <td>${{total_price }}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+<!--                            <div class="thanks display-5">Thank you!</div>-->
+                        </main>
+                        <footer>Invoice was created on a computer and is valid without the signature and seal.</footer>
+                    </div>
+                    <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+                    <div></div>
+                </div>
+                <div class="toolbar hidden-print">
+                    <div class="text-start">
+                         <button type="button" class="btn btn-dark"  onclick="window.print()"><i class="fa fa-print"></i> Print</button>
+
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+
+</script>

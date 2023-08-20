@@ -195,7 +195,7 @@ class SlotBookingFormAPIList(APIView):
 class SlotBookingEditAPIList(APIView):
 
 
-    def get(self, request):
+    def get(self, request,billing):
         print("Inside SlotBookingEditAPIList get", request)
 
         format_string = "%Y-%m-%d %H:%M:%S"
@@ -255,16 +255,6 @@ class SlotBookingEditAPIList(APIView):
 
             check_in_time_obj = parser.parse(check_in_time, dayfirst=True)
             print("Parsed check-in time:", check_in_time)
-            # if check_out_time:
-            #     check_out_time_obj = parser.parse(check_out_time, dayfirst=True)
-            #     print("check_out_time_obj", check_out_time_obj)
-            #
-            #     duration = check_out_time_obj -  check_in_time_obj
-            #     print("duration", duration)
-            #
-            #     duration_in_hours = duration.total_seconds() / 3600
-            # else:
-            #     print("check_out_time not specified")
 
             slot_booking_obj = SlotBooking.objects.get(id=booking_id)
             print("!!!!1")
