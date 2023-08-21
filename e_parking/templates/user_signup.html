@@ -55,6 +55,7 @@
         label[for="email"],
         label[for="address"],
         label[for="password"],
+        label[for="locationDropdown"],
         p {
             color: gray;
             margin-right: 10px;
@@ -114,9 +115,9 @@
         <img  src="/static/images/LOGO_PARKING.webp" class="" height="50" width="150" alt="...">
     </header>
     <div class="registration-form">
-        <h2 class="text-center">Admin Registration</h2>
+        <h2 class="text-center">User Registration</h2>
         <div class="main-form">
-        <form method="post" action="/admin_signup">
+        <form method="post" action="/user_signup">
             <!-- Username -->
             <div class="form-group">
             <label for="username">Username:</label>
@@ -147,6 +148,7 @@
             <label for="address">Address:</label><br>
                 <textarea id="address" name="address" rows="4" cols="50" required></textarea><br>
             </div>
+
 
 
             <p>Your personal data will be used to support your experience throughout this website,</p>

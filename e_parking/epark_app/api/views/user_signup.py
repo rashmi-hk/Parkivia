@@ -8,19 +8,19 @@ from django.template import TemplateDoesNotExist
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 
-class AdminUtilityAPIList(APIView):
+class UserSignUpAPIList(APIView):
 
     def get(self, request):
         try:
             print("Inside get homeapi")
-            return render(request, 'admin_sign_up.html')
+            return render(request, 'user_signup.html')
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template admin_sign_up.html does not exist'},
                 status=404)
 
     def post(self, request):
-        print("Inside admin sign up post", request)
+        print("Inside user sign up post", request)
         print("Inside sign up", request.data)
         try:
             if request.data:
@@ -40,32 +40,18 @@ class AdminUtilityAPIList(APIView):
                     user = CustomUser.objects.create_user(username=username, email=email,
                                                           password=password, phone_number=phone_number,
                                                           address=address,
-                                                          is_superuser=True,
-                                                          is_staff=True)
+                                                          )
 
 
 
                     # Send email with OTP
 
-                    return redirect('admin_login')
+                    return redirect('user_login')
                 else:
                     error_message = 'CustomUser with this email id already exist,Please try with different one'
-                    return render(request, 'admin_sign_up.html', {'error_message': error_message})
+                    return render(request, 'user_signup.html', {'error_message': error_message})
         except  Exception as e:
             print(f"An unexpected error occurred: {e}")
 
-
-
-
-
-class AdminCustomAPIList(APIView):
-        def get(self,request):
-            try:
-                print("Inside get AdminCustomAPIList")
-                return render(request, 'admin_select_location.html')
-            except TemplateDoesNotExist:
-                return JsonResponse(
-                    {'message': 'Template not found', 'error': 'The template admin_select_location.html does not exist'},
-                    status=404)
 
 

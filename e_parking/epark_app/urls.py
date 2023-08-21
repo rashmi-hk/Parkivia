@@ -4,12 +4,16 @@ from django.contrib.auth.views import LogoutView
 from .api.views.staff_home import HomeAPIList
 from .api.views.single_slot_detail import SingleSlotAPIList
 from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
-from .api.views.admin_signup import AdminUtilityAPIList
+from .api.views.admin_signup import AdminUtilityAPIList,AdminCustomAPIList
+from .api.views.admin_login import AdminSignInAPIList
 from .api.views.staff_signin import StaffLoginAPIList
 from .api.views.staff_signup import StaffSignupAPIList
 from .api.views.staff_verify_otp import StaffVerifyOtpAPIList
 from .api.views.slot_detail import SlotDetailAPIList
 from .api.views.staff_location import StaffLocationAPIList
+from .api.views.user_login import UserSignInAPIList
+from .api.views.user_signup import UserSignUpAPIList
+
 
 from .api.views.geo_map import GMapsGeocoding,CurrentLocation,ManualCurrentLocation,AllLocationGeocoding
 from django.urls import reverse_lazy
@@ -43,7 +47,13 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 
 urlpatterns = [
 
+    path('admin_login', AdminSignInAPIList.as_view() , name='admin_login'),
+    path('user_login', UserSignInAPIList.as_view() , name='user_login'),
+    path('user_signup', UserSignUpAPIList.as_view() , name='user_signup'),
     path('staff_home', HomeAPIList.as_view() , name='staff_home'),
+    path('admin_custom', AdminCustomAPIList.as_view(), name='admin_custom'),
+
+
     path('single_slot', SlotBookingFormAPIList.as_view() , name='single_slot'),
     path('single_slot_detail', SingleSlotAPIList.as_view() , name='single_slot_detail'),
     path('staff_location', StaffLocationAPIList.as_view() , name='staff_location'),
@@ -68,10 +78,6 @@ urlpatterns = [
     path('admin_utility_logout/', LogoutView.as_view(next_page='admin_utility_login'), name='admin_utility_logout'),
     path('gmap', GMapsGeocoding.as_view(), name='gmap'),
 
-    path('user_password_reset/',auth_views.PasswordResetView.as_view(template_name='forgot_password.html'),name='user_password_reset'),
-    path('user_password_reset/done/',auth_views.PasswordResetDoneView.as_view(template_name='password_reset_sent.html'),name='user_password_reset_done'),
-    path('user_reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='password_reset.html'),name='user_password_reset_confirm'),
-    path('user_reset/done/',auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_done.html'),name='user_password_reset_complete'),
 
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

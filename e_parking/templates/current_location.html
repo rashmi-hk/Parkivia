@@ -47,35 +47,35 @@
         function submitProductForm(form, latitude, longitude) {
             console.log("Inside submitProductForm")
             // Update the hidden input values
-<!--            document.getElementById('latitudeInput').value = latitude;-->
-<!--            document.getElementById('longitudeInput').value = longitude;-->
+            document.getElementById('latitudeInput').value = latitude;
+            document.getElementById('longitudeInput').value = longitude;
 
             // Submit the form
             form.submit();
         }
 
-<!--        document.getElementById("allowLocationBtn").addEventListener("click", function() {-->
-<!--            if ("geolocation" in navigator) {-->
-<!--                console.log("Inside current location");-->
-<!--                navigator.geolocation.getCurrentPosition(-->
-<!--                    function(position) {-->
-<!--                        var latitude = position.coords.latitude;-->
-<!--                        var longitude = position.coords.longitude;-->
+        document.getElementById("allowLocationBtn").addEventListener("click", function() {
+            if ("geolocation" in navigator) {
+                console.log("Inside current location");
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        var latitude = position.coords.latitude;
+                        var longitude = position.coords.longitude;
 
-<!--                        console.log("latitude", latitude);-->
-<!--                        console.log("longitude", longitude);-->
+                        console.log("latitude", latitude);
+                        console.log("longitude", longitude);
 
-<!--                        var form = document.getElementById('productForm');-->
-<!--                        submitProductForm(form, latitude, longitude);-->
-<!--                    },-->
-<!--                    function(error) {-->
-<!--                        console.log("Error getting geolocation:", error);-->
-<!--                    }-->
-<!--                );-->
-<!--            } else {-->
-<!--                console.log("Geolocation not available");-->
-<!--            }-->
-<!--        });-->
+                        var form = document.getElementById('productForm');
+                        submitProductForm(form, latitude, longitude);
+                    },
+                    function(error) {
+                        console.log("Error getting geolocation:", error);
+                    }
+                );
+            } else {
+                console.log("Geolocation not available");
+            }
+        });
 
         document.getElementById("denyLocationBtn").addEventListener("click", function() {
             var form = document.getElementById('denyCurrentLocation');

@@ -14,8 +14,13 @@
         }
 
         .main-body {
-            margin-top: 50px; /* Add space from the top to the body content */
-            margin-left: 200px;
+             /* Add space from the top to the body content */
+
+            display:flex;
+            justify-content: center;
+            flex-direction: column;
+            height: 60vh;
+            align-items: center;
         }
 
         /* Styling for the input elements */
@@ -63,25 +68,48 @@
             background-color: red;
 
         }
+        .error-message {
+            color: red;
+        }
     </style>
-    <title>Re-Set Password Form</title>
+       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.alert-error').fadeOut(4000);
+        });
+    </script>
+    <title>Login Form</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <header>
-     <img  src="/static/images/LOGO_PARKING.webp" class="" height="50" width="150" alt="...">
+
+    <img  src="/static/images/LOGO_PARKING.webp" class="" height="50" width="150" alt="...">
+
 </header>
 <div class="main-body">
-    <h2>Reset Password </h2>
-    <h3>Enter new password</h3>
-    <p>Please enter your new password twice so we can verify you typed it in correctly</p>
-    <form method="post">
-        {% csrf_token %}
-        {{form}}<br>
-        <button type="submit">Submit</button>
-    </form>
-    <p>
+    <div class="heading-login">
+        <h2>Admin Login </h2>
+        </div>
+    <form onsubmit="sendPasswordAndUserName(); return false;">
+        <div class="form-group">
+        <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+        </div>
 
+        <div class="form-group">
+        <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+    {% if error_message %}
+        <p class="error-message alert-error">{{ error_message }}</p>
+    {% endif %}
+    <p>
+        <a href="#" onclick="showForgotPassword()">Forgot Password?</a> |
+        <a href="#" onclick="showRegister()">Register</a>
     </p>
 </div>
 <!-- JavaScript Function -->
@@ -96,7 +124,7 @@
             // Create a form dynamically
             var form = document.createElement('form');
             form.method = 'POST';
-            form.action = '/home';
+            form.action = '/admin_login';
 
             // Create an input field for the email
             var inputEmail = document.createElement('input');
@@ -121,13 +149,24 @@
 
         function showForgotPassword() {
             // Replace this with the URL for your forgot password page
-            window.location.href = '/admin_forgot_password';
+            window.location.href = '/admin_password_reset/';
         }
 
         function showRegister() {
             // Replace this with the URL for your registration page
-            window.location.href = '/register';
+            window.location.href = '/admin_signup';
         }
+
+
+        // Disable back button for logged-out pages
+        const loggedOutPages = ['/login', '/logout']; // Add more URLs as needed
+
+        window.addEventListener('popstate', (event) => {
+            if (loggedOutPages.includes(window.location.pathname)) {
+                window.location.href = '/login'; // Redirect to the login page
+            }
+        });
+
     </script>
 </body>
 </html>
