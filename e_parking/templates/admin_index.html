@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% load static %}
+
      <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -11,69 +11,49 @@
     <meta charset="UTF-8">
     <script src="https://kit.fontawesome.com/ea4749b7f0.js" crossorigin="anonymous"></script>
     <style>
-<!--body{-->
-<!--position:relative;-->
-<!--}-->
-    .nav-data{color:gray;}
-    .nav-section{background-color: white;
-    width:100%;}
-    .first-icon{display: flex;}
-    .title_cls{
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: white;
-      font-size: 45px;
-      font-weight: bold;
-    }
-    /* .first-icon {
-    display: flex;
-    justify-content: center;
-} */
-    .first-icon {
-        height: 20%;
-        width: 20%;
-    }
 
+     <style>
 
-    .single-crd-cls {
-      max-width: 540px;
-      transition: background-color 0.3s;
-    }
+        .nav-section{background-color: white;
+        width:100%;}
 
-    .single-crd-cls:hover {
-      background-color: rgb(224, 244, 224);
-      color: white;
+        .navbar {
+            background-color: white;
+        }
+
+        .navbar-brand img {
+            max-height: 50px;
+        }
+
+        .navbar-nav {
+            flex-direction: row;
+        }
+
+        .navbar-nav .nav-link {
+            color: gray;
+            font-weight: bold;
+            padding: 0.5rem 1rem; /* Add padding for better spacing */
+        }
+
+       .footer {
+        text-align: center;
+        background-color: black;
+        padding: 20px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
 
-
-    .sub-msg-box{
-      display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+    .footer p {
+        margin: 0;
+        font-size: 14px;
+        color: #6c757d;
     }
-
-.advantage-div{
-  color:green;font-size: 53px;
-}
-    .card:hover .single-crd-cls, .card:hover .advantage-div{
-      /* opacity: 0; */
-      color: white;
-      background-color: green;
-    }
-
-    .footer {
-            background-color: black;
-            color: white;
-            text-align: center;
-
-            bottom: 0;
-            width:100%;
-
     </style>
+
+
+
+
     <title>Title</title>
 
 
@@ -99,31 +79,10 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-<!--      <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--        <ul class="navbar-nav">-->
-<!--          <li class="nav-item px-3">-->
-<!--            <a class="nav-link active nav-data" aria-current="page" href="{% url 'staff_home' %}">Home</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="{% url 'slot_detail' %}">SlotDetail</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="{% url 'slot_booking' %}">SlotBooking</a>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--           <ul class="navbar-nav">-->
-<!--        <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="">Choose Location</a>-->
-<!--        </li>-->
-<!--        <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="">Logout</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--      </div>-->
         <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
         <li class="nav-item px-3">
-            <a class="nav-link active nav-data" aria-current="page" href="{% url 'admin_custom' %}">Home</a>
+            <a class="nav-link active nav-data" aria-current="page" href="{% url 'admin_home' %}">Home</a>
         </li>
         <li class="nav-item px-3">
             <a class="nav-link nav-data" href="{% url 'slot_detail' %}">AddSlotDetail</a>
@@ -132,7 +91,7 @@
             <a class="nav-link nav-data" href="{% url 'slot_booking' %}">AddSlotBooking</a>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link nav-data" href="{% url 'admin_custom' %}">AddLocation</a>
+            <a class="nav-link nav-data" href="{% url 'admin_get_location' %}">Location</a>
         </li>
     </ul>
 

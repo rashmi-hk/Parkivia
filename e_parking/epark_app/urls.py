@@ -2,9 +2,10 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from .api.views.staff_home import HomeAPIList
+from .api.views.admin_home import AdminHomeAPIList
 from .api.views.single_slot_detail import SingleSlotAPIList
 from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
-from .api.views.admin_signup import AdminUtilityAPIList,AdminCustomAPIList
+from .api.views.admin_signup import AdminUtilityAPIList
 from .api.views.admin_login import AdminSignInAPIList
 from .api.views.staff_signin import StaffLoginAPIList
 from .api.views.staff_signup import StaffSignupAPIList
@@ -13,6 +14,7 @@ from .api.views.slot_detail import SlotDetailAPIList
 from .api.views.staff_location import StaffLocationAPIList
 from .api.views.user_login import UserSignInAPIList
 from .api.views.user_signup import UserSignUpAPIList
+from .api.views.admin_add_location import AdminLocationAPIList,AdminEditLocationAPIList,AdminGetLocationAPIList
 
 
 from .api.views.geo_map import GMapsGeocoding,CurrentLocation,ManualCurrentLocation,AllLocationGeocoding
@@ -48,10 +50,13 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 urlpatterns = [
 
     path('admin_login', AdminSignInAPIList.as_view() , name='admin_login'),
+    path('admin_home', AdminHomeAPIList.as_view() , name='admin_home'),
+    path('admin_get_location', AdminGetLocationAPIList.as_view() , name='admin_get_location'),
+    path('admin_edit_location', AdminEditLocationAPIList.as_view() , name='admin_edit_location'),
     path('user_login', UserSignInAPIList.as_view() , name='user_login'),
     path('user_signup', UserSignUpAPIList.as_view() , name='user_signup'),
     path('staff_home', HomeAPIList.as_view() , name='staff_home'),
-    path('admin_custom', AdminCustomAPIList.as_view(), name='admin_custom'),
+    path('admin_add_location', AdminLocationAPIList.as_view(), name='admin_add_location'),
 
 
     path('single_slot', SlotBookingFormAPIList.as_view() , name='single_slot'),

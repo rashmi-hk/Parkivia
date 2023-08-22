@@ -55,17 +55,3 @@ class AdminUtilityAPIList(APIView):
             print(f"An unexpected error occurred: {e}")
 
 
-
-
-
-class AdminCustomAPIList(APIView):
-        def get(self,request):
-            try:
-                print("Inside get AdminCustomAPIList")
-                return render(request, 'admin_select_location.html')
-            except TemplateDoesNotExist:
-                return JsonResponse(
-                    {'message': 'Template not found', 'error': 'The template admin_select_location.html does not exist'},
-                    status=404)
-
-

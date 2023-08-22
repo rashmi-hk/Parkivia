@@ -1,0 +1,70 @@
+{% extends 'admin_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Slot Detail List</h2>
+    <div class="table-container">
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'admin_add_location' %}" class="btn btn-primary">Add Location</a>
+        </div>
+        <table class="table table-success table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for location in resulting_list %}
+                <tr>
+                    <td>{{ location.name }}</td>
+                    <td>{{ location.latitude }}</td>
+                    <td>{{ location.longitude }}</td>
+                    <td>{{ location.address }}</td>
+                    <td>
+                         <a href="{% url 'admin_edit_location' %}?name={{ location.name  }}&latitude={{ location.latitude }}&longitude={{ location.longitude }}&address={{ location.address }}&location_id={{ location.location_id }}" class="btn btn-primary">Edit</a>
+
+                        <button type="button" class="btn btn-sm btn-danger delete-button" onclick="deleteLocation({{ location.location_id }})">Delete</button>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+   function deleteLocation(location_id) {
+        const confirmDelete = confirm("Are you sure you want to delete this location?");
+        if (!confirmDelete) {
+            return;
+        }
+
+        // Fetch method to delete the location
+        fetch("{% url 'admin_edit_location' %}?location_id=" + location_id, {
+            method: "DELETE",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+        .then(response => {
+           console.log("******",response.status)
+            if (response.ok) {
+                window.location.reload();
+                alert('Location deleted successfully');
+            }
+
+        })
+
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+</script>
+{% endblock %}

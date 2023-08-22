@@ -59,79 +59,43 @@ class SlotDetailAPIList(APIView):
             return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
                                 status=404)
 
-    def post(self, request):
-        print("Inside location post", request)
-        print("Inside location post user", request.user)
-        print("Inside location post", request.data)
-        try:
-            user_email = request.session.get('email')
-
-
-            user = CustomUser.objects.get(email=user_email)
-           # User with the provided email doesn't exist
-
-
-            if not user.is_authenticated:
-                print("User not authenticated")
-                return JsonResponse(
-                    {'message': 'Unauthorized', 'error': 'You must be logged in to access this resource'},
-                    status=status.HTTP_401_UNAUTHORIZED)
-
-
-
-            print("User athenticated n superuser")
-            address = request.data["address"]
-            print("address", address)
-
-            name = request.data["name"]
-            print("name", name)
-
-
-            new_location = Location()
-            new_location.address = address
-            new_location.name = name
-            new_location.save()
-            response_data = {'message': 'Request processed successfully'}
-            return JsonResponse(response_data, status=status.HTTP_200_OK)
-
-        except CustomUser.DoesNotExist:
-            # If the user does not exist, you can handle it accordingly
-            # For example, you might want to return an error response
-            return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
-                                status=404)
-
-    def delete(self, request):
-
-        print("inside delete Location item", request.data)
-
-        location_id = request.data['location_id']
-
-        print("location_id", location_id)
-
-        user_email = request.session.get('email')
-        user = CustomUser.objects.get(email=user_email)
-
-        if not user.is_authenticated:
-            print("User not authenticated")
-            return JsonResponse(
-                {'message': 'Unauthorized', 'error': 'You must be logged in to access this resource'},
-                status=status.HTTP_401_UNAUTHORIZED)
-
-        if not self.is_superuser(user):
-            print("user not superuser")
-            return JsonResponse(
-                {'message': 'Unauthorized', 'error': 'You do not have permission to access this resource'},
-                status=status.HTTP_403_FORBIDDEN)
-
-
-        try:
-            location_item = Location.objects.get(id=location_id)
-            print("location_item", location_item)
-
-            if location_item:
-                    location_item.delete()
-
-            return HttpResponse("location deleted successfully.")
-
-        except Location.DoesNotExist:
-            return HttpResponseBadRequest("Location not found.")
+    # def post(self, request):
+    #     print("Inside location post", request)
+    #     print("Inside location post user", request.user)
+    #     print("Inside location post", request.data)
+    #     try:
+    #         user_email = request.session.get('email')
+    #
+    #
+    #         user = CustomUser.objects.get(email=user_email)
+    #        # User with the provided email doesn't exist
+    #
+    #
+    #         if not user.is_authenticated:
+    #             print("User not authenticated")
+    #             return JsonResponse(
+    #                 {'message': 'Unauthorized', 'error': 'You must be logged in to access this resource'},
+    #                 status=status.HTTP_401_UNAUTHORIZED)
+    #
+    #
+    #
+    #         print("User athenticated n superuser")
+    #         address = request.data["address"]
+    #         print("address", address)
+    #
+    #         name = request.data["name"]
+    #         print("name", name)
+    #
+    #
+    #         new_location = Location()
+    #         new_location.address = address
+    #         new_location.name = name
+    #         new_location.save()
+    #         response_data = {'message': 'Request processed successfully'}
+    #         return JsonResponse(response_data, status=status.HTTP_200_OK)
+    #
+    #     except CustomUser.DoesNotExist:
+    #         # If the user does not exist, you can handle it accordingly
+    #         # For example, you might want to return an error response
+    #         return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
+    #                             status=404)

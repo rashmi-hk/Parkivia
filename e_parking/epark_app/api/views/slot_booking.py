@@ -120,37 +120,7 @@ class SlotBookingAPIList(APIView):
             return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
                                 status=404)
 
-    def delete(self, request):
 
-        print("inside delete Location item", request.data)
-
-        location_id = request.data['location_id']
-
-        print("location_id", location_id)
-
-        user_email = request.session.get('email')
-        user = CustomUser.objects.get(email=user_email)
-
-        if not user.is_authenticated:
-            print("User not authenticated")
-            return JsonResponse(
-                {'message': 'Unauthorized', 'error': 'You must be logged in to access this resource'},
-                status=status.HTTP_401_UNAUTHORIZED)
-
-
-
-
-        try:
-            location_item = Location.objects.get(id=location_id)
-            print("location_item", location_item)
-
-            if location_item:
-                    location_item.delete()
-
-            return HttpResponse("location deleted successfully.")
-
-        except Location.DoesNotExist:
-            return HttpResponseBadRequest("Location not found.")
 
 
 class SlotBookingFormAPIList(APIView):
