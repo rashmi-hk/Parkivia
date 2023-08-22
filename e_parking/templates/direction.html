@@ -1,45 +1,85 @@
 <!DOCTYPE html>
+{% extends 'user_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
 <html>
 <head>
     <title>Directions Map</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7-wAJ3I-VlVGCWzDPVnjfwFgvqFgoM-M"></script>
-    <script>
+
+
+</head>
+{% block content %}
+<body onload="initMap()">
+
+    <div id="map" style="height: 500px;"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}"></script>
+<script>
         function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 12.417020733478072, lng: 76.60470661806708},
-                zoom: 8
+            var fixedLocations = {{ fixed_locations | safe }};
+             var centerLocation = fixedLocations.find(function(location) {
+                return location.title === "Me";
             });
+            var mapOptions = {
+                center: {lat: centerLocation.lat, lng: centerLocation.lng},
+                zoom: 8
+            };
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+
 
             var directions = {{ directions | safe }};
             var directionsDisplay = new google.maps.DirectionsRenderer();
             directionsDisplay.setMap(map);
-
+            console.log("type travel", typeof('{{travling_mode}}'))
+            console.log("type inbuilt", typeof('DRIVING'))
+            console.log("mode travel", '{{travling_mode}}')
+            console.log("mode inbuilt", 'DRIVING')
             var request = {
                 origin: directions[0].start_location,
                 destination: directions[directions.length - 1].end_location,
-                travelMode: 'DRIVING'
+                travelMode: '{{travling_mode}}'
             };
 
             var directionsService = new google.maps.DirectionsService();
             directionsService.route(request, function(result, status) {
                 if (status === 'OK') {
                     directionsDisplay.setDirections(result);
+                     var startMarker = new google.maps.Marker({
+                        position: result.routes[0].legs[0].start_location,
+                        map: map,
+                        label: 'User Location',
+                        icon: {
+                            url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                        }
+                    });
+                    var endMarker = new google.maps.Marker({
+                        position: result.routes[0].legs[0].end_location,
+                        map: map,
+                        label: 'Destination',
+                        icon: {
+                            url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                        }
+                        });
                 }
             });
 
             var fixedLocations = {{ fixed_locations | safe }};
             console.log("fixedLocations", fixedLocations);
             for (var i = 0; i < fixedLocations.length; i++) {
+                var markerColor = (fixedLocations[i].title === "Me") ? "blue" : "red";
                 var marker = new google.maps.Marker({
                     position: {lat: fixedLocations[i].lat, lng: fixedLocations[i].lng},
                     map: map,
-                    title: fixedLocations[i].title
+                    title: fixedLocations[i].title,
+                     icon: {
+                        url: `http://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`
+                    },
+
                 });
             }
        }
     </script>
-</head>
-<body onload="initMap()">
-    <div id="map" style="height: 500px;"></div>
 </body>
 </html>
+{% endblock %}

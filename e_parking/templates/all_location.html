@@ -42,7 +42,8 @@
                         });
 
                          var anchor = document.createElement("a");
-                         var url = `single_slot_detail?lat=${location.lat}&lng=${location.lng}&location_id=${location.location_id}`;
+                          var url = `single_slot_detail?lat=${centerLocation.lat}&lng=${centerLocation.lng}&user_lat=${location.lat}&user_lng=${location.lng}&location_id=${location.location_id}`;
+<!--
                          anchor.href = url;
                          anchor.textContent = location.title;
 
@@ -65,18 +66,7 @@
                 }
             }
 
-            function show_path(lat, lng, location_id) {
-            console.log("Inside function")
-            fetch(`single_slot_detail?lat=${lat}&lng=${lng}&location_id=${location_id}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Process the data returned by the API as needed
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        }
+
     </script>
 </head>
 <body onload="initMap()">

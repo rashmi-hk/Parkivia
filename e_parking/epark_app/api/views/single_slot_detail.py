@@ -38,9 +38,12 @@ class SingleSlotAPIList(APIView):
         try:
             user_email = request.session.get('email')
             user = CustomUser.objects.get(email=user_email)
-
-            lat = request.GET.get('lat')
-            lng = request.GET.get('lng')
+            print("Data", request)
+            print("Data", request.GET)
+            current_lat = request.GET.get('lat')
+            current_lng = request.GET.get('lng')
+            lat = request.GET.get('user_lat')
+            lng = request.GET.get('user_lng')
             location_id = request.GET.get('location_id')
 
             slot_detail_obj = SlotDetail.objects.filter(location=location_id)
@@ -55,6 +58,8 @@ class SingleSlotAPIList(APIView):
                         "capacity": variant.capacity,
                         "hourly_rate": variant.hourly_rate,
                         "name": variant.slot,
+                        "latitude":lat,
+                        "longitude": lng,
                     }
 
                     # Group data by slot name
@@ -74,7 +79,10 @@ class SingleSlotAPIList(APIView):
                 for slot_name, variant_list in grouped_data.items()
             ]
 
-            context = {'slot_detail': resulting_list}
+            context = {'slot_detail': resulting_list,
+                       'current_lat': current_lat,
+                       'current_lng': current_lng
+                       }
             print("context", context)
             return render(request, 'user_slot_detail.html', context)
 

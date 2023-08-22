@@ -54,9 +54,11 @@
             form.submit();
         }
 
-        document.getElementById("allowLocationBtn").addEventListener("click", function() {
+       <!-- Inside the allowLocationBtn click event listener -->
+        document.getElementById("allowLocationBtn").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
             if ("geolocation" in navigator) {
-                console.log("Inside current location");
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
                         var latitude = position.coords.latitude;
@@ -66,7 +68,7 @@
                         console.log("longitude", longitude);
 
                         var form = document.getElementById('productForm');
-                        submitProductForm(form, latitude, longitude);
+                        submitProductForm(form, latitude, longitude); // Call the form submission function
                     },
                     function(error) {
                         console.log("Error getting geolocation:", error);
@@ -76,6 +78,7 @@
                 console.log("Geolocation not available");
             }
         });
+
 
         document.getElementById("denyLocationBtn").addEventListener("click", function() {
             var form = document.getElementById('denyCurrentLocation');

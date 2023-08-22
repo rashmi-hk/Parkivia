@@ -44,7 +44,7 @@ class UserSignInAPIList(APIView):
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
 
-            return render(request, 'user_home.html')
+            return redirect('current_location')
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response

@@ -24,15 +24,25 @@ class GMapsGeocoding(APIView):
         print("Inside: first *****", self.__class__.__name__)
         print("Request params: ", request)
 
-        start_location = request.GET.get('address')
-        print("start_location", start_location)
+
 
         latitude = request.GET.get('latitude')
         longitude = request.GET.get('longitude')
+        current_latitude = request.GET.get('current_lat')
+        current_longitude = request.GET.get('current_lng')
         print("***********", latitude,longitude)
-
+        travling_mode =  request.GET.get('travelmode')
+        end_location = 0
         if latitude and longitude:
-            start_location = (latitude, longitude)
+            lat = float(latitude)
+            long = float(longitude)
+            end_location = (lat, long)
+
+        start_location = 0
+        if current_latitude and current_longitude:
+            lat = float(current_latitude)
+            long = float(current_longitude)
+            start_location = (lat, long)
 
         YOUR_API_KEY = config('YOUR_API_KEY')
 
@@ -40,18 +50,20 @@ class GMapsGeocoding(APIView):
         gmaps = googlemaps.Client(key=YOUR_API_KEY)
 
 
-        end_location = 'balamuri, Mysore'
+
         directions_result = gmaps.directions(start_location, end_location,mode="driving", alternatives=True)
 
 
         fixed_locations = [
+
+            {"lat": lat, "lng": long, 'title': "Me"},
             {"lat": 15.351132566178995, "lng": 75.11103627515064, 'title': "Dollarbird"},
             {"lat": 12.455558657572665, "lng": 75.94912661758033, 'title': "balamuri"},
             {"lat": 12.305225882078265, "lng": 76.65517489669053, 'title': "Mysore palace"}
         ]
 
         return render(request, 'direction.html',
-                      {'directions': directions_result[0]['legs'][0]['steps'], 'fixed_locations': fixed_locations})
+                      {'directions': directions_result[0]['legs'][0]['steps'], 'fixed_locations': fixed_locations,'google_maps_api_key': YOUR_API_KEY,'travling_mode':travling_mode})
 
 
 class AllLocationGeocoding(APIView):
