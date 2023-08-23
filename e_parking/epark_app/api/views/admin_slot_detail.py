@@ -60,7 +60,8 @@ class AdminEditSlotDetailAPIList(APIView):
             all_location = Location.objects.all()
 
             slot_data_obj = SlotDetail.objects.get(id = slot_detail_id)
-            slot_variant_obj = slot_data_obj.slot_variants.all()
+            slot_variant_obj = SlotDetailVariant.objects.filter(slot__id=slot_detail_id)
+           
 
             print("slot_detail_id", slot_detail_id)
 
@@ -241,7 +242,7 @@ class AddSlotDetailAPIList(APIView):
                 'slot_detail': serializer.data,
                 'slot_variants': slot_variants
             }
-            print("saved ")
+
             return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
