@@ -3,7 +3,9 @@
 {% load mathfilters %}
 {% load static %}
 <head>
+<style>
 
+</style>
     <!-- Include Bootstrap CSS and other necessary stylesheets here -->
 </head>
 {% block content %}
@@ -20,18 +22,35 @@
                         <input type="text" id="nameInput" value="{{ name }}" class="form-control">
                     </div>
                 </div>
+                <div class="row mb-3  hidden-row" style="display: none;">
+                    <label class="col-sm-3 col-form-label">slot_detail_id:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="slotDetailId" value="{{ slot_detail_id }}" class="form-control">
+                    </div>
+                </div>
                 <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Opening Hours:</label>
                     <div class="col-sm-9">
                         <input type="text" id="openingHoursInput"  value="{{ opening_hours }}" class="form-control">
                     </div>
                 </div>
-                <div class="row mb-3">
+               <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Location:</label>
                     <div class="col-sm-9">
-                        <input type="text" id="locationInput" value="{{ location }}" class="form-control">
-                    </div>
-                </div>
+                        <select id="locationInput" class="form-control">
+                            {% for location_option in location %}
+                                <option value="{{ location_option.id }}"
+                                    {% if slot_location.id == location_option.id %}
+                                        selected
+                                    {% endif %}
+                                >
+                    {{ location_option.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
             </form>
         </div>
     </div>
@@ -44,7 +63,7 @@
                 Variant Details
             </div>
             <div class="card-body">
-                <div class="row mb-3">
+                <div class="row mb-3 hidden-row" style="display: none;">
                     <label class="col-sm-3 col-form-label">Slot:</label>
                     <div class="col-sm-9">
                         <input type="text" id="variantSlotInput{{ variant.var_slot_id }}" value="{{ variant.slot }}" class="form-control">
@@ -78,55 +97,66 @@
         </div>
     {% endfor %}
         <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" id="submitButton" class="btn btn-primary" onclick="submitForm()">Submit</button>
         </div>
     </form>
 </div>
 <script>
-$(document).ready(function() {
-    $('#submitButton').click(function() {
-        var editedSlotData = {
-            'name': $('#nameInput').val(),
-            'opening_hours': $('#openingHoursInput').val(),
-            'location': $('#locationInput').val(),
-            // Other slot fields...
-        };
+ function submitForm() {
+        // Collect and prepare the data
+        const variants = document.querySelectorAll("[id^='variantSlotInput']");
+        const data = [];
 
-        var editedVariants = [];
-        {% for variant in slot_variants %}
-            var variantId = $('#variantId{{ variant.var_slot_id }}').val();
-            var editedVariant = {
-                'id': variantId,
-                'slot': $('#variantSlotInput{{ variant.var_slot_id }}').val(),
-                'capacity': $('#variantCapacityInput{{ variant.var_slot_id }}').val(),
-                'available_slot': $('#variantAvailableSlots{{ variant.var_slot_id }}').val(),
-                'vehical_type': $('#variantVehicleType{{ variant.var_slot_id }}').val(),
-                'hourly_rate': $('#variantHourlyRate{{ variant.var_slot_id }}').val(),
-                // Other variant fields...
-            };
-            editedVariants.push(editedVariant);
-        {% endfor %}
+        variants.forEach(function (variant) {
+            const varSlotId = variant.id.replace("variantSlotInput", "");
+            const capacity = document.getElementById("variantCapacityInput" + varSlotId).value;
+            const availableSlots = document.getElementById("variantAvailableSlots" + varSlotId).value;
+            const vehicleType = document.getElementById("variantVehicleType" + varSlotId).value;
+            const hourlyRate = document.getElementById("variantHourlyRate" + varSlotId).value;
 
-        var requestData = {
-            'edited_slot_data': editedSlotData,
-            'edited_variants': editedVariants
-        };
-
-        // Send the requestData to the server using an AJAX request
-        $.ajax({
-            type: 'PATCH',
-            url: '{% url 'admin_edit_slot_detail' %}', // Replace with your actual server endpoint
-            data: JSON.stringify(requestData),
-            contentType: 'application/json',
-            success: function(response) {
-                // Handle success response from the server
-            },
-            error: function(error) {
-                // Handle error response from the server
-            }
+            data.push({
+                var_slot_id: varSlotId,
+                capacity: capacity,
+                available_slots: availableSlots,
+                vehicle_type: vehicleType,
+                hourly_rate: hourlyRate,
+            });
         });
-    });
-});
+
+        // Data to be sent to the server
+        const postData = {
+            slot_detail_id: document.getElementById("slotDetailId").value,
+            name: document.getElementById("nameInput").value,
+            opening_hours: document.getElementById("openingHoursInput").value,
+            location: document.getElementById("locationInput").value,
+            slot_variants: data,
+        };
+
+        // Send the data using a fetch request
+        fetch("/admin_edit_slot_detail", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                // You might need to include other headers based on your server's requirements
+            },
+            body: JSON.stringify(postData),
+        })
+            .then(response => {
+                console.log("OK")
+                console.log(response)
+                console.log(response.data)
+                if (response.ok) {
+                    window.location.reload(); // Changed from 'window.slot.reload();'
+                    alert('Slot Detail Edited Successfully');
+                } else {
+                    throw new Error('Failed to edit slot detail'); // You can customize the error message
+                }
+            })
+            .catch(error => {
+                // Handle errors
+                console.error(error);
+            });
+    }
 </script>
 
 {% endblock %}

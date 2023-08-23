@@ -29,7 +29,7 @@
 
 
                     <td>
-                         <a href="{% url 'admin_edit_slot_detail' %}?name={{ slot.name  }}&opening_hours={{ slot.opening_hours }}&location={{ slot.location }}&slot_id={{ slot.slot_detail_id }}" class="btn btn-primary">Edit</a>
+                         <a href="{% url 'admin_edit_slot_detail' %}?name={{ slot.name  }}&opening_hours={{ slot.opening_hours }}&location={{ slot.location }}&slot_id={{ slot.slot_detail_id }}&slot_location={{slot.slot_location}}" class="btn btn-primary">Edit</a>
 
                         <button type="button" class="btn btn-sm btn-danger delete-button" onclick="deleteSlotDetail({{ slot.slot_id }})">Delete</button>
 
