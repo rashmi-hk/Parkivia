@@ -9,7 +9,7 @@ from .api.views.admin_signup import AdminUtilityAPIList
 from .api.views.admin_login import AdminSignInAPIList
 from .api.views.staff_signin import StaffLoginAPIList
 from .api.views.staff_signup import StaffSignupAPIList
-from .api.views.admin_slot_detail import AdminGetSlotDetailAPIList,AdminEditSlotDetailAPIList
+from .api.views.admin_slot_detail import AdminGetSlotDetailAPIList,AdminEditSlotDetailAPIList,AddSlotDetailAPIList
 from .api.views.staff_verify_otp import StaffVerifyOtpAPIList
 from .api.views.slot_detail import SlotDetailAPIList
 from .api.views.staff_location import StaffLocationAPIList
@@ -55,6 +55,7 @@ urlpatterns = [
     path('admin_get_location', AdminGetLocationAPIList.as_view() , name='admin_get_location'),
     path('admin_edit_location', AdminEditLocationAPIList.as_view() , name='admin_edit_location'),
     path('admin_edit_slot_detail', AdminEditSlotDetailAPIList.as_view() , name='admin_edit_slot_detail'),
+    path('admin_add_slot_detail', AddSlotDetailAPIList.as_view() , name='admin_add_slot_detail'),
     path('admin_slot_detail', AdminGetSlotDetailAPIList.as_view() , name='admin_slot_detail'),
     path('user_login', UserSignInAPIList.as_view() , name='user_login'),
     path('user_signup', UserSignUpAPIList.as_view() , name='user_signup'),

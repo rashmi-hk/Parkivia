@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from django.shortcuts import render, redirect
 import json
 from ...models import CustomUser,Location, SlotDetail, SlotDetailVariant
+from ...serializers import SlotDetailSerializer,SlotDetailVariantSerializer
 from django.core.mail import send_mail,EmailMultiAlternatives
 from decouple import config
 from django.utils.crypto import get_random_string
@@ -195,3 +196,52 @@ class AdminEditSlotDetailAPIList(APIView):
 
         except Location.DoesNotExist:
             return HttpResponseBadRequest("Location not found.")
+
+class AddSlotDetailAPIList(APIView):
+
+    def get(self, request):
+        try:
+            print("Inside get AddSlotDetailAPIList", request)
+            all_location = Location.objects.all()
+            vehicle_choices = SlotDetailVariant.VEHICLE_CHOICES
+
+            context = {"all_location": all_location,
+                       "vehicle_choices": vehicle_choices}
+            return render(request, 'admin_add_slot_detail.html', context)
+
+        except TemplateDoesNotExist:
+            return JsonResponse(
+                {'message': 'Template not found',
+                 'error': 'The template admin_edit_location.html does not exist'},
+                status=404)
+
+    def post(self, request, format=None):
+        print("Inside create ", request)
+        print("Inside create ", request.data)
+        serializer = SlotDetailSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # Save the SlotDetail instance
+            slot_detail = serializer.save()
+
+            # Create SlotDetailVariant instances
+            slot_variants_data = request.data.get('slot_variants', [])
+            slot_variants = []
+            for variant_data in slot_variants_data:
+                variant_data['slot'] = slot_detail.id
+                variant_serializer = SlotDetailVariantSerializer(data=variant_data)
+                if variant_serializer.is_valid():
+                    variant_serializer.save()
+                    slot_variants.append(variant_serializer.data)
+                else:
+                    # Handle variant serializer errors if needed
+                    pass
+
+            response_data = {
+                'slot_detail': serializer.data,
+                'slot_variants': slot_variants
+            }
+            print("saved ")
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

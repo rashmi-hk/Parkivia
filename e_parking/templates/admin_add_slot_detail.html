@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+{% extends 'admin_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Slot Detail</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% block content %}
+<div class="container mt-5">
+    <h2>Create Slot Detail</h2>
+    <form method="post" >
+        {% csrf_token %}
+
+        <!-- SlotDetail Fields -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="card-title mb-4">Slot Detail</h3>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="opening_hours">Opening Hours:</label>
+                    <input type="text" class="form-control" id="opening_hours" name="opening_hours" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location:</label>
+
+                    <select class="form-control" id="location" name="location" required>
+                        <option value="" disabled selected>Select a Location</option>
+                        {% for location in all_location %}
+                            <option value="{{ location.id }}">{{ location.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- SlotDetailVariant Fields -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="card-title  mb-4">Slot Variants</h3>
+                <button type="button" class="btn btn-primary add-variant float-right  mb-3">Add Variant</button>
+                <div class="variant-container">
+                    <div class="form-group">
+                        <label for="capacity">Capacity:</label>
+                        <input type="number" class="form-control" name="capacity[]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="available_slots">Available Slots:</label>
+                        <input type="number" class="form-control" name="available_slots[]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicle_type">Vehicle Type:</label>
+                        <select class="form-control" name="vehicle_type[]" required>
+                            <option value="" disabled selected>Select a Vehicle Type</option>
+                            {% for choice in vehicle_choices %}
+                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hourly_rate">Hourly Rate:</label>
+                        <input type="number" step="0.01" class="form-control" name="hourly_rate[]" required>
+                    </div>
+                    <button type="button" class="btn btn-danger remove-variant  mb-3">Remove</button>
+                </div>
+            </div>
+        </div>
+         <div class="d-flex justify-content-center align-items-center mb-5">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+<!-- Other scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        // Add variant field
+        $(".add-variant").click(function () {
+            var variantContainer = $(".variant-container:first");
+            var newVariant = variantContainer.clone(true, true);
+
+            // Clear input values
+            newVariant.find("input, select").val("");
+
+            // Show remove button
+            newVariant.find(".remove-variant").show();
+
+            // Append the new variant after the last variant
+            variantContainer.parent().append(newVariant);
+        });
+
+        // Remove variant field
+        $(document).on("click", ".remove-variant", function () {
+            $(this).closest(".variant-container").remove();
+        });
+
+        // Handle form submission
+        $("form").submit(function (event) {
+            event.preventDefault();
+
+            // Gather variant data
+            var variants = [];
+            $(".variant-container").each(function () {
+                var variant = {
+                    capacity: $(this).find("input[name='capacity[]']").val(),
+                    available_slots: $(this).find("input[name='available_slots[]']").val(),
+                    vehicle_type: $(this).find("select[name='vehicle_type[]']").val(),
+                    hourly_rate: $(this).find("input[name='hourly_rate[]']").val(),
+                };
+                variants.push(variant);
+            });
+
+            // Create the final data to send in the POST request
+            var formData = {
+                name: $("#name").val(),
+                opening_hours: $("#opening_hours").val(),
+                location: $("#location").val(),
+                slot_variants: variants,
+                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+            };
+
+            // Send the POST request
+            $.ajax({
+                type: "POST",
+                url: "{% url 'admin_add_slot_detail' %}",
+                data: formData,
+                success: function (response) {
+                    // Handle success response if needed
+                    window.location.reload();
+                    alert('SlotDetail added successfully');
+                },
+                error: function (error) {
+                    // Handle error response if needed
+                },
+            });
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
+{% endblock %}
