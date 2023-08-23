@@ -39,7 +39,7 @@
         text-align: center;
         background-color: black;
         padding: 20px;
-        position: absolute;
+
         bottom: 0;
         width: 100%;
     }
@@ -48,6 +48,7 @@
         margin: 0;
         font-size: 14px;
         color: #6c757d;
+
     }
     </style>
 
@@ -85,7 +86,7 @@
             <a class="nav-link active nav-data" aria-current="page" href="{% url 'admin_home' %}">Home</a>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link nav-data" href="{% url 'slot_detail' %}">AddSlotDetail</a>
+            <a class="nav-link nav-data" href="{% url 'admin_slot_detail' %}">SlotDetail</a>
         </li>
         <li class="nav-item px-3">
             <a class="nav-link nav-data" href="{% url 'slot_booking' %}">AddSlotBooking</a>

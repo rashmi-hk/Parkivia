@@ -53,10 +53,15 @@
                 "X-CSRFToken": "{{ csrf_token }}"
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            // Handle response data if needed
-        })
+        .then(response => {
+                if (response.ok) {
+                    console.log("Ok");
+                    window.location.reload();
+                    alert('Location edit successfully');
+                } else {
+                    console.error('Error editing data to Location:', response.statusText);
+                }
+            })
         .catch(error => {
             console.error("Error:", error);
         });

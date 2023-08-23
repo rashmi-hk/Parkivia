@@ -48,5 +48,4 @@ class AdminSignInAPIList(APIView):
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response
-            return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
-                                status=404)
+            return render(request, 'admin_login.html', {'error_message': 'User not found'})

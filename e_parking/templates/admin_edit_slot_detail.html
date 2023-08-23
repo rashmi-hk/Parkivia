@@ -1,0 +1,132 @@
+{% extends 'admin_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<head>
+
+    <!-- Include Bootstrap CSS and other necessary stylesheets here -->
+</head>
+{% block content %}
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header">
+            Slot Details
+        </div>
+        <div class="card-body">
+            <form>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Name:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="nameInput" value="{{ name }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Opening Hours:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="openingHoursInput"  value="{{ opening_hours }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Location:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="locationInput" value="{{ location }}" class="form-control">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Nested Bootstrap card structure for each slot variant -->
+    <form>
+    {% for variant in slot_variants %}
+        <div class="card mt-4">
+            <div class="card-header">
+                Variant Details
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Slot:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantSlotInput{{ variant.var_slot_id }}" value="{{ variant.slot }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Capacity:</label>
+                    <div class="col-sm-9">
+                        <input type="text"  id="variantCapacityInput{{ variant.var_slot_id }}" value="{{ variant.capacity }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Available Slots:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantAvailableSlots{{ variant.var_slot_id }}"  value="{{ variant.available_slots }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Vehicle Type:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantVehicleType{{ variant.var_slot_id }}" value="{{ variant.vehicle_type }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate{{ variant.var_slot_id }}" value="{{ variant.hourly_rate }}" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+$(document).ready(function() {
+    $('#submitButton').click(function() {
+        var editedSlotData = {
+            'name': $('#nameInput').val(),
+            'opening_hours': $('#openingHoursInput').val(),
+            'location': $('#locationInput').val(),
+            // Other slot fields...
+        };
+
+        var editedVariants = [];
+        {% for variant in slot_variants %}
+            var variantId = $('#variantId{{ variant.var_slot_id }}').val();
+            var editedVariant = {
+                'id': variantId,
+                'slot': $('#variantSlotInput{{ variant.var_slot_id }}').val(),
+                'capacity': $('#variantCapacityInput{{ variant.var_slot_id }}').val(),
+                'available_slot': $('#variantAvailableSlots{{ variant.var_slot_id }}').val(),
+                'vehical_type': $('#variantVehicleType{{ variant.var_slot_id }}').val(),
+                'hourly_rate': $('#variantHourlyRate{{ variant.var_slot_id }}').val(),
+                // Other variant fields...
+            };
+            editedVariants.push(editedVariant);
+        {% endfor %}
+
+        var requestData = {
+            'edited_slot_data': editedSlotData,
+            'edited_variants': editedVariants
+        };
+
+        // Send the requestData to the server using an AJAX request
+        $.ajax({
+            type: 'PATCH',
+            url: '{% url 'admin_edit_slot_detail' %}', // Replace with your actual server endpoint
+            data: JSON.stringify(requestData),
+            contentType: 'application/json',
+            success: function(response) {
+                // Handle success response from the server
+            },
+            error: function(error) {
+                // Handle error response from the server
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

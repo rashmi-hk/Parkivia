@@ -163,7 +163,7 @@ class AdminEditLocationAPIList(APIView):
             loc_obj.save()
 
             print("Saved sucess")
-            return JsonResponse({'message': 'Staff location updated successfully'}, status=status.HTTP_201_CREATED)
+            return JsonResponse({'message': 'location updated successfully'}, status=status.HTTP_201_CREATED)
 
         except CustomUser.DoesNotExist:
             return JsonResponse({'error': 'CustomUser not found'}, status=404)

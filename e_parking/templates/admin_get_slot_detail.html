@@ -1,0 +1,71 @@
+{% extends 'admin_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Slot Detail Dashbord</h2>
+    <div class="table-container">
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'admin_edit_slot_detail' %}" class="btn btn-primary">Add Slot Detail</a>
+        </div>
+        <table class="table table-success table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Opening hours</th>
+                    <th>location</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in resulting_list %}
+                <tr>
+                    <td>{{ slot.name }}</td>
+                    <td>{{ slot.opening_hours }}</td>
+                    <td>{{ slot.location }}</td>
+
+
+                    <td>
+                         <a href="{% url 'admin_edit_slot_detail' %}?name={{ slot.name  }}&opening_hours={{ slot.opening_hours }}&location={{ slot.location }}&slot_id={{ slot.slot_detail_id }}" class="btn btn-primary">Edit</a>
+
+                        <button type="button" class="btn btn-sm btn-danger delete-button" onclick="deleteSlotDetail({{ slot.slot_id }})">Delete</button>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+   function deleteSlotDetail(slot_id) {
+        const confirmDelete = confirm("Are you sure you want to delete this slot?");
+        if (!confirmDelete) {
+            return;
+        }
+
+        // Fetch method to delete the slot
+        fetch("{% url 'admin_edit_slot_detail' %}?slot_id=" + slot_id, {
+            method: "DELETE",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+        .then(response => {
+           console.log("******",response.status)
+            if (response.ok) {
+                window.slot.reload();
+                alert('Location deleted successfully');
+            }
+
+        })
+
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+</script>
+{% endblock %}
