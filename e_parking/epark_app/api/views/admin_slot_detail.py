@@ -61,7 +61,7 @@ class AdminEditSlotDetailAPIList(APIView):
 
             slot_data_obj = SlotDetail.objects.get(id = slot_detail_id)
             slot_variant_obj = SlotDetailVariant.objects.filter(slot__id=slot_detail_id)
-           
+
 
             print("slot_detail_id", slot_detail_id)
 
@@ -132,15 +132,27 @@ class AdminEditSlotDetailAPIList(APIView):
                 hourly_rate = var_data["hourly_rate"]
                 var_slot_id = var_data["var_slot_id"]
                 try:
-                    exist_data_slot = SlotDetailVariant.objects.get(
-                        Q(id__iexact=var_slot_id) & Q(slot=slot_obj) & Q(capacity__iexact=capacity) &
-                        Q(available_slots__iexact=available_slots) & Q(vehicle_type__iexact=vehicle_type) &
-                        Q(hourly_rate__iexact=hourly_rate)
-                    )
-                    # exist_data_slot = SlotDetailVariant.objects.get(id=var_slot_id, slot=slot_obj, capacity=capacity,
-                    #                                              available_slots=available_slots,vehicle_type=vehicle_type,hourly_rate=hourly_rate)
 
-                    print("This SlotDetailVariant data already present no need to edit")
+                    if request.data.get('var_slot_id'):
+                        exist_data_slot = SlotDetailVariant.objects.get(
+                            Q(id__iexact=var_slot_id) & Q(slot=slot_obj) & Q(capacity__iexact=capacity) &
+                            Q(available_slots__iexact=available_slots) & Q(vehicle_type__iexact=vehicle_type) &
+                            Q(hourly_rate__iexact=hourly_rate)
+                        )
+
+                        print("This SlotDetailVariant data already present no need to edit")
+                    else:
+                        # Create new SlotDetailVariant
+                        new_variant_obj = SlotDetailVariant.objects.create(
+                            slot=slot_obj,
+                            capacity=capacity,
+                            available_slots=available_slots,
+                            vehicle_type=vehicle_type,
+                            hourly_rate=hourly_rate
+                        )
+                        print("Created new SlotDetailVariant:", new_variant_obj)
+
+
                 except:
                     print("SlotDetailVariant Editing is done")
                     slot_var_obj = SlotDetailVariant.objects.get(id=var_slot_id)
@@ -162,14 +174,17 @@ class AdminEditSlotDetailAPIList(APIView):
             print('Unexpected error occurred:', str(e))
             return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
 
+
     def delete(self, request):
 
-        print("inside delete Location item", request.data)
-        print("inside delete Location item", request)
+        print("inside delete slotvariant item", request.data)
+        print("inside delete slotdetail ", request)
 
-        location_id = name = request.GET.get('location_id')
+        variant_id =  request.data.get('variant_id')
+        print("variant_id", variant_id)
+        slot_detail_id =  request.GET.get('slot_detail_id')
 
-        print("location_id", location_id)
+
 
         user_email = request.session.get('email')
         user = CustomUser.objects.get(email=user_email)
@@ -187,16 +202,21 @@ class AdminEditSlotDetailAPIList(APIView):
                 status=status.HTTP_403_FORBIDDEN)
 
         try:
-            location_item = Location.objects.get(id=location_id)
-            print("location_item", location_item)
+            if variant_id:
+                print("Inside variant delete")
+                variant = SlotDetailVariant.objects.get(id=variant_id)
+                variant.delete()
+                print("Delete sucessfully")
+                return HttpResponse("SlotDetailVariant deleted successfully.")
+            else:
+                print("Inside slot delete")
+                slot_detail = SlotDetail.objects.get(id=slot_detail_id)
+                slot_detail.delete()
+                print("Delete sucessfully")
+                return HttpResponse("SlotDetail deleted successfully.")
 
-            if location_item:
-                location_item.delete()
-
-            return HttpResponse("location deleted successfully.")
-
-        except Location.DoesNotExist:
-            return HttpResponseBadRequest("Location not found.")
+        except SlotDetail.DoesNotExist:
+            return HttpResponseBadRequest("SlotDetail not found.")
 
 class AddSlotDetailAPIList(APIView):
 
@@ -216,33 +236,96 @@ class AddSlotDetailAPIList(APIView):
                  'error': 'The template admin_edit_location.html does not exist'},
                 status=404)
 
+    # def post(self, request, format=None):
+    #     print("Inside create ", request)
+    #     print("Inside create ", request.data)
+    #
+    #     serializer = SlotDetailSerializer(data=request.data)
+    #
+    #     if serializer.is_valid():
+    #         # Save the SlotDetail instance
+    #         print("seryihj")
+    #         slot_detail = serializer.save()
+
+            # Create SlotDetailVariant instances
+
+        #
+        #     slot_variants_data = request.data['slot_variants']
+        #     print("slot_variants_data", slot_variants_data)
+        #     slot_variants = []
+        #     for variant_data in slot_variants_data:
+        #         variant_data['slot'] = slot_detail.id
+        #         variant_serializer = SlotDetailVariantSerializer(data=variant_data)
+        #         if variant_serializer.is_valid():
+        #             variant_serializer.save()
+        #             slot_variants.append(variant_serializer.data)
+        #         else:
+        #             # Handle variant serializer errors if needed
+        #             pass
+        #
+        #     response_data = {
+        #         'slot_detail': serializer.data,
+        #         'slot_variants': slot_variants
+        #     }
+
+        #     return Response(response_data, status=status.HTTP_201_CREATED)
+        # else:
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # return
+
     def post(self, request, format=None):
         print("Inside create ", request)
         print("Inside create ", request.data)
-        serializer = SlotDetailSerializer(data=request.data)
 
-        if serializer.is_valid():
-            # Save the SlotDetail instance
-            slot_detail = serializer.save()
+        name = request.data.get('name')
+        opening_hours = request.data.get('opening_hours')
+        location = request.data.get('location')
+        slot_variants_data = json.loads(request.data.get('slot_variants'))
 
-            # Create SlotDetailVariant instances
-            slot_variants_data = request.data.get('slot_variants', [])
-            slot_variants = []
-            for variant_data in slot_variants_data:
-                variant_data['slot'] = slot_detail.id
-                variant_serializer = SlotDetailVariantSerializer(data=variant_data)
-                if variant_serializer.is_valid():
-                    variant_serializer.save()
-                    slot_variants.append(variant_serializer.data)
-                else:
-                    # Handle variant serializer errors if needed
-                    pass
 
-            response_data = {
-                'slot_detail': serializer.data,
-                'slot_variants': slot_variants
-            }
+        print("slot_variants_data", slot_variants_data)
 
-            return Response(response_data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        if not name or not opening_hours or not location:
+            return Response({'message': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+        location_obj = Location.objects.get(id=location)
+        slot_detail = SlotDetail.objects.create(
+            name=name,
+            opening_hours=opening_hours,
+            location=location_obj
+        )
+
+        slot_variants = []
+        for variant_data in slot_variants_data:
+            print("variant_data", variant_data)
+            capacity = variant_data['capacity']
+            available_slots = variant_data['available_slots']
+            vehicle_type = variant_data['vehicle_type']
+            hourly_rate = variant_data['hourly_rate']
+
+            if capacity and available_slots and vehicle_type and hourly_rate:
+                variant = SlotDetailVariant.objects.create(
+                    slot=slot_detail,
+                    capacity=capacity,
+                    available_slots=available_slots,
+                    vehicle_type=vehicle_type,
+                    hourly_rate=hourly_rate
+                )
+                slot_variants.append({
+                    'capacity': capacity,
+                    'available_slots': available_slots,
+                    'vehicle_type': vehicle_type,
+                    'hourly_rate': hourly_rate
+                })
+
+        response_data = {
+            'slot_detail': {
+                'name': name,
+                'opening_hours': opening_hours,
+                'location': location
+            },
+            'slot_variants': slot_variants
+        }
+
+        return Response(response_data, status=status.HTTP_201_CREATED)

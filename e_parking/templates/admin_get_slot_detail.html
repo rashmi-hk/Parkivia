@@ -31,7 +31,7 @@
                     <td>
                          <a href="{% url 'admin_edit_slot_detail' %}?name={{ slot.name  }}&opening_hours={{ slot.opening_hours }}&location={{ slot.location }}&slot_id={{ slot.slot_detail_id }}&slot_location={{slot.slot_location}}" class="btn btn-primary">Edit</a>
 
-                        <button type="button" class="btn btn-sm btn-danger delete-button" onclick="deleteSlotDetail({{ slot.slot_id }})">Delete</button>
+                        <button type="button" class="btn btn-sm btn-danger delete-button" onclick="deleteSlotDetail({{ slot.slot_detail_id }})">Delete</button>
 
                     </td>
                 </tr>
@@ -41,14 +41,14 @@
     </div>
 </div>
 <script>
-   function deleteSlotDetail(slot_id) {
+   function deleteSlotDetail(slot_detail_id) {
         const confirmDelete = confirm("Are you sure you want to delete this slot?");
         if (!confirmDelete) {
             return;
         }
 
         // Fetch method to delete the slot
-        fetch("{% url 'admin_edit_slot_detail' %}?slot_id=" + slot_id, {
+        fetch("{% url 'admin_edit_slot_detail' %}?slot_detail_id=" + slot_detail_id, {
             method: "DELETE",
             headers: {
                 "X-CSRFToken": "{{ csrf_token }}"
@@ -57,7 +57,7 @@
         .then(response => {
            console.log("******",response.status)
             if (response.ok) {
-                window.slot.reload();
+                window.location.reload();
                 alert('Location deleted successfully');
             }
 

@@ -2,11 +2,13 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from .api.views.staff_home import HomeAPIList
+from .api.views.admin_user import AdminUserAPIList,AdminUserCreateAPIList
 from .api.views.admin_home import AdminHomeAPIList
 from .api.views.single_slot_detail import SingleSlotAPIList
 from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
 from .api.views.admin_signup import AdminUtilityAPIList
 from .api.views.admin_login import AdminSignInAPIList
+
 from .api.views.staff_signin import StaffLoginAPIList
 from .api.views.staff_signup import StaffSignupAPIList
 from .api.views.admin_slot_detail import AdminGetSlotDetailAPIList,AdminEditSlotDetailAPIList,AddSlotDetailAPIList
@@ -52,9 +54,13 @@ urlpatterns = [
 
     path('admin_login', AdminSignInAPIList.as_view() , name='admin_login'),
     path('admin_home', AdminHomeAPIList.as_view() , name='admin_home'),
+    path('admin_add_user', AdminUserCreateAPIList.as_view() , name='admin_add_user'),
+    path('admin_edit_user', AdminUserAPIList.as_view() , name='admin_edit_user'),
     path('admin_get_location', AdminGetLocationAPIList.as_view() , name='admin_get_location'),
     path('admin_edit_location', AdminEditLocationAPIList.as_view() , name='admin_edit_location'),
     path('admin_edit_slot_detail', AdminEditSlotDetailAPIList.as_view() , name='admin_edit_slot_detail'),
+
+
     path('admin_add_slot_detail', AddSlotDetailAPIList.as_view() , name='admin_add_slot_detail'),
     path('admin_slot_detail', AdminGetSlotDetailAPIList.as_view() , name='admin_slot_detail'),
     path('user_login', UserSignInAPIList.as_view() , name='user_login'),

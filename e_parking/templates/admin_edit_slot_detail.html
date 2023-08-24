@@ -15,6 +15,9 @@
             Slot Details
         </div>
         <div class="card-body">
+             <div class="d-flex justify-content-end mb-3">
+                <button type="button" class="btn btn-success btn-sm" onclick="addNewVariant()">Add New Variant</button>
+            </div>
             <form>
                 <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Name:</label>
@@ -60,7 +63,9 @@
     {% for variant in slot_variants %}
         <div class="card mt-4">
             <div class="card-header">
-                Variant Details
+            Variant Details
+
+
             </div>
             <div class="card-body">
                 <div class="row mb-3 hidden-row" style="display: none;">
@@ -94,6 +99,10 @@
                     </div>
                 </div>
             </div>
+            <div class="text-end mt-2">
+
+            <button type="button" class="btn btn-danger btn-sm" onclick="deleteVariant('{{ variant.var_slot_id }}')">Delete Variant</button>
+            </div>
         </div>
     {% endfor %}
         <div class="text-center mt-4">
@@ -102,6 +111,85 @@
     </form>
 </div>
 <script>
+function deleteVariant(variantId) {
+    const requestData = {
+        variant_id: variantId,
+    };
+
+    fetch("/admin_edit_slot_detail", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Variant deleted successfully:", variantId);
+            // Remove the corresponding card from the DOM
+            const variantCard = document.querySelector(`#variantCard${variantId}`);
+           window.location.reload();
+           alert("Delete Successfully")
+        } else {
+            console.error("Failed to delete variant:", variantId);
+            // Handle the error case here
+        }
+    })
+    .catch(error => {
+        console.error("An error occurred:", error);
+        // Handle the error case here
+    });
+}
+
+
+
+function addNewVariant() {
+    const newVariantCard = document.createElement('div');
+    newVariantCard.className = 'card mt-4';
+    newVariantCard.innerHTML = `
+         <div class="card-header">
+            Variant Details
+
+            </div>
+            <div class="card-body">
+                <div class="row mb-3 hidden-row" style="display: none;">
+                    <label class="col-sm-3 col-form-label">Slot:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantSlotInput{{ variant.var_slot_id }}" value="{{ variant.slot }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Capacity:</label>
+                    <div class="col-sm-9">
+                        <input type="text"  id="variantCapacityInput{{ variant.var_slot_id }}" value="{{ variant.capacity }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Available Slots:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantAvailableSlots{{ variant.var_slot_id }}"  value="{{ variant.available_slots }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Vehicle Type:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantVehicleType{{ variant.var_slot_id }}" value="{{ variant.vehicle_type }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate{{ variant.var_slot_id }}" value="{{ variant.hourly_rate }}" class="form-control">
+                    </div>
+                </div>
+            </div>
+    `;
+
+    document.querySelector('#submitButton').before(newVariantCard);
+}
+
+
+
  function submitForm() {
         // Collect and prepare the data
         const variants = document.querySelectorAll("[id^='variantSlotInput']");

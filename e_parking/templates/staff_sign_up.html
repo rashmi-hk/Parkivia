@@ -37,7 +37,6 @@
              margin-right: 10px;
              margin-top: 10px;
         text-align: left;
-        margin-left: 20px;
          width: 300px;
         height: 40px; /* Add this line to set the height */
         box-sizing: border-box;
@@ -151,7 +150,7 @@
 
              <div class="form-group">
                 <label for="locationDropdown" class="form-label">Choose parking lot Location</label>
-                                <select class="form-select" id="locationDropdown" name="location">
+                                <select class="w-25 form-select" id="locationDropdown" style="width:220px;height:30px;" name="location">
                                     <option value="" selected disabled>Select a location...</option>
                                     {% for slot in location_detail_list %}
                                         <option value="{{ slot.location_id }}">{{ slot.location_name }}</option>

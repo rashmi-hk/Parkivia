@@ -18,17 +18,21 @@ class SlotDetailVariantSerializer(serializers.ModelSerializer):
         model = SlotDetailVariant
         fields = ['capacity', 'available_slots', 'vehicle_type', 'hourly_rate']
 
+
 class SlotDetailSerializer(serializers.ModelSerializer):
-    slot_variants = SlotDetailVariantSerializer(many=True, source='slotdetailvariant_set')
+    slot_variants = SlotDetailVariantSerializer(many=True)
 
     class Meta:
         model = SlotDetail
         fields = ['name', 'opening_hours', 'location', 'slot_variants']
 
     def create(self, validated_data):
-        slot_variants_data = validated_data.pop('slotdetailvariant_set', [])
+        slot_variants_data = validated_data.pop('slot_variants', [])
         slot_detail = SlotDetail.objects.create(**validated_data)
+
         for variant_data in slot_variants_data:
             SlotDetailVariant.objects.create(slot=slot_detail, **variant_data)
+
         return slot_detail
+
 

@@ -90,68 +90,73 @@
 
 
 <script>
-    $(document).ready(function () {
-        // Add variant field
-        $(".add-variant").click(function () {
-            var variantContainer = $(".variant-container:first");
-            var newVariant = variantContainer.clone(true, true);
+   $(document).ready(function () {
+    // Add variant field
+    $(".add-variant").click(function () {
+        var variantContainer = $(".variant-container:first");
+        var newVariant = variantContainer.clone(true, true);
 
-            // Clear input values
-            newVariant.find("input, select").val("");
+        // Clear input values
+        newVariant.find("input, select").val("");
 
-            // Show remove button
-            newVariant.find(".remove-variant").show();
+        // Show remove button
+        newVariant.find(".remove-variant").show();
 
-            // Append the new variant after the last variant
-            variantContainer.parent().append(newVariant);
-        });
+        // Append the new variant after the last variant
+        variantContainer.parent().append(newVariant);
+    });
 
-        // Remove variant field
-        $(document).on("click", ".remove-variant", function () {
-            $(this).closest(".variant-container").remove();
-        });
+    // Remove variant field
+    $(document).on("click", ".remove-variant", function () {
+        $(this).closest(".variant-container").remove();
+    });
 
-        // Handle form submission
-        $("form").submit(function (event) {
-            event.preventDefault();
+    // Handle form submission
+    $("form").submit(function (event) {
+        event.preventDefault();
 
-            // Gather variant data
-            var variants = [];
-            $(".variant-container").each(function () {
-                var variant = {
-                    capacity: $(this).find("input[name='capacity[]']").val(),
-                    available_slots: $(this).find("input[name='available_slots[]']").val(),
-                    vehicle_type: $(this).find("select[name='vehicle_type[]']").val(),
-                    hourly_rate: $(this).find("input[name='hourly_rate[]']").val(),
-                };
-                variants.push(variant);
-            });
-
-            // Create the final data to send in the POST request
-            var formData = {
-                name: $("#name").val(),
-                opening_hours: $("#opening_hours").val(),
-                location: $("#location").val(),
-                slot_variants: variants,
-                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+        // Gather variant data
+        var variants = [];
+        $(".variant-container").each(function () {
+            var variant = {
+                capacity: $(this).find("input[name='capacity[]']").val(),
+                available_slots: $(this).find("input[name='available_slots[]']").val(),
+                vehicle_type: $(this).find("select[name='vehicle_type[]']").val(),
+                hourly_rate: $(this).find("input[name='hourly_rate[]']").val(),
             };
+            variants.push(variant);
+        });
+        console.log("variants",variants)
+        console.log("variants",JSON.stringify(variants))
+        // Create the final data to send in the POST request
 
-            // Send the POST request
-            $.ajax({
-                type: "POST",
-                url: "{% url 'admin_add_slot_detail' %}",
-                data: formData,
-                success: function (response) {
-                    // Handle success response if needed
-                    window.location.reload();
-                    alert('SlotDetail added successfully');
-                },
-                error: function (error) {
-                    // Handle error response if needed
-                },
-            });
+        var formData = {
+            name: $("#name").val(),
+            opening_hours: $("#opening_hours").val(),
+            location: $("#location").val(),
+            slot_variants: JSON.stringify(variants),  // Move this line here
+            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+        };
+
+        // Send the POST request
+        $.ajax({
+            type: "POST",
+            url: "{% url 'admin_add_slot_detail' %}",
+            data: formData,
+            success: function (response) {
+                // Handle success response if needed
+                window.location.reload();
+                alert('SlotDetail added successfully');
+            },
+            error: function (error) {
+                alert('SlotDetail name already exists, try a different name');
+                window.location.reload();
+                // Handle error response if needed
+            },
         });
     });
+});
+
 </script>
 
 

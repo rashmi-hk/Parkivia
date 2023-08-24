@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% extends 'admin_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+
+    <div class="card col-lg-8">
+        <div class="card-header">
+            User or Staff Registration
+        </div>
+        <div class="card-body">
+            <form>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username:</label>
+                    <input class="form-control w-50" id="username" name="username" rows="3" required></input>
+                </div>
+                 <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control w-50" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input class="form-control w-50" id="password" name="password" rows="3" required></input>
+                </div>
+                 <div class="mb-3">
+                    <label for="phone_number" class="form-label">Phone Number:</label>
+                    <input type="tel" class="form-control w-50" id="phone_number" name="phone_number" required>
+                </div>
+                <div class="mb-3">
+                    <label for="vehicle_type" class="form-label">Vehicle Type:</label>
+                    <select class="form-control w-50" id="vehicle_type" name="vehicle_type">
+                        {% for choice_value, choice_label in vehicle_choices %}
+                            <option value="{{ choice_value }}">{{ choice_label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+               <div class="mb-3">
+                    <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" onclick="toggleParkingLotLocation()">
+                    <label for="is_staff" class="form-check-label">Is Staff:</label>
+                </div>
+                <div class="mb-3" id="parking_lot_location_div" style="display: none;">
+                    <label for="parking_lot_location" class="form-label">Parking Lot Location:</label>
+                    <select class="form-control" id="parking_lot_location" name="parking_lot_location">
+                        {% for location_option in all_location %}
+                            <option value="{{ location_option.id }}">{{ location_option.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="is_superuser" name="is_superuser">
+                    <label class="form-check-label" for="is_superuser">
+                        Is Superuser (Admin)
+                    </label>
+                </div>
+
+                 <div class="mb-3">
+                    <label for="address" class="form-label">Address:</label>
+                    <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+function toggleParkingLotLocation() {
+    const parkingLotLocationDiv = document.getElementById("parking_lot_location_div");
+    const isStaffCheckbox = document.getElementById("is_staff");
+
+    if (isStaffCheckbox.checked) {
+        parkingLotLocationDiv.style.display = "block";
+    } else {
+        parkingLotLocationDiv.style.display = "none";
+    }
+}
+</script>
+</body>
+</html>
+{% endblock %}
