@@ -56,6 +56,8 @@ urlpatterns = [
     path('admin_home', AdminHomeAPIList.as_view() , name='admin_home'),
     path('admin_add_user', AdminUserCreateAPIList.as_view() , name='admin_add_user'),
     path('admin_edit_user', AdminUserAPIList.as_view() , name='admin_edit_user'),
+
+    path('admin_edit_user/<int:user_id>/', AdminUserAPIList.as_view() , name='admin_get_single_user'),
     path('admin_get_location', AdminGetLocationAPIList.as_view() , name='admin_get_location'),
     path('admin_edit_location', AdminEditLocationAPIList.as_view() , name='admin_edit_location'),
     path('admin_edit_slot_detail', AdminEditSlotDetailAPIList.as_view() , name='admin_edit_slot_detail'),

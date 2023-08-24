@@ -1,0 +1,123 @@
+{% extends 'admin_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Edit User
+                </div>
+                <div class="card-body">
+                    <form id="user-edit-form" action="{% url 'admin_edit_user'  %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="userid" class="form-label">User Id:</label>
+                            <input type="text" class="form-control" id="user_id" name="user_id" value="{{ resulting_list.user_id }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{ resulting_list.username }}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ resulting_list.email }}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Phone Number:</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ resulting_list.phone_number }}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address:</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" >{{ resulting_list.address }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vehicle_type" class="form-label">Vehicle Type:</label>
+                            <select class="form-control" id="vehicle_type" name="vehicle_type" {% if is_staff %} disabled {% endif %}>
+                                {% for choice_value, choice_label in resulting_list.vehicle_choices %}
+                                    <option value="{{ choice_value }}" {% if choice_value == resulting_list.vehicle_type %} selected {% endif %}>{{ choice_label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" onclick="toggleParkingLotLocation()" {% if is_staff %} checked {% endif %}>
+                            <label for="is_staff" class="form-check-label">Is Staff:</label>
+                        </div>
+                         <div class="mb-3">
+                            <input class="form-check-input" type="checkbox" id="is_admin" name="is_admin">
+                            <label for="is_admin" class="form-check-label">Is Admin:</label>
+                        </div>
+                        <div class="mb-3" id="parking_lot_location_div" {% if not is_staff %} style="display: none;" {% endif %}>
+                            <label for="parking_lot_location" class="form-label">Parking Lot Location:</label>
+                            <select class="form-control" id="parking_lot_location" name="parking_lot_location">
+                                {% for location_option in resulting_list.all_location %}
+                                    <option value="{{ location_option.id }}" {% if location_option.id == resulting_list.parking_lot_location.id %} selected {% endif %}>{{ location_option.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" onclick="updateUser()">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleParkingLotLocation() {
+        const parkingLotLocationDiv = document.getElementById("parking_lot_location_div");
+        const isStaffCheckbox = document.getElementById("is_staff");
+
+        if (isStaffCheckbox.checked) {
+            parkingLotLocationDiv.style.display = "block";
+        } else {
+            parkingLotLocationDiv.style.display = "none";
+        }
+    }
+
+    function updateUser() {
+        const form = document.getElementById('user-edit-form');
+        const formData = new FormData(form);
+        const isStaffCheckbox = document.getElementById("is_staff");
+        const parkingLotLocationSelect = document.getElementById("parking_lot_location");
+
+
+
+        fetch(form.action, {
+            method: 'PATCH',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+        .then(response => {
+           console.log("******",response.status)
+            if (response.ok) {
+                window.location.reload();
+                alert('User Edited successfully');
+            }
+
+        })
+        .then(data => {
+            // Handle response data as needed
+            console.log('User updated successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error updating user:', error);
+        });
+    }
+</script>
+{% endblock %}
+</body>
+</html>

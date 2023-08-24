@@ -67,6 +67,20 @@
       background-color: green;
     }
 
+
+.image-strip {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .image {
+            height: 35vh;
+            width: auto;
+            object-fit: cover;
+        }
+
+
     </style>
     <title>Title</title>
 
@@ -112,8 +126,8 @@
 <!--    </div>-->
 <!--</nav>-->
 {% block content %}
-  <div style="position: relative; display: inline-block;">
-    <img src='/static/images/strip_prking1.jpg' class="d-block w-30" style="height: 30%; width: 100%;" alt="...">
+  <div style="position: relative; display: inline-block;height: 30%; width: 100%;">
+    <img src='/static/images/parking_first_img.jpg' class="d-block w-30" style="height: 30%; width: 100%;" alt="...">
     <div class="title_cls">
         We Have The Best Deals For<br> Parking Lots!
         <div style="font-size: 14px;">Instantly book your space today. Trust by Million</div>
@@ -189,7 +203,29 @@
   </div>
 
 </section>
-
+<div class="image-strip">
+        <div class="image">
+            <img src="/static/images/parking1.jpg" alt="Image 1">
+            <div class="image-card">
+                <h6>ParkSpot for Owners</h6>
+                <p>Want to monetize your idle parking spots?</p>
+            </div>
+        </div>
+        <div class="image">
+            <img src="/static/images/parking2.jpg" alt="Image 2">
+            <div class="image-card">
+                <h6>ParkSpot for Societies</h6>
+                <p>Secure your society and enable seamless entry/exit for residents.</p>
+            </div>
+        </div>
+        <div class="image">
+            <img src="/static/images/parking3.jpg" alt="Image 3">
+            <div class="image-card">
+                <h6>ParkSpot for Corporates</h6>
+                <p>Give your employees the gift of easy parking.</p>
+            </div>
+        </div>
+    </div>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <script>
 
