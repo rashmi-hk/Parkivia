@@ -69,20 +69,15 @@
             background-color: black;
             color: white;
             text-align: center;
-
+            padding: 40px 0px 40px 0px;
             bottom: 0;
-            width:100%;
+            width:100%;}
 
     </style>
     <title>Title</title>
 
 
-        <!-- <div class="first-icon">
-          <img  src="/static/images/car_parking_icon.jpeg" class="d-block w-30" height="80" alt="...">
 
-
-
-        </div> -->
 
 
 
@@ -98,28 +93,8 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-<!--      <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--        <ul class="navbar-nav">-->
-<!--          <li class="nav-item px-3">-->
-<!--            <a class="nav-link active nav-data" aria-current="page" href="{% url 'staff_home' %}">Home</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="{% url 'slot_detail' %}">SlotDetail</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="{% url 'slot_booking' %}">SlotBooking</a>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--           <ul class="navbar-nav">-->
-<!--        <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="">Choose Location</a>-->
-<!--        </li>-->
-<!--        <li class="nav-item px-3">-->
-<!--            <a class="nav-link nav-data" href="">Logout</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--      </div>-->
-        <div class="collapse navbar-collapse" id="navbarNav">
+
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
     <ul class="navbar-nav">
         <li class="nav-item px-3">
             <a class="nav-link active nav-data" aria-current="page" href="{% url 'all_location' %}">Home</a>
@@ -135,9 +110,8 @@
     <!-- Use a grid column for the right-aligned links -->
         <div class="col-md-2 text-right">
             <ul class="navbar-nav">
-                <li class="nav-item px-3">
-                    <a class="nav-link nav-data" href="{% url 'staff_location' %}">Choose Location</a>
-                </li>
+
+                <li><p class="nav-link text-dark m-0">Hello <span id=username>{{ user.username }}</span> </p></li>
                 <li class="nav-item px-3">
                     <a class="nav-link nav-data" href="">Logout</a>
                 </li>
@@ -151,18 +125,113 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!--<div>-->
 <!--<span class="navbar-brand "  href="#"><img  src="/static/images/strip_img2.avif" class="" height="20%" width="100%" alt="..."></span>-->
 <!--</div>-->
 {% block content %}
   {% endblock %}
+<section class="footer">
 
- <div class="footer">
-        <p>&copy; 2023 Your Website. All Rights Reserved.</p>
+
+     <div class="row">
+         <div class="col-md-3">
+              <ul class="list-unstyled"><li> <img  src="/static/images/LOGO_PARKING.webp"></li>
+                  <li>We Provide The Cheap And Best</li>
+                  <li>Parking Spot In India.</li>
+                  <li>You Can't Park Cheaper!</li>
+
+
+              </ul>
+          </div>
+
+          <div class="col-md-3">
+              <ul class="list-unstyled"><li> <h4>Top Searched Places</h4></li>
+                  <li>Parking Spot In JP-Nagar</li>
+                  <li>Parking Spot In Bommanahalli</li>
+                  <li>Parking Spot In Rajajinagar</li>
+                  <li>Parking Spot In Banashankari</li>
+                  <li>Parking Spot In Marathahalli</li>
+
+              </ul>
+          </div>
+           <div class="col-md-3">
+              <ul class="list-unstyled">
+                   <li>   <h4>Contact Info</h4> </li>
+                  <li>Corporate Office Address :</li>
+                  <li> 2nd Floor, Nextcoworks BTM Layout, BTM 2nd Stage, Bengaluru, Karnataka 560076</li>
+                  <li>Customer Service:</li>
+                  <li>+91 80929 96057</li>
+
+
+          </ul>
+           </div>
+         <div class="col-md-3">
+               <ul class="list-unstyled">
+              <li><h4>Discover</h4></li>
+              <li>Features</li>
+              <li>Blogs</li>
+              <li>Request Spot</li>
+              <li>Register Spot</li>
+              <li>Faq</li>
+
+          </ul>
+              </div>
+              </div>
     </div>
+        <p>&copy; 2023 Your Website. All Rights Reserved.</p>
+
+</section>
+
 
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  console.log("Inside username")
+  // Perform an AJAX request to your Django URL endpoint
+  fetch("{% url 'admin_identity' %}")
+    .then(response => response.json())
+    .then(data => {
+      // Assuming your response contains a "username" field
+      const username = data.username;
+      // Now you can use the username as needed, e.g., update a DOM element
+      const usernameElement = document.getElementById("username");
+      if (usernameElement) {
+        usernameElement.textContent = username;
+      }
+    })
+    .catch(error => console.error("Error fetching username:", error));
+});
+</script>
 </body>
 
 </html>

@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from .api.views.staff_home import HomeAPIList
 from .api.views.admin_user import AdminUserAPIList,AdminUserCreateAPIList
-from .api.views.admin_home import AdminHomeAPIList
+from .api.views.admin_home import AdminHomeAPIList,AdminIdentity
 from .api.views.single_slot_detail import SingleSlotAPIList
 from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
 from .api.views.admin_signup import AdminUtilityAPIList
@@ -52,6 +52,7 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 
 urlpatterns = [
 
+    path('admin_identity', AdminIdentity.as_view() , name='admin_identity'),
     path('admin_login', AdminSignInAPIList.as_view() , name='admin_login'),
     path('admin_home', AdminHomeAPIList.as_view() , name='admin_home'),
     path('admin_add_user', AdminUserCreateAPIList.as_view() , name='admin_add_user'),

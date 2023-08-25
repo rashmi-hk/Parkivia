@@ -7,9 +7,190 @@
 {% block content %}
 <html>
 <head>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <style>
+
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .about-container{
+    display:flex;
+    max-width:1100px;
+    margin:auto;
+    }
+    .news-data{
+    width:100%;
+    height:100%;
+    border:1px solid #dee2e6;;
+    display: flex;
+    align-items: center;
+    padding:10px 10px 10px 10px;
+    }
+
+    .news-container{
+    max-width:1100px;
+    margin:auto;
+    }
+    .bg-color{
+        background-color: #F9FBFE;
+        padding:20px 0px 20px 0px;
+     }
+    </style>
     <title>Map with Fixed Locations</title>
+
+</head>
+<body onload="initMap()">
+    <div id="map" style="width: 100%; height: 500px;"></div>
+    <div class="hero-swipe">
+         <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+
+          <div class="swiper-slide">     <img src="/static/images/lot1.jpeg" class="img-fluid"></div>
+          <div class="swiper-slide">  <img src="/static/images/lot2.jpeg" class="img-fluid" ></div>
+          <div class="swiper-slide">  <img src="/static/images/lot3.jpeg" class="img-fluid" ></div>
+          <div class="swiper-slide">  <img src="/static/images/lot4.jpeg" class="img-fluid" ></div>
+          <div class="swiper-slide">   <img src="/static/images/lot5.jpeg" class="img-fluid" ></div>
+          <div class="swiper-slide">   <img src="/static/images/lot6.jpeg" class="img-fluid" ></div>
+
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+        <section id="about">
+            <div class="about-container">
+                <div class="figure-container">
+                    <img src="/static/images/parking_enquiry.svg" alt="About Image" loading="lazy" class="" width="354">
+                </div>
+                <div class="text-container">
+                    <h1>Why Choose Us?</h1>
+                    <p>Comfortable parking experience. Brokerage free. Genuine Owners. Ensured security of your vehicle. Available for residents and visitors. Surveillance parking. Simple steps to list property. Earn money on the go. Available on app and website.</p>
+                    <p>Parkivia is part of this new initiative and incorporates various features aimed at improving the parking experience for residents and visitors. These will include removing the need for entry barriers at car park entrances and exits for a seamless flow of traffic, as vehicle plates will be registered via cameras.</p>
+                </div>
+            </div>
+        </section>
+
+
+    <div class="hero-help-container">
+         <div class="row">
+             <div class="col-md-5 bg-color">
+                 <div class="row">
+                 <div class="col-md-6">
+
+                 </div>
+                 <div class="col-md-6 pt-3"> <h5>How ParkingRhino Helps?</h5>
+                    <p>Smart Parking Platform provides a full-stack approach to solving for parking related problems in today's cities. Products based off its platform solves problems of parking lot operators & owners, urban motorists, corporates, city planners and administrators</p>
+                 </div>
+
+                </div>
+             </div>
+             <div class="col-md-7">
+                <div class="row">
+
+                     <div class="col-md-4">
+                         <div class="card">
+                              <img src="/static/images/parking_static.jpg" class="card-img-top" alt="...">
+                              <div class="card-body">
+                                <p class="card-text">
+                                  <ul>
+                                        <li>Increase Revenue</li>
+                                        <li>More Business Traffic</li>
+                                        <li>Optimize Employee Traffic</li>
+                                    </ul>
+                                  </p>
+                              </div>
+                         </div>
+                     </div>
+                      <div class="col-md-4">
+                            <div class="card">
+                              <img src="/static/images/parking_nav.jpg" class="card-img-top" alt="...">
+                              <div class="card-body">
+                                <p class="card-text">
+                                  <ul>
+                                        <li>Find Nearby Parking</li>
+                                        <li>Real Time Guidance</li>
+                                        <li>No More Circling</li>
+                                    </ul>
+                                  </p>
+                              </div>
+                         </div>
+                      </div>
+                      <div class="col-md-4">
+                           <div class="card">
+                              <img src="/static/images/parking_car.jpg" class="card-img-top" alt="...">
+                              <div class="card-body">
+                                <p class="card-text">
+                                  <ul>
+                                        <li>Improve Compliance</li>
+                                        <li>Smart City Tracking</li>
+                                        <li>Increase Turnover</li>
+                                   </ul>
+                                  </p>
+                              </div>
+                         </div>
+                      </div>
+                  </div>
+                  </div>
+         </div>
+
+     <section id="news-container">
+         <div class="news-container">
+         <div class="row">
+         <div class="col-md-2">
+           <div class="news-data">
+                 <img src="/static/images/news1.png" class="img-fluid">
+            </div>
+         </div>
+         <div class="col-md-2">
+                <div class="news-data">
+                     <img src="/static/images/news3.png" class="img-fluid">
+                </div>
+         </div>
+         <div class="col-md-2">
+            <div class="news-data">
+                 <img src="/static/images/news4.png" class="img-fluid">
+            </div>
+         </div>
+         <div class="col-md-2">
+            <div class="news-data">
+                 <img src="/static/images/news5.png" class="img-fluid">
+            </div>
+         </div>
+          <div class="col-md-2">
+                <div class="news-data">
+                 <img src="/static/images/news6.png" class="img-fluid">
+            </div>
+         </div>
+         <div class="col-md-2">
+            <div class="news-data">
+                 <img src="/static/images/news7.png" class="img-fluid">
+            </div>
+         </div>
+             </div>
+             </div>
+     </section>
+
+       <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkrNAXjMGeM-HukizFu88BrgtU7DomJqI&libraries=places"></script>
-    <script>
+
+<script>
 
 
 
@@ -65,12 +246,16 @@
                     });
                 }
             }
-
+  var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+    });
 
     </script>
-</head>
-<body onload="initMap()">
-    <div id="map" style="width: 100%; height: 500px;"></div>
 </body>
 </html>
 {% endblock %}

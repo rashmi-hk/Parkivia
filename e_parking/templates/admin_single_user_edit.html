@@ -49,11 +49,12 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" onclick="toggleParkingLotLocation()" {% if is_staff %} checked {% endif %}>
+                            <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" onclick="toggleParkingLotLocation()" {% if resulting_list.is_staff %} checked {% endif %}>
                             <label for="is_staff" class="form-check-label">Is Staff:</label>
                         </div>
+
                          <div class="mb-3">
-                            <input class="form-check-input" type="checkbox" id="is_admin" name="is_admin">
+                            <input class="form-check-input" type="checkbox" id="is_admin" name="is_admin" {% if resulting_list.is_admin %} checked {% endif %}>
                             <label for="is_admin" class="form-check-label">Is Admin:</label>
                         </div>
                         <div class="mb-3" id="parking_lot_location_div" {% if not is_staff %} style="display: none;" {% endif %}>
@@ -74,13 +75,16 @@
 </div>
 
 <script>
+    window.addEventListener('load', toggleParkingLotLocation);
     function toggleParkingLotLocation() {
         const parkingLotLocationDiv = document.getElementById("parking_lot_location_div");
         const isStaffCheckbox = document.getElementById("is_staff");
 
         if (isStaffCheckbox.checked) {
+            console.log("check location")
             parkingLotLocationDiv.style.display = "block";
         } else {
+            console.log("not check location")
             parkingLotLocationDiv.style.display = "none";
         }
     }

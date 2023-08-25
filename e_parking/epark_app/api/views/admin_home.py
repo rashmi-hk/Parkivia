@@ -5,10 +5,7 @@ from django.shortcuts import render, redirect
 from ...models import CustomUser
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
-# from ...models import
-# import os
-# from ...serializers import CartSerializer
-# from django.core import serializers
+
 
 from django.shortcuts import get_object_or_404
 import json
@@ -23,5 +20,13 @@ class AdminHomeAPIList(APIView):
 
     def get(self,request):
         print("Inside admin get homeapi")
+
         return render(request, 'admin_home.html')
-        # return render(request, 'demo.html')
+
+class AdminIdentity(APIView):
+    def get(self, request):
+        print("Inside admin get AdminIdentity")
+        user_email = request.session.get('email')
+        user = CustomUser.objects.get(email=user_email)
+
+        return JsonResponse({"username": user.username})

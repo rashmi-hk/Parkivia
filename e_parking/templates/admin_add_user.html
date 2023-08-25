@@ -20,7 +20,7 @@
             User or Staff Registration
         </div>
         <div class="card-body">
-            <form>
+            <form method="post" id="registration-form" >
 
                 <div class="mb-3">
                     <label for="username" class="form-label">Username:</label>
@@ -70,7 +70,7 @@
                     <label for="address" class="form-label">Address:</label>
                     <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary"   onclick="submitForm()">Register</button>
             </form>
         </div>
     </div>
@@ -81,6 +81,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+ window.addEventListener('load', toggleParkingLotLocation);
 function toggleParkingLotLocation() {
     const parkingLotLocationDiv = document.getElementById("parking_lot_location_div");
     const isStaffCheckbox = document.getElementById("is_staff");
@@ -91,6 +92,49 @@ function toggleParkingLotLocation() {
         parkingLotLocationDiv.style.display = "none";
     }
 }
+
+
+function submitForm() {
+    // Collect form data
+
+    const form = document.getElementById('registration-form');
+    const formData = new FormData(form);
+
+    const isStaffCheckbox = document.getElementById('is_staff');
+    formData.append('is_staff', isStaffCheckbox.checked);
+
+    const isAdminCheckbox = document.getElementById('is_superuser');
+    formData.append('is_superuser', isAdminCheckbox.checked);
+
+
+    // Fetch options
+    const fetchOptions = {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken') // Include CSRF token
+        }
+    };
+
+    // Send the POST request
+    fetch('admin_add_user', fetchOptions)
+        .then(response => {
+            if (response.ok) {
+                // Display success alert
+                window.location.reload();
+                alert('success', 'User registered successfully.');
+            } else {
+                // Display error alert
+                alert('error', 'An error occurred. Please try again later.');
+            }
+        })
+        .catch(error => {
+            console.error('An error occurred:', error);
+            // Display error alert
+            alert('error', 'An error occurred. Please try again later.');
+        });
+}
+
 </script>
 </body>
 </html>

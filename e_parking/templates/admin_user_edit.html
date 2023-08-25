@@ -47,7 +47,7 @@
         }
 
         // Fetch method to delete the location
-        fetch("{% url 'admin_edit_location' %}?user_id=" + user_id, {
+        fetch("{% url 'admin_edit_user' %}?user_id=" + user_id, {
             method: "DELETE",
             headers: {
                 "X-CSRFToken": "{{ csrf_token }}"
