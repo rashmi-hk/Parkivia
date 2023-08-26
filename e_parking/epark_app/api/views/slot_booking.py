@@ -62,7 +62,12 @@ class SlotBookingAPIList(APIView):
                        # 'all_vehicle_types': all_vehicle_types
                        }
             print("context", context)
-            return render(request, 'booked_slot_detail.html',context)
+            if user.is_superuser:
+                print("User is admin")
+                return render(request, 'admin_booked_slot_detail.html',context)
+            else:
+                print("user is staff")
+                return render(request, 'booked_slot_detail.html',context)
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},
@@ -165,11 +170,14 @@ class SlotBookingFormAPIList(APIView):
 class SlotBookingEditAPIList(APIView):
 
 
-    def get(self, request,billing):
+    def get(self, request):
         print("Inside SlotBookingEditAPIList get", request)
 
         format_string = "%Y-%m-%d %H:%M:%S"
         try:
+            user_email = request.session.get('email')
+            user = CustomUser.objects.get(email=user_email)
+
             slot = request.GET.get('slot')
             check_in_time = request.GET.get('check_in_time')
 
@@ -196,8 +204,10 @@ class SlotBookingEditAPIList(APIView):
                 "hourly_rate": hourly_rate,
                 "booking_id": booking_id
             }
-
-            return render(request, 'booked_slot_edit.html', context)
+            if user.is_superuser:
+                return render(request, 'admin_booked_slot_edit.html', context)
+            else:
+                return render(request, 'booked_slot_edit.html', context)
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},

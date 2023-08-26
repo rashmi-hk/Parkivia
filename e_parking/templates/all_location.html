@@ -224,7 +224,7 @@
 
                          var anchor = document.createElement("a");
                           var url = `single_slot_detail?lat=${centerLocation.lat}&lng=${centerLocation.lng}&user_lat=${location.lat}&user_lng=${location.lng}&location_id=${location.location_id}`;
-<!--
+
                          anchor.href = url;
                          anchor.textContent = location.title;
 
@@ -246,14 +246,19 @@
                     });
                 }
             }
-  var swiper = new Swiper(".mySwiper", {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-    });
+        var swiper = new Swiper(".mySwiper", {
+                slidesPerView: 3,      // Show 3 slides at a time
+                spaceBetween: 30,
+                loop: true,            // Enable loop
+                autoplay: {
+                    delay: 2000,        // Auto slide every 3 seconds
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+            });
 
     </script>
 </body>

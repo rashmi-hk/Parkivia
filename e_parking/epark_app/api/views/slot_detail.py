@@ -31,11 +31,13 @@ class SlotDetailAPIList(APIView):
                 variant_list = []
                 for variant in data.slot_variants.all():
                     # Update available_slots and vehicle_type
+                    percent_val  = variant.available_slots/variant.capacity
                     variant_dict = {"available_slots" : variant.available_slots,
                     "vehicle_type" : variant.vehicle_type,
                     "capacity" :  variant.capacity,
                     "hourly_rate" : variant.hourly_rate,
-                    "name": variant.slot,}
+                    "name": variant.slot,
+                    variant.vehicle_type + str("percentage"): percent_val * 100}
                     variant_list.append(variant_dict)
 
 

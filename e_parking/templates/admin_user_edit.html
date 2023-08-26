@@ -4,6 +4,30 @@
 {% load static %}
 
 {% block content %}
+<div class="container mt-3">
+    <h4>Filters:</h4>
+    <div class="mb-3">
+        <label for="emailFilter" class="form-label">Email:</label>
+        <input type="text" id="emailFilter" class="form-control" placeholder="Filter by email">
+    </div>
+    <div class="mb-3">
+        <label for="isStaffFilter" class="form-label">Is Staff:</label>
+        <select id="isStaffFilter" class="form-select">
+            <option value="">Any</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="isAdminFilter" class="form-label">Is Admin:</label>
+        <select id="isAdminFilter" class="form-select">
+            <option value="">Any</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+</div>
+
 <div class="container mt-5">
     <h2 class="text-center">User Dashbord</h2>
     <div class="table-container">
@@ -16,8 +40,9 @@
                     <th>User Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
-                    <th>Vehical Type</th>
-                    <th>Address</th>
+                    <th>Is Staff</th>
+                    <th> Is Admin</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +51,8 @@
                     <td>{{ user_data.username }}</td>
                     <td>{{ user_data.email }}</td>
                     <td>{{ user_data.phone_number }}</td>
-                    <td>{{ user_data.address }}</td>
+                    <td>{{ user_data.is_staff }}</td>
+                    <td>{{ user_data.is_superuser }}</td>
                     <td>
                          <a href="{% url 'admin_get_single_user' user_id=user_data.user_id  %}" class="btn btn-primary">Edit</a>
 
@@ -40,6 +66,36 @@
     </div>
 </div>
 <script>
+   // Inside your <script> tag
+document.addEventListener("DOMContentLoaded", function() {
+    const emailFilter = document.getElementById("emailFilter");
+    const isStaffFilter = document.getElementById("isStaffFilter");
+    const isAdminFilter = document.getElementById("isAdminFilter");
+    const tableRows = document.querySelectorAll(".table tbody tr");
+
+    function applyFilters() {
+        const emailValue = emailFilter.value.toLowerCase();
+        const isStaffValue = isStaffFilter.value;
+        const isAdminValue = isAdminFilter.value;
+
+        tableRows.forEach(row => {
+            const email = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+            const isStaff = row.querySelector("td:nth-child(4)").textContent.toLowerCase();
+            const isAdmin = row.querySelector("td:nth-child(5)").textContent.toLowerCase();
+
+            const emailMatch = email.includes(emailValue);
+            const isStaffMatch = isStaffValue === "" || isStaff === isStaffValue;
+            const isAdminMatch = isAdminValue === "" || isAdmin === isAdminValue;
+
+            row.style.display = emailMatch && isStaffMatch && isAdminMatch ? "" : "none";
+        });
+    }
+
+    emailFilter.addEventListener("keyup", applyFilters);
+    isStaffFilter.addEventListener("change", applyFilters);
+    isAdminFilter.addEventListener("change", applyFilters);
+});
+
    function deleteUser(user_id) {
         const confirmDelete = confirm("Are you sure you want to delete this User?");
         if (!confirmDelete) {

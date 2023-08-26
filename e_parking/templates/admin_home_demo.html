@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parking Slot Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h1>Admin</h1>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="slotChart"></canvas>
+    </div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var vehicleTypes = JSON.parse({{ vehicle_types|json_script|safe }});
+        var availableSlots = JSON.parse({{ available_slots|json_script|safe }});
+
+        console.log("vehicleTypes", vehicleTypes);
+        console.log("availableSlots", availableSlots);
+
+        var ctx = document.getElementById('slotChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: vehicleTypes,
+                datasets: [{
+                    label: 'Available Slots',
+                    data: availableSlots,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

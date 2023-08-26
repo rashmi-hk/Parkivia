@@ -109,6 +109,8 @@ class AdminUserAPIList(APIView):
                 for user in user_data:
                     resulting_dict = {
                         "user_id" : user.id,
+                        "is_staff":user.is_staff,
+                        "is_superuser":user.is_superuser,
                         'username': user.username,
                         'email': user.email,
                         'phone_number': user.phone_number,

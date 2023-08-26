@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% extends 'admin_index.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <style>
+            input[type="text"], textarea {
+            width: 300px;
+            height: 40px; /* Add this line to set the height */
+            box-sizing: border-box;
+        }
+        .hero { padding-bottom: 40px; margin: 20px; }
+        .card {
+            border: 1px solid #d1d1d1;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+{% block content %}
+
+   <div class="card">
+          <div class="card-body" style="width:40%;height:100%">
+              <h1 class="card-title">Admin Edit Slot</h1>
+              <form id="editForm">
+                  <div class="mb-3">
+                      <label for="slot" class="form-label">Slot:</label>
+
+                      <input type="text" id="slot" name="slot" class="form-control" value="{{ slot }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="check_in_time" class="form-label">Check-in Time:</label>
+                      <input type="text" id="check_in_time" name="check_in_time" class="form-control" value="{{ check_in_time }}" >
+                  </div>
+                  <div class="mb-3">
+                      <label for="check_out_time" class="form-label">Check-out Time:</label>
+                      <input type="datetime-local" id="check_out_time" name="check_out_time" class="form-control" value="{{ check_out_time }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="vehicle_number" class="form-label">Vehicle Number:</label>
+                      <input type="text" id="vehicle_number" name="vehicle_number" class="form-control" value="{{ vehicle_number }}">
+                  </div>
+                  <div class="mb-3">
+                      <label for="vehicle_type" class="form-label">Vehicle Type:</label>
+                      <input type="text" id="vehicle_type" name="vehicle_type" class="form-control" value="{{ vehicle_type }}">
+                  </div>
+
+                   <div class="mb-3" style="display: none;">
+
+                        <label for="booking_id" class="form-label">Booking_id:</label>
+                        <input type="text" id="booking_id" name="booking_id" class="form-control" value="{{ booking_id }}">
+                   </div>
+
+
+                  <button type="submit" class="btn btn-primary" onclick="edit_booking()">Save Changes</button>
+              </form>
+          </div>
+      </div>
+
+    <script>
+
+
+         function   edit_booking() {
+         console.log("***Inside edit_booking **************************************")
+         const slot = document.getElementById('slot').value;
+         const booking_id = document.getElementById('booking_id').value;
+           const checkInTime = document.getElementById('check_in_time').value;
+           const checkOutTime = document.getElementById('check_out_time').value;
+           const vehicleNumber = document.getElementById('vehicle_number').value;
+           const vehicleType = document.getElementById('vehicle_type').value;
+
+
+
+           const requestBody = {
+               slot: slot,
+               check_in_time: checkInTime,
+               check_out_time: checkOutTime,
+               vehicle_number: vehicleNumber,
+               vehicle_type: vehicleType,
+
+               booking_id:booking_id,
+
+
+           };
+
+        fetch('/edit_booking', {
+            method: 'PATCH',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+                alert('booking edit successfully');
+            } else {
+                console.error('Error adding data to Location:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Error adding data to Location:', error);
+        });
+    }
+
+
+
+    </script>
+{% endblock %}
+</body>
+</html>
