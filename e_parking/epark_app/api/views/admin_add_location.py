@@ -34,6 +34,8 @@ class AdminLocationAPIList(APIView):
             address = request.data["address"]
             latitude = request.data["latitude"]
             longitude = request.data["longitude"]
+            image = request.data["image"]
+            print("image", image)
 
             try:
                 user_email = request.session.get('email')
@@ -65,7 +67,7 @@ class AdminLocationAPIList(APIView):
                     {'message': 'Data already exists', 'error': 'The provided data already exists'},
                     status=status.HTTP_409_CONFLICT
                 )
-            new_location = Location(name=name, address=address, latitude=latitude, longitude=longitude)
+            new_location = Location(name=name, address=address, latitude=latitude, longitude=longitude, image=image)
             new_location.save()
             print("Saved sucess")
             # Return a success response

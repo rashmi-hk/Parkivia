@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a8cbf2ee-2300-41e3-bd54-eeeffd54947e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/e_parking/templates/all_location.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/e_parking/templates/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/geo_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/geo_map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/current_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/current_location.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/direction.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/direction.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/manual_current_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/manual_current_location.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,19 +29,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/home/rashmihk/perfect_e_park/e_parking/templates",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/rashmihk/perfect_e_park/e_parking/templates/registration&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/e_parking/templates/registration" />
       <recent name="$PROJECT_DIR$/e_parking/templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/e_parking/templates" />
+      <recent name="$PROJECT_DIR$/e_parking/templates/registration" />
+      <recent name="$PROJECT_DIR$/e_parking/templates/admin" />
+      <recent name="$PROJECT_DIR$/e_parking/templates/admin/epark_app" />
+      <recent name="$PROJECT_DIR$/e_parking/templates/epark_app" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

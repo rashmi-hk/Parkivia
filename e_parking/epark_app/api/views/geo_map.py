@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import requests
+from ...models import CustomUser,Location
 import geocoder
 from decouple import config
 
@@ -25,6 +26,8 @@ class GMapsGeocoding(APIView):
         print("Request params: ", request)
 
 
+
+        address = request.GET.get('address')
 
         latitude = request.GET.get('latitude')
         longitude = request.GET.get('longitude')
@@ -71,17 +74,6 @@ class AllLocationGeocoding(APIView):
     API wrapper for invoking google maps Geocoding API
     """
 
-    # def get_current_location(self):
-    #     url = f"https://www.googleapis.com/geolocation/v1/geolocate?key={'AIzaSyBgytWbW7G8sUUXvUfYpPG6dJS4N5M4WQw'}"
-    #     response = requests.post(url)
-    #
-    #     if response.status_code == 200:
-    #         location_data = response.json()
-    #         latitude = location_data['location']['lat']
-    #         longitude = location_data['location']['lng']
-    #         return latitude, longitude
-    #     else:
-    #         return None
 
     def get(self, request):
         """
@@ -90,8 +82,8 @@ class AllLocationGeocoding(APIView):
         print("Inside: first *****", self.__class__.__name__)
         print("Request params: ", request)
 
-        start_location = request.GET.get('address')
-        print("start_location", start_location)
+        address = request.GET.get('address')
+        print("address", address)
 
         latitude = (request.GET.get('latitude'))
         longitude = (request.GET.get('longitude'))
@@ -108,9 +100,7 @@ class AllLocationGeocoding(APIView):
             print("type b", lon)
         except:
             print("in exception")
-        # print("***********", type(latitude), type(longitude))
-        # current_location = self.get_current_location()
-        # print("current_location", current_location)
+
 
         if latitude and longitude:
             start_location = (latitude, longitude)
@@ -119,8 +109,19 @@ class AllLocationGeocoding(APIView):
 
         gmaps = googlemaps.Client(key=YOUR_API_KEY)
 
-        end_location = 'balamuri, Mysore'
-        # directions_result = gmaps.directions(start_location, end_location, mode="driving", alternatives=True)
+        if address:
+
+            geocode_result = gmaps.geocode(address)
+
+            if geocode_result:
+                location = geocode_result[0]['geometry']['location']
+                lat = float(location['lat'])
+                lon = float(location['lng'])
+
+            else:
+                print("Geocode result not found for the given address")
+
+        location_obj = Location.objects.all()
 
         fixed_locations = [
             {"lat": lat, "lng": lon, 'title': "Me"},

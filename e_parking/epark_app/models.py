@@ -14,6 +14,7 @@ class Location(models.Model):
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
     address = models.CharField(max_length=255)
+    image =  CloudinaryField(blank=True)
 
     def __str__(self):
         return self.name
