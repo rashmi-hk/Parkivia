@@ -173,9 +173,20 @@ function addNewVariant() {
                 <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Vehicle Type:</label>
                     <div class="col-sm-9">
-                        <input type="text" id="variantVehicleType{{ variant.var_slot_id }}" value="{{ variant.vehicle_type }}" class="form-control">
+                         <select id="variantVehicleType{{ variant.var_slot_id }}" class="form-control">
+                          {% if vehicle_choices %}
+                                {% for choice_value, choice_label in vehicle_choices %}
+                                    <option value="{{ choice_value }}" {% if variant.vehicle_type == choice_value %}selected{% endif %}>{{ choice_label }}</option>
+                                {% endfor %}
+                           {% else %}
+                                <option value="" selected>All vehical type selected ,no options available</option>
+                            {% endif %}
+
+                         </select>
                     </div>
                 </div>
+
+
                 <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Hourly Rate:</label>
                     <div class="col-sm-9">
@@ -200,6 +211,7 @@ function addNewVariant() {
             const capacity = document.getElementById("variantCapacityInput" + varSlotId).value;
             const availableSlots = document.getElementById("variantAvailableSlots" + varSlotId).value;
             const vehicleType = document.getElementById("variantVehicleType" + varSlotId).value;
+
             const hourlyRate = document.getElementById("variantHourlyRate" + varSlotId).value;
 
             data.push({

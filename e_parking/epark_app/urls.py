@@ -92,8 +92,9 @@ urlpatterns = [
     path('all_location', AllLocationGeocoding.as_view() , name='all_location'),
     path('staff_verify_otp', StaffVerifyOtpAPIList.as_view(), name='staff_verify_otp'),
 
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-    path('admin_utility_logout/', LogoutView.as_view(next_page='admin_utility_login'), name='admin_utility_logout'),
+    path('logout/', LogoutView.as_view(next_page='user_login'), name='logout'),
+    path('admin_utility_logout/', LogoutView.as_view(next_page='admin_login'), name='admin_utility_logout'),
+    path('staff_logout/', LogoutView.as_view(next_page='staff_signin'), name='staff_logout'),
     path('gmap', GMapsGeocoding.as_view(), name='gmap'),
 
 

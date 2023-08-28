@@ -34,8 +34,9 @@ class AdminSignInAPIList(APIView):
             print("password type", type(customer.password))
             password_matched = check_password(password, customer.password)
             print("password_matched", password_matched)
+            print("super user", customer.is_superuser)
 
-            if not password_matched:
+            if not (password_matched and customer.is_superuser) :
                 print("invalid")
 
                 return render(request, 'admin_login.html', {'error_message': 'Invalid credentials'})

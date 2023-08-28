@@ -92,8 +92,9 @@
                                 <label for="vehicle_type">Vehicle Type:</label>
 
                                 <select id="vehicle_type" name="vehicle_type" class="form-control">
-                                    {% for choice in all_vehicle_types %}
-                                        <option value="{{ choice }}">{{ choice }}</option>
+                                     {% for choice_value, choice_label in vehicle_choices %}
+
+                                        <option value="{{ choice_value }}">{{ choice_label }}</option>
                                     {% endfor %}
                                 </select>
                             </div>

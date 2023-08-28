@@ -57,7 +57,7 @@
                 <th>hourly_rate</th>
                 <th>opening_hours</th>
                 <th>location</th>
-                <th>Action</th>
+
             </tr>
         </thead>
         <tbody>
@@ -71,10 +71,7 @@
                         <td>{{ variant.hourly_rate }}</td>
                         <td>{{ slot_data.opening_hours }}</td>
                         <td>{{ slot_data.location }}</td>
-                        <td>
-                            <a href="#" class="btn btn-primary">Edit</a>
-                            <button class="btn btn-danger" onclick="deleteLocation('{{ slot_data.location.location_id }}')">Delete</button>
-                        </td>
+
                     </tr>
                 {% endfor %}
             {% endfor %}

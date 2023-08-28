@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Count, Sum, F, Q
-from ...models import CustomUser,SlotDetail
+from ...models import CustomUser,SlotDetail,SlotDetailVariant
 from datetime import timedelta
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -29,7 +29,9 @@ class SlotDetailAPIList(APIView):
             resulting_list = []
             for data in slot_detail_obj:
                 variant_list = []
-                for variant in data.slot_variants.all():
+                slot_variant_obj = SlotDetailVariant.objects.filter(slot__id=data.id)
+
+                for variant in slot_variant_obj:
                     # Update available_slots and vehicle_type
                     percent_val  = variant.available_slots/variant.capacity
                     variant_dict = {"available_slots" : variant.available_slots,

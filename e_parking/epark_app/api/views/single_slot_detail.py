@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Count, Sum, F, Q
-from ...models import CustomUser,SlotDetail
+from ...models import CustomUser,SlotDetail, SlotDetailVariant
 from datetime import timedelta
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -47,10 +47,12 @@ class SingleSlotAPIList(APIView):
             location_id = request.GET.get('location_id')
 
             slot_detail_obj = SlotDetail.objects.filter(location=location_id)
+            print("slot_detail_obj", slot_detail_obj)
+
             grouped_data = {}  # Initialize a dictionary for grouping
 
             for data in slot_detail_obj:
-                for variant in data.slot_variants.all():
+                for variant in SlotDetailVariant.objects.filter(slot__id=data.id):
                     # Update available_slots and vehicle_type
                     variant_dict = {
                         "available_slots": variant.available_slots,

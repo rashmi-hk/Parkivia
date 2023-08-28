@@ -39,6 +39,10 @@ class UserSignInAPIList(APIView):
                 print("invalid")
 
                 return render(request, 'user_login.html', {'error_message': 'Invalid credentials'})
+
+            elif customer.is_staff or customer.is_superuser:
+                print("Invalid")
+                return render(request, 'user_login.html', {'error_message': 'You do not have permission to log in.'})
             else:
                 print("valid")
                 request.session['customer_id'] = customer.id

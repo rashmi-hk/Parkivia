@@ -38,17 +38,18 @@ class StaffLoginAPIList(APIView):
             print("password type", type(customer.password))
             password_matched = check_password(password, customer.password)
             print("password_matched", password_matched)
-
-            if not password_matched:
-                print("invalid")
-
-                return render(request, 'staff_login.html', {'error_message': 'Invalid credentials'})
-            else:
+            if password_matched and customer.is_staff and not customer.is_superuser:
                 print("valid")
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
 
-            return render(request, 'staff_home.html')
+                return render(request, 'staff_home.html')
+            else:
+                print("invalid")
+
+                return render(request, 'staff_login.html', {'error_message': 'Invalid credentials'})
+
+
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response

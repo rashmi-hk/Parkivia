@@ -56,7 +56,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
 
 class SlotDetail(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     opening_hours = models.CharField(max_length=100,default=0)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     slot_variants = models.ManyToManyField('SlotDetailVariant', blank=True)
@@ -66,6 +66,7 @@ class SlotDetail(models.Model):
 
     class Meta:
         db_table = 'slotdetail'
+        unique_together = ('location', 'name')
 
 
 class SlotDetailVariant(models.Model):

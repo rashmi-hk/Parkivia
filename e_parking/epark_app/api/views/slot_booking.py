@@ -136,7 +136,7 @@ class SlotBookingFormAPIList(APIView):
         try:
             user_email = request.session.get('email')
             user = CustomUser.objects.get(email=user_email)
-
+            vehicle_choices = CustomUser.VEHICLE_CHOICES
             slot_details = SlotDetail.objects.filter(location=user.parking_lot_location)
             print("############### slot_variants ", slot_details)
 
@@ -158,8 +158,10 @@ class SlotBookingFormAPIList(APIView):
 
             context = {
                        'slot_detail_list': slot_detail_list,
-                       'all_vehicle_types': unique_vehicle_types}
+                       'all_vehicle_types': unique_vehicle_types,
+                        'vehicle_choices': vehicle_choices}
 
+            print("context",context)
             return render(request, 'slot_booking.html', context)
         except TemplateDoesNotExist:
             return JsonResponse(

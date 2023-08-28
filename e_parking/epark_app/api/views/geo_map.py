@@ -56,14 +56,28 @@ class GMapsGeocoding(APIView):
 
         directions_result = gmaps.directions(start_location, end_location,mode="driving", alternatives=True)
 
+        location_obj = Location.objects.all()
+        fixed_locations = []
 
-        fixed_locations = [
+        for data in location_obj:
+            location_dict = {
+                "lat": data.latitude,
+                "lng": data.longitude,
+                "title": data.address,
 
-            {"lat": lat, "lng": long, 'title': "Me"},
-            {"lat": 15.351132566178995, "lng": 75.11103627515064, 'title': "Dollarbird"},
-            {"lat": 12.455558657572665, "lng": 75.94912661758033, 'title': "balamuri"},
-            {"lat": 12.305225882078265, "lng": 76.65517489669053, 'title': "Mysore palace"}
-        ]
+                "location_id": data.id
+            }
+            fixed_locations.append(location_dict)
+        fixed_locations.append({"lat": lat, "lng": long, 'title': "Me"})
+        print("fixed_locations", fixed_locations)
+        #
+        # fixed_locations = [
+        #
+        #     {"lat": lat, "lng": long, 'title': "Me"},
+        #     {"lat": 15.351132566178995, "lng": 75.11103627515064, 'title': "Dollarbird"},
+        #     {"lat": 12.455558657572665, "lng": 75.94912661758033, 'title': "balamuri"},
+        #     {"lat": 12.305225882078265, "lng": 76.65517489669053, 'title': "Mysore palace"}
+        # ]
 
         return render(request, 'direction.html',
                       {'directions': directions_result[0]['legs'][0]['steps'], 'fixed_locations': fixed_locations,'google_maps_api_key': YOUR_API_KEY,'travling_mode':travling_mode})
@@ -122,13 +136,26 @@ class AllLocationGeocoding(APIView):
                 print("Geocode result not found for the given address")
 
         location_obj = Location.objects.all()
+        location_obj = Location.objects.all()
+        fixed_locations = []
 
-        fixed_locations = [
-            {"lat": lat, "lng": lon, 'title': "Me"},
-            {"lat": 15.351132566178995, "lng": 75.11103627515064, 'title': "Dollarbird", "location_id": 1},
-            {"lat": 12.455558657572665, "lng": 75.94912661758033, 'title': "balamuri", "location_id": 2},
-            {"lat": 12.305225882078265, "lng": 76.65517489669053, 'title': "Mysore palace", "location_id": 2}
-        ]
+        for data in location_obj:
+            location_dict = {
+                "lat": data.latitude,
+                "lng": data.longitude,
+                "title": data.address,
+
+                "location_id": data.id
+            }
+            fixed_locations.append(location_dict)
+        fixed_locations.append({"lat": lat, "lng": lon, 'title': "Me"})
+
+        # fixed_locations = [
+        #     {"lat": lat, "lng": lon, 'title': "Me"},
+        #     {"lat": 15.351132566178995, "lng": 75.11103627515064, 'title': "Dollarbird", "location_id": 1},
+        #     {"lat": 12.455558657572665, "lng": 75.94912661758033, 'title': "balamuri", "location_id": 2},
+        #     {"lat": 12.305225882078265, "lng": 76.65517489669053, 'title': "Mysore palace", "location_id": 2}
+        # ]
         context = { 'fixed_locations': fixed_locations}
         print("context", context)
         return render(request, 'all_location.html',
