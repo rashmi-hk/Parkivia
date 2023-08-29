@@ -47,7 +47,7 @@ class AdminSlotBookingAPIList(APIView):
                      }
                     variant_result_list.append(variant_dict)
                 print("variant_result_list", variant_result_list)
-
+                print("datetime", datetime.now())
 
                 data_dict = {"slot": data.slot,
                              "slot_id": data.id,
@@ -60,6 +60,9 @@ class AdminSlotBookingAPIList(APIView):
                              "amount":data.amount,
                              "booking_id":data.id,
                              "slot_detail_id": slot_obj.id,
+                             "is_slot_relese": data.is_slot_relese,
+                             "is_bill_generated":data.is_bill_generated,
+
                              }
 
                 resulting_list.append(data_dict)

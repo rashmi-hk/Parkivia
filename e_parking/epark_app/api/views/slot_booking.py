@@ -175,9 +175,11 @@ class SlotBookingFormAPIList(APIView):
                                     "vehicle_choices": slot_vehicle_types}
                 slot_detail_list.append(slot_detail_dict)
 
+            print("datetime", datetime.now())
             context = {
                        'slot_detail_list': slot_detail_list,
                        'all_vehicle_types': unique_vehicle_types,
+                        "current_datetime" : datetime.now().strftime('%Y-%m-%dT%H:%M')
                         }
 
             print("context",context)
@@ -226,7 +228,8 @@ class SlotBookingEditAPIList(APIView):
                 "vehicle_type": vehicle_type,
                 "amount": amount,
                 "hourly_rate": hourly_rate,
-                "booking_id": booking_id
+                "booking_id": booking_id,
+                "current_datetime": datetime.now().strftime('%Y-%m-%dT%H:%M')
             }
             if user.is_superuser:
                 print("super user")

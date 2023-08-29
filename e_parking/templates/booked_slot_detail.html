@@ -91,9 +91,16 @@
                     <td>{{ slot.vehicle_type }}</td>
                     <td>{{ slot.amount }}</td>
                     <td>
-                        <a href="{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}" class="btn btn-primary">Edit</a>
-                        <button class="btn btn-success" onclick="">Slot Open</button>
-                        <button class="btn btn-danger" onclick="generateBill('{{ slot.booking_id }}')">Bill</button>
+                          <td>
+<!--                        <a class="btn btn-primary" href="{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}"  {% if  slot.check_out_time %}disabled{% endif %}>Edit</a>-->
+                       <button class="btn btn-primary" {% if slot.check_out_time %}disabled{% endif %}
+                        onclick="location.href='{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}';">
+                        Edit
+                    </button>
+                        <button class="btn btn-success" onclick="freeSpace('{{slot.vehicle_type}}','{{slot.slot_detail_id}}','{{ slot.booking_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Slot Open</button>
+                        <button class="btn btn-danger" onclick="generateBill('{{ slot.booking_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Bill</button>
+
+                    </td>
                     </td>
 
 

@@ -99,7 +99,7 @@
                         onclick="location.href='{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}';">
                         Edit
                     </button>
-                        <button class="btn btn-success" onclick="freeSpace('{{slot.vehicle_type}}','{{slot.slot_detail_id}}')" {% if not slot.check_out_time %}disabled{% endif %}>Slot Open</button>
+                        <button class="btn btn-success" onclick="freeSpace('{{slot.vehicle_type}}','{{slot.slot_detail_id}}','{{ slot.booking_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Slot Open</button>
                         <button class="btn btn-danger" onclick="generateBill('{{ slot.booking_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Bill</button>
 
                     </td>
@@ -143,12 +143,13 @@
                 });
         }
 
-function freeSpace(vehical_type, slot_id) {
+function freeSpace(vehical_type, slot_id,bookind_id) {
     var url = "/free_slot";
     var method = 'GET';
 
     var params = new URLSearchParams();
     params.append('vehical_type', vehical_type);
+    params.append('bookind_id', bookind_id);
     params.append('slot_id', slot_id);
 
     fetch(url + '?' + params.toString(), {

@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from ...models import CustomUser,SlotDetail,SlotDetailVariant
+from ...models import CustomUser,SlotDetail,SlotDetailVariant,SlotBooking
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 
@@ -27,6 +27,7 @@ class SlotFreeAPIList(APIView):
 
         slot_id = request.GET.get('slot_id')
         vehicle_type = request.GET.get('vehicle_type')
+        bookind_id = request.GET.get('bookind_id')
         if not user.is_authenticated:
             print("User not authenticated")
             return JsonResponse(
@@ -35,13 +36,17 @@ class SlotFreeAPIList(APIView):
 
         slot_obj = SlotDetail.objects.get(id=slot_id)
         print("slot_obj", slot_obj)
+
+        book_obj = SlotBooking.objects.get(id=bookind_id)
+        book_obj.is_slot_relese = True
+        book_obj.save()
+
         variants = SlotDetailVariant.objects.filter(slot__id=slot_obj.id, vehicle_type=vehicle_type)
         print("variants", variants)
         # Iterate through the variants and update available_slots
         for variant in variants:
             print("Inside for")
             variant.available_slots += 1
-            variant.is_slot_relese = True
             variant.save()
 
         return JsonResponse({'message': 'Available slots updated successfully'}, status=status.HTTP_200_OK)
