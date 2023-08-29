@@ -106,9 +106,11 @@
         </div>
     {% endfor %}
         <div class="text-center mt-4">
-            <button type="submit" id="submitButton" class="btn btn-primary" onclick="submitForm()">Submit</button>
+
+
         </div>
     </form>
+        <button type="submit" id="submitButton" class="btn btn-primary" onclick="submitForm({{slot_location_id.id}})">Submit</button>
 </div>
 <script>
 function deleteVariant(variantId) {
@@ -201,7 +203,7 @@ function addNewVariant() {
 
 
 
- function submitForm() {
+ function submitForm(location_id) {
         // Collect and prepare the data
         const variants = document.querySelectorAll("[id^='variantSlotInput']");
         const data = [];
@@ -233,7 +235,7 @@ function addNewVariant() {
         };
 
         // Send the data using a fetch request
-        fetch("/admin_edit_slot_detail", {
+        fetch("/admin_slot_detail", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -246,8 +248,12 @@ function addNewVariant() {
                 console.log(response)
                 console.log(response.data)
                 if (response.ok) {
-                    window.location.reload(); // Changed from 'window.slot.reload();'
-                    alert('Slot Detail Edited Successfully');
+
+                    window.location.href = "{% url 'admin_slot_detail' %}" + "?location_id=" + location_id;
+
+                     alert('Slot Detail Edited Successfully');
+
+
                 } else {
                     throw new Error('Failed to edit slot detail'); // You can customize the error message
                 }

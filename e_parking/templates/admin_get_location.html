@@ -26,8 +26,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>Name</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
+
                     <th>Address</th>
                     <th>Actions</th>
                 </tr>
@@ -36,13 +35,18 @@
                 {% for location in resulting_list %}
                 <tr>
                     <td>{{ location.name }}</td>
-                    <td>{{ location.latitude }}</td>
-                    <td>{{ location.longitude }}</td>
+
                     <td>{{ location.address }}</td>
                     <td>
+
+
+
+                        <button type="button" onclick="edit_slot()" data-href="{% url 'admin_slot_detail' %}?location_id={{ location.location_id }}" class="btn btn-warning">View SlotDetail</button>
                          <a href="{% url 'admin_edit_location' %}?name={{ location.name  }}&latitude={{ location.latitude }}&longitude={{ location.longitude }}&address={{ location.address }}&location_id={{ location.location_id }}" class="btn btn-primary">Edit</a>
 
                         <button type="button" class="btn btn-sm btn-danger delete-button" onclick="deleteLocation({{ location.location_id }})">Delete</button>
+
+                        <a href="{% url 'admin_add_slot_detail' %}?location_id={{ location.location_id }}" class="btn btn-success">Add Slot</a>
 
                     </td>
                 </tr>
@@ -52,6 +56,42 @@
     </div>
 </div>
 <script>
+       function edit_slot() {
+        var button = event.target;  // Get the clicked button
+        var url = button.getAttribute('data-href');  // Get the data-href attribute
+
+        var params = new URLSearchParams();
+        // Add any query parameters if needed
+        // params.append('paramName', paramValue);
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+         .then(response => {
+                console.log('get method:', response);  // Log response status
+                console.log('Response:', response);  // Log response status
+                console.log('Response Status:', response.status);  // Log response status
+                return response.text();  // Convert response to text
+            }) // Convert response to text
+
+        .then(html => {
+            // Open a new window and display the HTML response
+            var billWindow = window.open('', '_self');
+            billWindow.document.open();
+            billWindow.document.write(html);
+            billWindow.document.close();
+        })
+        .catch(error => {
+            // Handle any errors that occur during the request
+            console.error('Error:', error);
+        });
+    }
+
+
    // Inside your <script> tag
 document.addEventListener("DOMContentLoaded", function() {
     const nameFilter = document.getElementById("nameFilter");

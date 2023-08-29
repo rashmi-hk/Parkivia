@@ -99,12 +99,12 @@
                     <input type="text" id="addressInput" class="form-control" placeholder="Enter Address">
                 </div>
                 <div class="mb-3">
-                    <label for="latitudeInput" class="form-label">Latitude:</label>
-                    <input type="text" id="latitudeInput" class="form-control" placeholder="Latitude">
+
+                    <input type="hidden" id="latitudeInput" class="form-control" placeholder="Latitude">
                 </div>
                 <div class="mb-3">
-                    <label for="longitudeInput" class="form-label">Longitude:</label>
-                    <input type="text" id="longitudeInput" class="form-control" placeholder="Longitude">
+
+                    <input type="hidden" id="longitudeInput" class="form-control" placeholder="Longitude">
                 </div>
                 <div class="mb-3">
                     <label for="imageInput" class="form-label">Location Picture:</label>
@@ -117,10 +117,9 @@
 </div>
 
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-draggable"></script>
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
 
-    <script>
          function submitForm() {
           var imageInput = document.getElementById('imageInput');
 
@@ -141,13 +140,7 @@
             }
 
         // Create the data object to send in the AJAX request
-<!--        var data = {-->
-<!--            name: name,-->
-<!--            address: address,-->
-<!--            latitude: latitude,-->
-<!--            longitude: longitude,-->
-<!--            image:imageFile-->
-<!--        };-->
+
         var formData = new FormData();
         formData.append('name', name);
         formData.append('address', address);
@@ -164,8 +157,9 @@
            .then(response => {
            console.log("******",response.status)
             if (response.ok) {
-                window.location.reload();
+
                 alert('Location added successfully');
+                 window.location.href = "{% url 'admin_get_location' %}";
             }
             else if (response.status === 409) {
                 console.error('Data already exists:', response.statusText);
@@ -180,43 +174,68 @@
         });
     }
 
+    function reverseGeocode(lat, lng) {
+        var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
-        var initialPinPosition = [15.3173, 75.7139]; // Initial pin position (Karnataka)
-        var map;
-        var marker;
-
-        function initMap() {
-            // Initialize the map
-            map = L.map('map').setView(initialPinPosition, 7); // Centered on Karnataka, zoom level 7
-
-            // Add a tile layer (you can replace this with your preferred tile layer)
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            // Initialize the marker with the initial position at the center of the map
-            marker = L.marker(initialPinPosition, { draggable: true }).addTo(map);
-
-            // Use the Draggable library to enable smooth marker dragging
-            new L.Draggable(marker._icon, marker).enable();
-
-            // Event listener for button click
-           // Event listener for button click
-            document.getElementById('selectLocation').addEventListener('click', function () {
-                if (marker) {
-                    var selectedLatLng = marker.getLatLng();
-                    document.getElementById('latitudeInput').value = selectedLatLng.lat;
-                    document.getElementById('longitudeInput').value = selectedLatLng.lng;
-                    alert('Selected Latitude: ' + selectedLatLng.lat + '\nSelected Longitude: ' + selectedLatLng.lng);
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.display_name) {
+                    return data.display_name;
+                } else {
+                    return "Address not found";
                 }
+            })
+            .catch(error => {
+                console.error('Error fetching address:', error);
+                return "Address not found";
             });
+    }
 
-        }
+    var initialPinPosition = [15.3173, 75.7139];
+    var map;
+    var marker;
 
-        // Initialize the map when the page loads
-        window.onload = initMap;
-    </script>
+    function initMap() {
+        map = L.map('map').setView(initialPinPosition, 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
+        marker = L.marker(initialPinPosition, { draggable: true }).addTo(map);
+        new L.Draggable(marker._icon, marker).enable();
+
+        marker.on('dragend', function(event) {
+            var draggedMarker = event.target;
+            var position = draggedMarker.getLatLng();
+            var lat = position.lat;
+            var lng = position.lng;
+
+            document.getElementById('latitudeInput').value = lat;
+            document.getElementById('longitudeInput').value = lng;
+
+            reverseGeocode(lat, lng)
+                .then(address => {
+                    document.getElementById('addressInput').value = address;
+                });
+        });
+
+        document.getElementById('selectLocation').addEventListener('click', function () {
+            if (marker) {
+                var selectedLatLng = marker.getLatLng();
+                document.getElementById('latitudeInput').value = selectedLatLng.lat;
+                document.getElementById('longitudeInput').value = selectedLatLng.lng;
+
+                reverseGeocode(selectedLatLng.lat, selectedLatLng.lng)
+                    .then(address => {
+                        document.getElementById('addressInput').value = address;
+                    });
+            }
+        });
+    }
+
+    window.onload = initMap;
+</script>
 </body>
 </html>
 

@@ -18,28 +18,30 @@
 
 <div class="container mt-5">
     <h2 class="text-center">Slot Detail Dashbord</h2>
+    <h5 class="text-center">{{slot_location}}</h5>
     <div class="table-container">
-        <div class="d-flex justify-content-end mb-3">
-            <a href="{% url 'admin_add_slot_detail' %}" class="btn btn-primary">Add Slot Detail</a>
-        </div>
+
         <table class="table table-success table-striped">
             <thead class="table-dark">
                 <tr>
                     <th>Name</th>
                     <th>Opening hours</th>
-                    <th>location</th>
+                    <th>Available</th>
+                     <th>Capacity</th>
+                     <th>Vehical type</th>
                     <th>Action</th>
 
                 </tr>
             </thead>
             <tbody>
                 {% for slot in resulting_list %}
+
                 <tr>
                     <td>{{ slot.name }}</td>
                     <td>{{ slot.opening_hours }}</td>
-                    <td>{{ slot.location }}</td>
-
-
+                    <td>{{ slot.variant_data.0.available_slots }}</td>
+                    <td>{{ slot.variant_data.0.capacity }}</td>
+                    <td>{{ slot.variant_data.0.vehicle_type }}</td>
                     <td>
                          <a href="{% url 'admin_edit_slot_detail' %}?name={{ slot.name  }}&opening_hours={{ slot.opening_hours }}&location={{ slot.location }}&slot_id={{ slot.slot_detail_id }}&slot_location={{slot.slot_location}}" class="btn btn-primary">Edit</a>
 

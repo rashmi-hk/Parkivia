@@ -40,6 +40,7 @@ class AdminLocationAPIList(APIView):
             try:
                 user_email = request.session.get('email')
                 user = CustomUser.objects.get(email=user_email)
+                print("In")
             except ObjectDoesNotExist:
                 return JsonResponse(
                     {'message': 'User not found', 'error': 'The user does not exist'},
@@ -59,6 +60,7 @@ class AdminLocationAPIList(APIView):
                     status=status.HTTP_403_FORBIDDEN)
             try:
                 already_exist = Location.objects.get(name=name, address=address, latitude=latitude, longitude=longitude)
+                print("already_exist", already_exist)
             except:
                 already_exist = None
 
@@ -67,7 +69,7 @@ class AdminLocationAPIList(APIView):
                     {'message': 'Data already exists', 'error': 'The provided data already exists'},
                     status=status.HTTP_409_CONFLICT
                 )
-            new_location = Location(name=name, address=address, latitude=latitude, longitude=longitude, image=image)
+            new_location = Location(name=name, address=address, latitude=latitude, longitude=longitude)
             new_location.save()
             print("Saved sucess")
             # Return a success response

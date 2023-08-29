@@ -20,23 +20,35 @@ class AdminGetSlotDetailAPIList(APIView):
 
         def get(self, request):
             try:
-                print("Inside get AdminGetSlotDetailAPIList")
-                slot_detail_obj = SlotDetail.objects.all()
+                print("Inside get AdminGetSlotDetailAPIList", request)
+                location  = request.GET.get('location_id')
+                print("location", location)
+                location_obj = Location.objects.get(id=location)
+                slot_detail_obj = SlotDetail.objects.filter(location=location)
                 print("slot_detail_obj", slot_detail_obj)
                 resulting_list = []
                 for data in slot_detail_obj:
+                    result_var_list = []
+                    slot_variant_obj = SlotDetailVariant.objects.filter(slot__id=data.id)
+                    for var_data in slot_variant_obj:
+                        var_dict = { "capacity": var_data.capacity,
+                            "available_slots": var_data.available_slots,
+                            "vehicle_type": var_data.vehicle_type}
 
+                        result_var_list.append(var_dict)
 
                     resulting_dict = {
                         "slot_detail_id":data.id,
                         "name": data.name,
                         "opening_hours": data.opening_hours,
                         "location": data.location,
+                        "variant_data": result_var_list
 
 
                     }
                     resulting_list.append(resulting_dict)
-                context = {"resulting_list" : resulting_list}
+                context = {"resulting_list" : resulting_list,
+                           "slot_location": location_obj.name}
                 print("context", context)
                 return render(request, 'admin_get_slot_detail.html', context)
             except TemplateDoesNotExist:
@@ -45,6 +57,96 @@ class AdminGetSlotDetailAPIList(APIView):
                      'error': 'The template admin_get_slot_detail.html does not exist'},
                     status=404)
 
+        def patch(self, request):
+
+            try:
+                print(" PATCH admin slot detail request", request)
+                print(" patch admin slot detail  request", request.data)
+
+                slot_detail_id = request.data["slot_detail_id"]
+                name = request.data["name"]
+                opening_hours = request.data["opening_hours"]
+                location = request.data["location"]
+                slot_variants = request.data["slot_variants"]
+                print("slot_variants", slot_variants)
+
+                slot_obj = None
+                try:
+                    if slot_detail_id:
+                        location_obj = Location.objects.get(id=location)
+
+                        slot_obj = SlotDetail.objects.get(
+                            Q(id=slot_detail_id) & Q(name__iexact=name) & Q(opening_hours=opening_hours) & Q(
+                                location=location_obj)
+                        )
+                        print("This slotdetail data already present no need to edit", slot_obj)
+                except:
+                    print("SlotDetail Editing is done")
+                    location_obj = Location.objects.get(id=location)
+                    slot_obj = SlotDetail.objects.get(id=slot_detail_id)
+                    slot_obj.name = name
+                    slot_obj.opening_hours = opening_hours
+                    slot_obj.location = location_obj
+                    slot_obj.save()
+
+                for var_data in slot_variants:
+                    print("var_data", var_data)
+                    capacity = var_data["capacity"]
+                    available_slots = var_data["available_slots"]
+                    vehicle_type = var_data["vehicle_type"]
+                    hourly_rate = var_data["hourly_rate"]
+                    var_slot_data_id = var_data["var_slot_id"]
+                    try:
+
+                        if var_slot_data_id:
+                            # exist_data_slot = SlotDetailVariant.objects.get(
+                            #     Q(id__iexact=var_slot_id) & Q(slot=slot_obj) & Q(capacity__iexact=capacity) &
+                            #     Q(available_slots__iexact=available_slots) & Q(vehicle_type__iexact=vehicle_type) &
+                            #     Q(hourly_rate__iexact=hourly_rate)
+                            # )
+                            # print("**************", )
+                            exist_data_slot = SlotDetailVariant.objects.get(
+                                id=var_slot_data_id,
+                                slot=slot_obj,
+                                capacity=capacity,
+                                available_slots=available_slots,
+                                vehicle_type__iexact=vehicle_type,
+                                hourly_rate=hourly_rate
+                            )
+
+                            print("This SlotDetailVariant data already present no need to edit")
+                        else:
+                            # Create new SlotDetailVariant
+                            if vehicle_type != '':
+                                new_variant_obj = SlotDetailVariant.objects.create(
+                                    slot=slot_obj,
+                                    capacity=capacity,
+                                    available_slots=available_slots,
+                                    vehicle_type=vehicle_type,
+                                    hourly_rate=hourly_rate
+                                )
+                                print("Created new SlotDetailVariant:", new_variant_obj)
+
+
+                    except:
+                        print("SlotDetailVariant Editing is done")
+                        slot_var_obj = SlotDetailVariant.objects.get(id=var_slot_data_id)
+                        slot_var_obj.capacity = capacity
+                        slot_var_obj.available_slots = available_slots
+                        slot_var_obj.vehicle_type = vehicle_type
+                        slot_var_obj.hourly_rate = hourly_rate
+                        slot_var_obj.save()
+
+                print("Saved sucess")
+                return JsonResponse({'message': 'SlotDetail updated successfully'}, status=status.HTTP_201_CREATED)
+
+
+            except CustomUser.DoesNotExist:
+                return JsonResponse({'error': 'CustomUser not found'}, status=404)
+            except Exception as e:
+
+                print('Unexpected error occurred:', str(e))
+                return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
 
 class AdminEditSlotDetailAPIList(APIView):
 
@@ -80,7 +182,9 @@ class AdminEditSlotDetailAPIList(APIView):
                             "capacity": var_data.capacity,
                             "available_slots": var_data.available_slots,
                             "vehicle_type": var_data.vehicle_type,
-                            "hourly_rate": var_data.hourly_rate}
+                            "hourly_rate": var_data.hourly_rate,
+                            }
+
 
                var_list.append(var_dict)
             print("var_list  add data to list")
@@ -96,6 +200,7 @@ class AdminEditSlotDetailAPIList(APIView):
                 "slot_location":slot_data_obj.location,
                 'slot_variants':var_list,
                 "vehicle_choices": filtered_vehicle_choices,
+                "slot_location_id": slot_data_obj.location
             }
 
 
@@ -108,97 +213,7 @@ class AdminEditSlotDetailAPIList(APIView):
                  'error': 'The template admin_edit_location.html does not exist'},
                 status=404)
 
-    def patch(self, request):
 
-        try:
-            print(" PATCH admin slot detail request", request)
-            print(" patch admin slot detail  request", request.data)
-
-            slot_detail_id = request.data["slot_detail_id"]
-            name = request.data["name"]
-            opening_hours = request.data["opening_hours"]
-            location = request.data["location"]
-            slot_variants = request.data["slot_variants"]
-            print("slot_variants", slot_variants)
-
-            slot_obj = None
-            try:
-                if slot_detail_id:
-                    location_obj = Location.objects.get(id=location)
-
-                    slot_obj = SlotDetail.objects.get(
-                        Q(id=slot_detail_id) & Q(name__iexact=name) & Q(opening_hours=opening_hours) & Q(
-                            location=location_obj)
-                    )
-                    print("This slotdetail data already present no need to edit", slot_obj)
-            except:
-                print("SlotDetail Editing is done")
-                location_obj = Location.objects.get(id=location)
-                slot_obj = SlotDetail.objects.get(id=slot_detail_id)
-                slot_obj.name = name
-                slot_obj.opening_hours = opening_hours
-                slot_obj.location = location_obj
-                slot_obj.save()
-
-            for var_data in slot_variants:
-                print("var_data", var_data)
-                capacity = var_data["capacity"]
-                available_slots = var_data["available_slots"]
-                vehicle_type = var_data["vehicle_type"]
-                hourly_rate = var_data["hourly_rate"]
-                var_slot_data_id = var_data["var_slot_id"]
-                try:
-
-                    if var_slot_data_id:
-                        # exist_data_slot = SlotDetailVariant.objects.get(
-                        #     Q(id__iexact=var_slot_id) & Q(slot=slot_obj) & Q(capacity__iexact=capacity) &
-                        #     Q(available_slots__iexact=available_slots) & Q(vehicle_type__iexact=vehicle_type) &
-                        #     Q(hourly_rate__iexact=hourly_rate)
-                        # )
-                        # print("**************", )
-                        exist_data_slot = SlotDetailVariant.objects.get(
-                            id=var_slot_data_id,
-                            slot=slot_obj,
-                            capacity=capacity,
-                            available_slots=available_slots,
-                            vehicle_type__iexact=vehicle_type,
-                            hourly_rate=hourly_rate
-                        )
-
-                        print("This SlotDetailVariant data already present no need to edit")
-                    else:
-                        # Create new SlotDetailVariant
-                        if vehicle_type != '':
-                            new_variant_obj = SlotDetailVariant.objects.create(
-                                slot=slot_obj,
-                                capacity=capacity,
-                                available_slots=available_slots,
-                                vehicle_type=vehicle_type,
-                                hourly_rate=hourly_rate
-                            )
-                            print("Created new SlotDetailVariant:", new_variant_obj)
-
-
-                except:
-                    print("SlotDetailVariant Editing is done")
-                    slot_var_obj = SlotDetailVariant.objects.get(id=var_slot_data_id)
-                    slot_var_obj.capacity = capacity
-                    slot_var_obj.available_slots = available_slots
-                    slot_var_obj.vehicle_type = vehicle_type
-                    slot_var_obj.hourly_rate = hourly_rate
-                    slot_var_obj.save()
-
-
-
-            print("Saved sucess")
-            return JsonResponse({'message': 'SlotDetail updated successfully'}, status=status.HTTP_201_CREATED)
-
-        except CustomUser.DoesNotExist:
-            return JsonResponse({'error': 'CustomUser not found'}, status=404)
-        except Exception as e:
-
-            print('Unexpected error occurred:', str(e))
-            return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
 
 
     def delete(self, request):
@@ -249,11 +264,22 @@ class AddSlotDetailAPIList(APIView):
     def get(self, request):
         try:
             print("Inside get AddSlotDetailAPIList", request)
-            all_location = Location.objects.all()
+            location_id = request.GET.get("location_id")
+            all_location = Location.objects.filter(id=location_id)
+            context = {}
+            if all_location.exists():
+                location = all_location.first()
+                print("location", location)# Assuming you're interested in the first result
+
+                context.update({"all_location":location})
+
+
+
             vehicle_choices = SlotDetailVariant.VEHICLE_CHOICES
 
-            context = {"all_location": all_location,
-                       "vehicle_choices": vehicle_choices}
+            context.update({
+                       "vehicle_choices": vehicle_choices})
+            print("context", context)
             return render(request, 'admin_add_slot_detail.html', context)
 
         except TemplateDoesNotExist:
