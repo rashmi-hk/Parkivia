@@ -84,6 +84,7 @@ class SlotDetailVariant(models.Model):
     available_slots = models.PositiveIntegerField(default=0)  # Number of available spots
     vehicle_type = models.CharField(max_length=20,choices=VEHICLE_CHOICES,default='2_wheeler')
     hourly_rate = models.DecimalField(max_digits=8, decimal_places=2,default=0.00)
+    is_slot_relese = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.slot.name}"

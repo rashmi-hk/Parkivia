@@ -10,6 +10,10 @@
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <style>
+.card-info{
+height:100%;
+
+}
 
 
     .swiper {
@@ -29,7 +33,7 @@
     .swiper-slide img {
       display: block;
       width: 100%;
-      height: 100%;
+      height: 350px;
       object-fit: cover;
     }
     .about-container{
@@ -61,20 +65,20 @@
 <body onload="initMap()">
     <div id="map" style="width: 100%; height: 500px;"></div>
     <div class="hero-swipe">
-         <div class="swiper mySwiper">
+         <div class="swiper mySwiper pt-5 pb-5">
         <div class="swiper-wrapper">
 
-          <div class="swiper-slide">     <img src="/static/images/lot1.jpeg" class="img-fluid"></div>
-          <div class="swiper-slide">  <img src="/static/images/lot2.jpeg" class="img-fluid" ></div>
-          <div class="swiper-slide">  <img src="/static/images/lot3.jpeg" class="img-fluid" ></div>
-          <div class="swiper-slide">  <img src="/static/images/lot4.jpeg" class="img-fluid" ></div>
-          <div class="swiper-slide">   <img src="/static/images/lot5.jpeg" class="img-fluid" ></div>
-          <div class="swiper-slide">   <img src="/static/images/lot6.jpeg" class="img-fluid" ></div>
+          <div class="swiper-slide">     <img src="/static/images/lot1.jpeg" class="img-fluid sp-img"></div>
+          <div class="swiper-slide">  <img src="/static/images/lot2.jpeg" class="img-fluid sp-img" ></div>
+          <div class="swiper-slide">  <img src="/static/images/lot3.jpeg" class="img-fluid sp-img" ></div>
+          <div class="swiper-slide">  <img src="/static/images/lot4.jpeg" class="img-fluid sp-img" ></div>
+          <div class="swiper-slide">   <img src="/static/images/lot5.jpeg" class="img-fluid sp-img" ></div>
+          <div class="swiper-slide">   <img src="/static/images/lot6.jpeg" class="img-fluid sp-img" ></div>
 
         </div>
         <div class="swiper-pagination"></div>
       </div>
-        <section id="about">
+        <section id="about" class="pt-5 pb-5">
             <div class="about-container">
                 <div class="figure-container">
                     <img src="/static/images/parking_enquiry.svg" alt="About Image" loading="lazy" class="" width="354">
@@ -88,8 +92,8 @@
         </section>
 
 
-    <div class="hero-help-container">
-         <div class="row">
+    <div class="hero-help-container" >
+         <div class="row pt-5 pb-5">
              <div class="col-md-5 bg-color">
                  <div class="row">
                  <div class="col-md-6">
@@ -105,7 +109,7 @@
                 <div class="row">
 
                      <div class="col-md-4">
-                         <div class="card">
+                         <div class="card card-info">
                               <img src="/static/images/parking_static.jpg" class="card-img-top" alt="...">
                               <div class="card-body">
                                 <p class="card-text">
@@ -119,7 +123,7 @@
                          </div>
                      </div>
                       <div class="col-md-4">
-                            <div class="card">
+                            <div class="card card-info">
                               <img src="/static/images/parking_nav.jpg" class="card-img-top" alt="...">
                               <div class="card-body">
                                 <p class="card-text">
@@ -133,7 +137,7 @@
                          </div>
                       </div>
                       <div class="col-md-4">
-                           <div class="card">
+                           <div class="card card-info">
                               <img src="/static/images/parking_car.jpg" class="card-img-top" alt="...">
                               <div class="card-body">
                                 <p class="card-text">
@@ -150,7 +154,7 @@
                   </div>
          </div>
 
-     <section id="news-container">
+     <section id="news-container" class="pt-5 pb-5">
          <div class="news-container">
          <div class="row">
          <div class="col-md-2">

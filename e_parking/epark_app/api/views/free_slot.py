@@ -41,6 +41,7 @@ class SlotFreeAPIList(APIView):
         for variant in variants:
             print("Inside for")
             variant.available_slots += 1
+            variant.is_slot_relese = True
             variant.save()
 
         return JsonResponse({'message': 'Available slots updated successfully'}, status=status.HTTP_200_OK)

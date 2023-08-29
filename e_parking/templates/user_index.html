@@ -64,7 +64,11 @@
       color: white;
       background-color: green;
     }
-
+  .copy-right{
+      display: flex;
+    justify-content: center;
+}
+  
     .footer {
             background-color: black;
             color: white;
@@ -108,7 +112,7 @@
     </ul>
 
     <!-- Use a grid column for the right-aligned links -->
-        <div class="col-md-2 text-right">
+        <div class="text-right">
             <ul class="navbar-nav">
 
                 <li><p class="nav-link text-dark m-0">Hello <span id=username>{{ user.username }}</span> </p></li>
@@ -207,7 +211,7 @@
               </div>
               </div>
     </div>
-        <p>&copy; 2023 Your Website. All Rights Reserved.</p>
+        <p class="copy-right">&copy; 2023 Your Website. All Rights Reserved.</p>
 
 </section>
 
