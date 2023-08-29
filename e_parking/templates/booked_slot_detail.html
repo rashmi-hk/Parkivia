@@ -92,7 +92,8 @@
                     <td>{{ slot.amount }}</td>
                     <td>
                         <a href="{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}" class="btn btn-primary">Edit</a>
-                        <button class="btn btn-danger" onclick="deleteLocation('{{ location.location_id }}')">Slot Open</button>
+                        <button class="btn btn-success" onclick="">Slot Open</button>
+                        <button class="btn btn-danger" onclick="generateBill('{{ slot.booking_id }}')">Bill</button>
                     </td>
 
 
@@ -105,6 +106,34 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  function generateBill(booking_id) {
+            var url = "/generate_bill";
+            var method = 'GET';
+
+            var params = new URLSearchParams();
+            params.append('booking_id', booking_id);
+
+
+            fetch(url + '?' + params.toString(), {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+                .then(response => response.text())  // Convert response to text
+                .then(html => {
+                    // Render the HTML response
+                    var billWindow = window.open('', '_blank');
+                    billWindow.document.open();
+                    billWindow.document.write(html);
+                    billWindow.document.close();
+                })
+                .catch(error => {
+                    // Handle any errors that occur during the request
+                });
+        }
+
 
 
  const searchInput = document.getElementById('searchVehicleNumber');

@@ -24,8 +24,10 @@ class SlotDetailAPIList(APIView):
             user_email = request.session.get('email')
 
             user = CustomUser.objects.get(email=user_email)
+            print("location of staff", user.parking_lot_location)
 
             slot_detail_obj = SlotDetail.objects.filter(location=user.parking_lot_location)
+            print("slot_detail_obj", slot_detail_obj)
             resulting_list = []
             for data in slot_detail_obj:
                 variant_list = []

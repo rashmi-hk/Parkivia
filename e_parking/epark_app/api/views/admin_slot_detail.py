@@ -262,43 +262,6 @@ class AddSlotDetailAPIList(APIView):
                  'error': 'The template admin_edit_location.html does not exist'},
                 status=404)
 
-    # def post(self, request, format=None):
-    #     print("Inside create ", request)
-    #     print("Inside create ", request.data)
-    #
-    #     serializer = SlotDetailSerializer(data=request.data)
-    #
-    #     if serializer.is_valid():
-    #         # Save the SlotDetail instance
-    #         print("seryihj")
-    #         slot_detail = serializer.save()
-
-            # Create SlotDetailVariant instances
-
-        #
-        #     slot_variants_data = request.data['slot_variants']
-        #     print("slot_variants_data", slot_variants_data)
-        #     slot_variants = []
-        #     for variant_data in slot_variants_data:
-        #         variant_data['slot'] = slot_detail.id
-        #         variant_serializer = SlotDetailVariantSerializer(data=variant_data)
-        #         if variant_serializer.is_valid():
-        #             variant_serializer.save()
-        #             slot_variants.append(variant_serializer.data)
-        #         else:
-        #             # Handle variant serializer errors if needed
-        #             pass
-        #
-        #     response_data = {
-        #         'slot_detail': serializer.data,
-        #         'slot_variants': slot_variants
-        #     }
-
-        #     return Response(response_data, status=status.HTTP_201_CREATED)
-        # else:
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # return
-
     def post(self, request, format=None):
         print("Inside create ", request)
         print("Inside create ", request.data)
@@ -336,21 +299,21 @@ class AddSlotDetailAPIList(APIView):
             for variant_data in slot_variants_data:
                 print("variant_data", variant_data)
                 capacity = variant_data['capacity']
-                available_slots = variant_data['available_slots']
+
                 vehicle_type = variant_data['vehicle_type']
                 hourly_rate = variant_data['hourly_rate']
 
-                if capacity and available_slots and vehicle_type and hourly_rate:
+                if capacity and  vehicle_type and hourly_rate:
                     variant = SlotDetailVariant.objects.create(
                         slot=slot_detail,
                         capacity=capacity,
-                        available_slots=available_slots,
+
                         vehicle_type=vehicle_type,
                         hourly_rate=hourly_rate
                     )
                     slot_variants.append({
                         'capacity': capacity,
-                        'available_slots': available_slots,
+
                         'vehicle_type': vehicle_type,
                         'hourly_rate': hourly_rate
                     })

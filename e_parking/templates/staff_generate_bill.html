@@ -1,0 +1,54 @@
+{% extends 'staff_index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Bill</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Slot Detail</th>
+                            <td>{{ slot }}</td>
+                        </tr>
+                        <tr>
+                            <th>Check-in Time</th>
+                            <td>{{ check_in_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>Vehicle Number</th>
+                            <td>{{ vehicle_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>Vehicle Type</th>
+                            <td>{{ vehicle_type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Check-out Time</th>
+                            <td>{{ check_out_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount</th>
+                            <td>{{ amount }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="toolbar hidden-print">
+                    <div class="text-start">
+                         <button type="button" class="btn btn-dark"  onclick="window.print()"><i class="fa fa-print"></i> Print</button>
+
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+{% endblock %}

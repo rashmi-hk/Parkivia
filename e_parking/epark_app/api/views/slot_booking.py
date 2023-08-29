@@ -26,6 +26,7 @@ class SlotBookingAPIList(APIView):
         print("Inside slot_booking get", request.data)
         try:
             user_email = request.session.get('email')
+            print("user_email",user_email)
             user = CustomUser.objects.get(email=user_email)
 
             all_booked_obj = SlotBooking.objects.all()
@@ -44,15 +45,20 @@ class SlotBookingAPIList(APIView):
                      "hourly_amount": variant.hourly_rate
                      }
                     variant_result_list.append(variant_dict)
+                print("variant_result_list", variant_result_list)
+
 
                 data_dict = {"slot": data.slot,
                              "slot_id": data.id,
+                             "location": slot_obj.location,
                              "check_in_time": data.check_in_time,
                              "check_out_time": data.check_out_time,
                              "vehicle_number": data.vehicle_number,
                              "variant_result_list": variant_result_list,
                              "vehicle_type": data.vehicle_type,
                              "amount":data.amount,
+                             "booking_id":data.id,
+                             "slot_detail_id": slot_obj.id,
                              }
 
                 resulting_list.append(data_dict)
@@ -100,7 +106,7 @@ class SlotBookingAPIList(APIView):
             print("slot", slot)
 
             slot_detail_obj = SlotDetail.objects.filter(id=slot).first()
-
+            print("***slot_detail_obj", slot_detail_obj)
             new_slot_booking = SlotBooking()
             new_slot_booking.slot = slot_detail_obj
             new_slot_booking.check_in_time = check_in_time
@@ -108,10 +114,13 @@ class SlotBookingAPIList(APIView):
             new_slot_booking.vehicle_type = vehicle_type
             new_slot_booking.save()
 
-            variants = slot_detail_obj.slot_variants.filter(vehicle_type=vehicle_type)
+            print("Row created")
 
+            variants = SlotDetailVariant.objects.filter(slot__id=slot_detail_obj.id)
+            print("variants", variants)
             # Iterate through the variants and update available_slots
             for variant in variants:
+                print("Inside for")
                 variant.available_slots -= 1
                 variant.save()
 
@@ -137,32 +146,45 @@ class SlotBookingFormAPIList(APIView):
             user_email = request.session.get('email')
             user = CustomUser.objects.get(email=user_email)
             vehicle_choices = CustomUser.VEHICLE_CHOICES
-            slot_details = SlotDetail.objects.filter(location=user.parking_lot_location)
-            print("############### slot_variants ", slot_details)
+            if user.is_superuser:
+                slot_details = SlotDetail.objects.all()
+                print("############### slot_variants ", slot_details)
+            else:
+
+                slot_details = SlotDetail.objects.filter(location=user.parking_lot_location)
+                print("############### slot_variants ", slot_details)
 
             unique_vehicle_types = set()
 
             # Iterate through the SlotDetail objects and retrieve the related vehicle types
-            for slot_detail in slot_details:
-                vehicle_types = slot_detail.slot_variants.values_list("vehicle_type", flat=True)
-                unique_vehicle_types.update(vehicle_types)
+            # for slot_detail in slot_details:
+            #     slot_variants = SlotDetailVariant.objects.filter(slot=slot_detail)
+            #     slot_vehicle_types = slot_variants.values_list("vehicle_type", flat=True)
+            #     unique_vehicle_types.update(slot_vehicle_types)
 
-            slot_detail = SlotDetail.objects.filter(location=user.parking_lot_location)
 
             # all_vehicle_types = [choice[0] for choice in SlotDetail.VEHICLE_CHOICES]
             slot_detail_list = []
-            for slot_data in slot_detail:
+            for slot_data in slot_details:
+                slot_variants = SlotDetailVariant.objects.filter(slot=slot_data)
+                slot_vehicle_types = slot_variants.values_list("vehicle_type", flat=True)
+                unique_vehicle_types.update(slot_vehicle_types)
                 slot_detail_dict = {"slot_name": slot_data.name,
-                                    "slot_id": slot_data.id}
+                                    "slot_id": slot_data.id,
+                                    "location": slot_data.location,
+                                    "vehicle_choices": slot_vehicle_types}
                 slot_detail_list.append(slot_detail_dict)
 
             context = {
                        'slot_detail_list': slot_detail_list,
                        'all_vehicle_types': unique_vehicle_types,
-                        'vehicle_choices': vehicle_choices}
+                        }
 
             print("context",context)
-            return render(request, 'slot_booking.html', context)
+            if user.is_superuser:
+                return render(request, 'admin_slot_booking.html', context)
+            else:
+                return render(request, 'slot_booking.html', context)
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},
@@ -207,8 +229,10 @@ class SlotBookingEditAPIList(APIView):
                 "booking_id": booking_id
             }
             if user.is_superuser:
+                print("super user")
                 return render(request, 'admin_booked_slot_edit.html', context)
             else:
+                print("Not super user")
                 return render(request, 'booked_slot_edit.html', context)
         except TemplateDoesNotExist:
             return JsonResponse(
@@ -250,6 +274,7 @@ class SlotBookingEditAPIList(APIView):
                 print("duration", duration)
 
                 duration_in_hours = duration.total_seconds() / 3600
+                print("duration_in_hours", duration_in_hours)
                 slot_obj = SlotDetailVariant.objects.filter(slot=slot_booking_obj.slot).first()
                 print("$$$$$$2", slot_obj)
 

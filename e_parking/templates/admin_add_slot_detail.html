@@ -54,10 +54,10 @@
                         <label for="capacity">Capacity:</label>
                         <input type="number" class="form-control" name="capacity[]" required>
                     </div>
-                    <div class="form-group">
-                        <label for="available_slots">Available Slots:</label>
-                        <input type="number" class="form-control" name="available_slots[]" required>
-                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <label for="available_slots">Available Slots:</label>-->
+<!--                        <input type="number" class="form-control" name="available_slots[]" required>-->
+<!--                    </div>-->
                     <div class="form-group">
                         <label for="vehicle_type">Vehicle Type:</label>
                         <select class="form-control" name="vehicle_type[]" required>
@@ -120,7 +120,7 @@
         $(".variant-container").each(function () {
             var variant = {
                 capacity: $(this).find("input[name='capacity[]']").val(),
-                available_slots: $(this).find("input[name='available_slots[]']").val(),
+
                 vehicle_type: $(this).find("select[name='vehicle_type[]']").val(),
                 hourly_rate: $(this).find("input[name='hourly_rate[]']").val(),
             };

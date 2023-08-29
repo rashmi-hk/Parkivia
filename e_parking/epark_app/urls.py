@@ -2,18 +2,21 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from .api.views.staff_home import HomeAPIList
+from .api.views.admin_slot_booking import AdminSlotBookingAPIList
 from .api.views.admin_user import AdminUserAPIList,AdminUserCreateAPIList
 from .api.views.admin_home import AdminHomeAPIList,AdminIdentity
 from .api.views.single_slot_detail import SingleSlotAPIList
 from .api.views.slot_booking import SlotBookingAPIList,SlotBookingFormAPIList,SlotBookingEditAPIList
 from .api.views.admin_signup import AdminUtilityAPIList
 from .api.views.admin_login import AdminSignInAPIList
+from .api.views.generate_bill import GenerateBillFormAPIList
 
 from .api.views.staff_signin import StaffLoginAPIList
 from .api.views.staff_signup import StaffSignupAPIList
 from .api.views.admin_slot_detail import AdminGetSlotDetailAPIList,AdminEditSlotDetailAPIList,AddSlotDetailAPIList
 from .api.views.staff_verify_otp import StaffVerifyOtpAPIList
 from .api.views.slot_detail import SlotDetailAPIList
+from .api.views.free_slot import SlotFreeAPIList
 from .api.views.staff_location import StaffLocationAPIList
 from .api.views.user_login import UserSignInAPIList
 from .api.views.user_signup import UserSignUpAPIList
@@ -62,6 +65,7 @@ urlpatterns = [
     path('admin_get_location', AdminGetLocationAPIList.as_view() , name='admin_get_location'),
     path('admin_edit_location', AdminEditLocationAPIList.as_view() , name='admin_edit_location'),
     path('admin_edit_slot_detail', AdminEditSlotDetailAPIList.as_view() , name='admin_edit_slot_detail'),
+    path('free_slot', SlotFreeAPIList.as_view() , name='free_slot'),
 
 
     path('admin_add_slot_detail', AddSlotDetailAPIList.as_view() , name='admin_add_slot_detail'),
@@ -72,6 +76,7 @@ urlpatterns = [
     path('admin_add_location', AdminLocationAPIList.as_view(), name='admin_add_location'),
 
 
+    path('generate_bill', GenerateBillFormAPIList.as_view() , name='generate_bill'),
     path('single_slot', SlotBookingFormAPIList.as_view() , name='single_slot'),
     path('single_slot_detail', SingleSlotAPIList.as_view() , name='single_slot_detail'),
     path('staff_location', StaffLocationAPIList.as_view() , name='staff_location'),
@@ -84,6 +89,7 @@ urlpatterns = [
     path('admin_reset/done/', CustomPasswordResetCompleteView.as_view(), name='admin_password_reset_complete'),
 
     path('slot_booking', SlotBookingAPIList.as_view() , name='slot_booking'),
+    path('admin_slot_booking', AdminSlotBookingAPIList.as_view() , name='admin_slot_booking'),
     path('admin_signup', AdminUtilityAPIList.as_view() , name='admin_signup'),
     path('staff_signin', StaffLoginAPIList.as_view() , name='staff_signin'),
     path('staff_signup', StaffSignupAPIList.as_view() , name='staff_signup'),
