@@ -15,6 +15,7 @@ class Location(models.Model):
     longitude = models.FloatField(null=True)
     address = models.CharField(max_length=255)
     image =  CloudinaryField(blank=True)
+    opening_hours = models.CharField(max_length=100, default=0)
 
     def __str__(self):
         return self.name
@@ -57,7 +58,6 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
 class SlotDetail(models.Model):
     name = models.CharField(max_length=50)
-    opening_hours = models.CharField(max_length=100,default=0)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     slot_variants = models.ManyToManyField('SlotDetailVariant', blank=True)
 
@@ -83,11 +83,15 @@ class SlotDetailVariant(models.Model):
     capacity = models.PositiveIntegerField(default=0)  # Total capacity of the parking slot
     available_slots = models.PositiveIntegerField(default=0)  # Number of available spots
     vehicle_type = models.CharField(max_length=20,choices=VEHICLE_CHOICES,default='2_wheeler')
-    hourly_rate = models.DecimalField(max_digits=8, decimal_places=2,default=0.00)
+    hourly_rate_1_hour = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    hourly_rate_3_hours = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    hourly_rate_6_hours = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    hourly_rate_12_hours = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    daily_rate = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
 
 
     def __str__(self):
-        return f"{self.slot.name}"
+            return f"{self.slot.name}"
 
     class Meta:
         db_table = 'slotdetailvariant'

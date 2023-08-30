@@ -31,12 +31,7 @@
                         <input type="text" id="slotDetailId" value="{{ slot_detail_id }}" class="form-control">
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label">Opening Hours:</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="openingHoursInput"  value="{{ opening_hours }}" class="form-control">
-                    </div>
-                </div>
+
                <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Location:</label>
                     <div class="col-sm-9">
@@ -93,11 +88,36 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label">Hourly Rate:</label>
+                    <label class="col-sm-3 col-form-label">Hourly Rate (1 Hour):</label>
                     <div class="col-sm-9">
-                        <input type="text" id="variantHourlyRate{{ variant.var_slot_id }}" value="{{ variant.hourly_rate }}" class="form-control">
+                        <input type="text" id="variantHourlyRate1Hour{{ variant.var_slot_id }}" value="{{ variant.hourly_rate_1_hour }}" class="form-control">
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate (3 Hours):</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate3Hours{{ variant.var_slot_id }}" value="{{ variant.hourly_rate_3_hours }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate (6 Hours):</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate6Hours{{ variant.var_slot_id }}" value="{{ variant.hourly_rate_6_hours }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate (12 Hours):</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate12Hours{{ variant.var_slot_id }}" value="{{ variant.hourly_rate_12_hours }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Daily Rate:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantDailyRate{{ variant.var_slot_id }}" value="{{ variant.daily_rate }}" class="form-control">
+                    </div>
+                </div>
+
             </div>
             <div class="text-end mt-2">
 
@@ -189,10 +209,34 @@ function addNewVariant() {
                 </div>
 
 
-                <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label">Hourly Rate:</label>
+                 <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate (1 Hour):</label>
                     <div class="col-sm-9">
-                        <input type="text" id="variantHourlyRate{{ variant.var_slot_id }}" value="{{ variant.hourly_rate }}" class="form-control">
+                        <input type="text" id="variantHourlyRate1Hour{{ variant.var_slot_id }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate (3 Hours):</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate3Hours{{ variant.var_slot_id }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate (6 Hours):</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate6Hours{{ variant.var_slot_id }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Hourly Rate (12 Hours):</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantHourlyRate12Hours{{ variant.var_slot_id }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-form-label">Daily Rate:</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="variantDailyRate{{ variant.var_slot_id }}" class="form-control">
                     </div>
                 </div>
             </div>
@@ -213,15 +257,23 @@ function addNewVariant() {
             const capacity = document.getElementById("variantCapacityInput" + varSlotId).value;
             const availableSlots = document.getElementById("variantAvailableSlots" + varSlotId).value;
             const vehicleType = document.getElementById("variantVehicleType" + varSlotId).value;
+            const hourlyrate_1_hours = document.getElementById("variantHourlyRate1Hour" + varSlotId).value;
+            const hourlyrate_3_hours = document.getElementById("variantHourlyRate3Hours" + varSlotId).value;
+            const hourlyrate_6_hours = document.getElementById("variantHourlyRate6Hours" + varSlotId).value;
+            const hourlyrate_12_hours = document.getElementById("variantHourlyRate12Hours" + varSlotId).value;
+            const dailyrate = document.getElementById("variantDailyRate" + varSlotId).value;
 
-            const hourlyRate = document.getElementById("variantHourlyRate" + varSlotId).value;
 
             data.push({
                 var_slot_id: varSlotId,
                 capacity: capacity,
                 available_slots: availableSlots,
                 vehicle_type: vehicleType,
-                hourly_rate: hourlyRate,
+                 hourly_rate_1_hour: hourlyrate_1_hours,
+                hourly_rate_3_hours: hourlyrate_3_hours,
+                hourly_rate_6_hours: hourlyrate_6_hours,
+                hourly_rate_12_hours: hourlyrate_12_hours,
+                daily_rate: dailyrate,
             });
         });
 
@@ -229,7 +281,6 @@ function addNewVariant() {
         const postData = {
             slot_detail_id: document.getElementById("slotDetailId").value,
             name: document.getElementById("nameInput").value,
-            opening_hours: document.getElementById("openingHoursInput").value,
             location: document.getElementById("locationInput").value,
             slot_variants: data,
         };

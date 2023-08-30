@@ -15,6 +15,8 @@ from django.http import HttpResponseBadRequest
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+import ast
+from decimal import Decimal
 
 class AdminGetSlotDetailAPIList(APIView):
 
@@ -31,16 +33,21 @@ class AdminGetSlotDetailAPIList(APIView):
                     result_var_list = []
                     slot_variant_obj = SlotDetailVariant.objects.filter(slot__id=data.id)
                     for var_data in slot_variant_obj:
-                        var_dict = { "capacity": var_data.capacity,
+                        var_dict = {"capacity": var_data.capacity,
                             "available_slots": var_data.available_slots,
-                            "vehicle_type": var_data.vehicle_type}
+                            "vehicle_type": var_data.vehicle_type,
+                             "hourly_rate_1_hour" : var_data.hourly_rate_1_hour,
+                             "hourly_rate_3_hours" : var_data.hourly_rate_3_hours,
+                            "hourly_rate_6_hours" : var_data.hourly_rate_6_hours,
+                            "hourly_rate_12_hours" : var_data.hourly_rate_12_hours,
+                            "daily_rate" : var_data.daily_rate
+                             }
 
                         result_var_list.append(var_dict)
 
                     resulting_dict = {
                         "slot_detail_id":data.id,
                         "name": data.name,
-                        "opening_hours": data.opening_hours,
                         "location": data.location,
                         "variant_data": result_var_list
 
@@ -65,7 +72,6 @@ class AdminGetSlotDetailAPIList(APIView):
 
                 slot_detail_id = request.data["slot_detail_id"]
                 name = request.data["name"]
-                opening_hours = request.data["opening_hours"]
                 location = request.data["location"]
                 slot_variants = request.data["slot_variants"]
                 print("slot_variants", slot_variants)
@@ -76,7 +82,7 @@ class AdminGetSlotDetailAPIList(APIView):
                         location_obj = Location.objects.get(id=location)
 
                         slot_obj = SlotDetail.objects.get(
-                            Q(id=slot_detail_id) & Q(name__iexact=name) & Q(opening_hours=opening_hours) & Q(
+                            Q(id=slot_detail_id) & Q(name__iexact=name) & Q(
                                 location=location_obj)
                         )
                         print("This slotdetail data already present no need to edit", slot_obj)
@@ -85,7 +91,6 @@ class AdminGetSlotDetailAPIList(APIView):
                     location_obj = Location.objects.get(id=location)
                     slot_obj = SlotDetail.objects.get(id=slot_detail_id)
                     slot_obj.name = name
-                    slot_obj.opening_hours = opening_hours
                     slot_obj.location = location_obj
                     slot_obj.save()
 
@@ -94,24 +99,29 @@ class AdminGetSlotDetailAPIList(APIView):
                     capacity = var_data["capacity"]
                     available_slots = var_data["available_slots"]
                     vehicle_type = var_data["vehicle_type"]
-                    hourly_rate = var_data["hourly_rate"]
+                    hourly_rate_1_hours = var_data["hourly_rate_1_hour"]
+                    hourly_rate_3_hours = var_data["hourly_rate_3_hours"]
+                    hourly_rate_6_hours = var_data["hourly_rate_6_hours"]
+                    hourly_rate_12_hours = var_data["hourly_rate_12_hours"]
+                    daily_rate = var_data["daily_rate"]
+
+
                     var_slot_data_id = var_data["var_slot_id"]
                     try:
 
                         if var_slot_data_id:
-                            # exist_data_slot = SlotDetailVariant.objects.get(
-                            #     Q(id__iexact=var_slot_id) & Q(slot=slot_obj) & Q(capacity__iexact=capacity) &
-                            #     Q(available_slots__iexact=available_slots) & Q(vehicle_type__iexact=vehicle_type) &
-                            #     Q(hourly_rate__iexact=hourly_rate)
-                            # )
-                            # print("**************", )
+
                             exist_data_slot = SlotDetailVariant.objects.get(
                                 id=var_slot_data_id,
                                 slot=slot_obj,
                                 capacity=capacity,
                                 available_slots=available_slots,
                                 vehicle_type__iexact=vehicle_type,
-                                hourly_rate=hourly_rate
+                                hourly_rate_1_hour = hourly_rate_1_hours,
+                                hourly_rate_3_hour = hourly_rate_3_hours,
+                                hourly_rate_6_hour = hourly_rate_6_hours,
+                                hourly_rate_12_hour = hourly_rate_12_hours,
+                                daily_rate = daily_rate
                             )
 
                             print("This SlotDetailVariant data already present no need to edit")
@@ -123,7 +133,11 @@ class AdminGetSlotDetailAPIList(APIView):
                                     capacity=capacity,
                                     available_slots=available_slots,
                                     vehicle_type=vehicle_type,
-                                    hourly_rate=hourly_rate
+                                    hourly_rate_1_hour=hourly_rate_1_hours,
+                                    hourly_rate_3_hours=hourly_rate_3_hours,
+                                    hourly_rate_6_hours=hourly_rate_6_hours,
+                                    hourly_rate_12_hours=hourly_rate_12_hours,
+                                    daily_rate=daily_rate
                                 )
                                 print("Created new SlotDetailVariant:", new_variant_obj)
 
@@ -134,7 +148,11 @@ class AdminGetSlotDetailAPIList(APIView):
                         slot_var_obj.capacity = capacity
                         slot_var_obj.available_slots = available_slots
                         slot_var_obj.vehicle_type = vehicle_type
-                        slot_var_obj.hourly_rate = hourly_rate
+                        slot_var_obj.hourly_rate_1_hour = hourly_rate_1_hours
+                        slot_var_obj.hourly_rate_3_hours = hourly_rate_3_hours
+                        slot_var_obj.hourly_rate_6_hours = hourly_rate_6_hours
+                        slot_var_obj.hourly_rate_12_hours = hourly_rate_12_hours
+                        slot_var_obj.daily_rate = daily_rate
                         slot_var_obj.save()
 
                 print("Saved sucess")
@@ -182,7 +200,12 @@ class AdminEditSlotDetailAPIList(APIView):
                             "capacity": var_data.capacity,
                             "available_slots": var_data.available_slots,
                             "vehicle_type": var_data.vehicle_type,
-                            "hourly_rate": var_data.hourly_rate,
+                            "hourly_rate_1_hour": var_data.hourly_rate_1_hour,
+                            "hourly_rate_3_hours": var_data.hourly_rate_3_hours,
+                            "hourly_rate_6_hours": var_data.hourly_rate_6_hours,
+                            "hourly_rate_12_hours": var_data.hourly_rate_12_hours,
+                            "daily_rate": var_data.daily_rate
+
                             }
 
 
@@ -195,7 +218,6 @@ class AdminEditSlotDetailAPIList(APIView):
             context = {
                 'slot_detail_id': slot_detail_id,
                 'name': slot_data_obj.name,
-                'opening_hours': slot_data_obj.opening_hours,
                 'location': all_location,
                 "slot_location":slot_data_obj.location,
                 'slot_variants':var_list,
@@ -293,7 +315,7 @@ class AddSlotDetailAPIList(APIView):
         print("Inside create ", request.data)
 
         name = request.data.get('name')
-        opening_hours = request.data.get('opening_hours')
+
         location = request.data.get('location')
         slot_variants_data = json.loads(request.data.get('slot_variants'))
 
@@ -301,9 +323,11 @@ class AddSlotDetailAPIList(APIView):
         print("slot_variants_data", slot_variants_data)
 
 
-        if not name or not opening_hours or not location:
+        if not name or not location or not slot_variants_data:
+            print("Missing fields***********")
             return Response({'message': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
+        print("JIII")
         location_obj = Location.objects.get(id=location)
         exestence_check = None
         try:
@@ -317,7 +341,6 @@ class AddSlotDetailAPIList(APIView):
             print("Data not exist")
             slot_detail = SlotDetail.objects.create(
                 name=name,
-                opening_hours=opening_hours,
                 location=location_obj
             )
             print("Created SlotDetail")
@@ -327,27 +350,39 @@ class AddSlotDetailAPIList(APIView):
                 capacity = variant_data['capacity']
 
                 vehicle_type = variant_data['vehicle_type']
-                hourly_rate = variant_data['hourly_rate']
-
-                if capacity and  vehicle_type and hourly_rate:
+                print("****ihkj")
+                hourly_rate_1_hour = variant_data['hourly_rate_1_hour']
+                print("HII")
+                hourly_rate_3_hours = variant_data['hourly_rate_3_hours']
+                hourly_rate_6_hours = variant_data['hourly_rate_6_hours']
+                hourly_rate_12_hours = variant_data['hourly_rate_12_hours']
+                daily_rate = variant_data['daily_rate']
+                print("************",hourly_rate_1_hour,hourly_rate_3_hours,hourly_rate_6_hours,hourly_rate_12_hours,daily_rate)
+                if capacity and  vehicle_type and hourly_rate_12_hours and hourly_rate_6_hours and hourly_rate_3_hours and hourly_rate_1_hour and daily_rate:
                     variant = SlotDetailVariant.objects.create(
                         slot=slot_detail,
                         capacity=capacity,
-
                         vehicle_type=vehicle_type,
-                        hourly_rate=hourly_rate
+                        hourly_rate_1_hour=hourly_rate_1_hour,
+                        hourly_rate_3_hours = hourly_rate_3_hours,
+                        hourly_rate_6_hours = hourly_rate_6_hours,
+                        hourly_rate_12_hours = hourly_rate_12_hours,
+                        daily_rate = daily_rate
                     )
+                    print("Created")
                     slot_variants.append({
                         'capacity': capacity,
-
                         'vehicle_type': vehicle_type,
-                        'hourly_rate': hourly_rate
+                         'hourly_rate_1_hour': hourly_rate_1_hour,
+                        'hourly_rate_3_hours' : hourly_rate_3_hours,
+                        'hourly_rate_6_hours' : hourly_rate_6_hours,
+                        'hourly_rate_12_hours' : hourly_rate_12_hours
                     })
 
             response_data = {
                 'slot_detail': {
                     'name': name,
-                    'opening_hours': opening_hours,
+
                     'location': location
                 },
                 'slot_variants': slot_variants
