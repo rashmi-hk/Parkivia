@@ -115,7 +115,6 @@ class SlotBooking(models.Model):
     vehicle_number = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=20, choices=VEHICLE_CHOICES, default='2_wheeler')
     amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-    is_slot_relese = models.BooleanField(default=False)
     is_bill_generated = models.BooleanField(default=False)
 
     def __str__(self):

@@ -101,15 +101,19 @@
             }
         })
         .then(response => {
+             console.log("response ***",response)
             if (response.ok) {
-                window.location.reload();
+                console.log("Inside tresponse ok")
                 alert('booking edit successfully');
+                window.location.reload()
+                window.location.href = "{% url 'admin_slot_booking' %}"
+
             } else {
-                console.error('Error adding data to Location:', response.statusText);
+                console.error('Error editing data to booking:', response.statusText);
             }
         })
         .catch(error => {
-            console.error('Error adding data to Location:', error);
+            console.error('Error editing data to booking:', error);
         });
     }
 

@@ -42,7 +42,7 @@ class SlotBookingAPIList(APIView):
                 for variant in slot_obj.slot_variants.filter(vehicle_type = data.vehicle_type):
                     print("@#@#@#", variant)
                     variant_dict = {
-                     "hourly_amount": variant.hourly_rate
+
                      }
                     variant_result_list.append(variant_dict)
                 print("variant_result_list", variant_result_list)
@@ -211,9 +211,9 @@ class SlotBookingEditAPIList(APIView):
             vehicle_number = request.GET.get('vehicle_number')
             vehicle_type = request.GET.get('vehicle_type')
             amount = request.GET.get('amount')
-            hourly_rate = request.GET.get('hourly_rate')
+
             booking_id = request.GET.get('booking_id')
-            print("%%%%%%%%%%%%%%%%%hourly_rate", hourly_rate)
+
 
             date_time_obj = parser.parse(check_in_time)
 
@@ -227,7 +227,6 @@ class SlotBookingEditAPIList(APIView):
                 "vehicle_number": vehicle_number,
                 "vehicle_type": vehicle_type,
                 "amount": amount,
-                "hourly_rate": hourly_rate,
                 "booking_id": booking_id,
                 "current_datetime": datetime.now().strftime('%Y-%m-%dT%H:%M')
             }
@@ -276,18 +275,39 @@ class SlotBookingEditAPIList(APIView):
                 duration = check_out_time_obj - check_in_time_obj
                 print("duration", duration)
 
-                duration_in_hours = duration.total_seconds() / 3600
-                print("duration_in_hours", duration_in_hours)
-                slot_obj = SlotDetailVariant.objects.filter(slot=slot_booking_obj.slot).first()
+                total_hours = duration.total_seconds() / 3600
+                print("total_hours", total_hours)
+
+                slot_obj = SlotDetailVariant.objects.filter(slot=slot_booking_obj.slot , vehicle_type=vehicle_type).first()
                 print("$$$$$$2", slot_obj)
 
-                print("&&&&&&3   hour rate", slot_obj.hourly_rate)
+                rate_1_day = slot_obj.daily_rate
+                rate_1_hour = slot_obj.hourly_rate_1_hour
+                rate_3_hours = slot_obj.hourly_rate_3_hours
+                rate_6_hours = slot_obj.hourly_rate_6_hours
+                rate_12_hours = slot_obj.hourly_rate_12_hours
+
+                print("rate_1_day",rate_1_day)
+                print("rate_1_hour",rate_1_hour)
+                print("rate_3_hours",rate_3_hours)
+                print("rate_6_hours",rate_6_hours)
+                print("rate_12_hours",rate_12_hours)
 
 
-                fixed_price_per_hour = slot_obj.hourly_rate
-                payable_amount = fixed_price_per_hour * Decimal(duration_in_hours)
 
-                print("payable_amount", round(payable_amount))
+                # Calculate amount based on rates
+                payable_amount = (
+                        float(rate_1_day) * (total_hours // 24) +
+                        float(rate_1_hour) * (total_hours % 24) +
+                        float(rate_3_hours) * (total_hours // 3) +
+                        float(rate_6_hours) * (total_hours // 6) +
+                        float(rate_12_hours) * (total_hours // 12)
+                )
+
+                print("Total Amount:*******************", payable_amount)
+                # payable_amount = fixed_price_per_hour * Decimal(duration_in_hours)
+                #
+                # print("payable_amount", round(payable_amount))
 
 
             else:

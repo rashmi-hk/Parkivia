@@ -39,7 +39,7 @@ class SlotDetailAPIList(APIView):
                     variant_dict = {"available_slots" : variant.available_slots,
                     "vehicle_type" : variant.vehicle_type,
                     "capacity" :  variant.capacity,
-                    "hourly_rate" : variant.hourly_rate,
+
                     "name": variant.slot,
                     variant.vehicle_type + str("percentage"): percent_val * 100}
                     variant_list.append(variant_dict)
@@ -48,7 +48,7 @@ class SlotDetailAPIList(APIView):
                 data_dict = {
 
                               "variant_dict": variant_list,
-                             "opening_hours": data.opening_hours,
+
                              "location": data.location}
 
                 resulting_list.append(data_dict)

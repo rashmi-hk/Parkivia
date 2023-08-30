@@ -2,6 +2,11 @@
 {% load humanize %}
 {% load mathfilters %}
 {% load static %}
+<head>
+    .itm-cls{
+
+    }
+</head>
 
 {% block content %}
 <div class="container mt-3">
@@ -37,16 +42,17 @@
                     <td>{{ location.name }}</td>
 
                     <td>{{ location.address }}</td>
+
                     <td>
 
 
 
-                        <button type="button" onclick="edit_slot()" data-href="{% url 'admin_slot_detail' %}?location_id={{ location.location_id }}" class="btn btn-warning">View SlotDetail</button>
-                         <a href="{% url 'admin_edit_location' %}?name={{ location.name  }}&latitude={{ location.latitude }}&longitude={{ location.longitude }}&address={{ location.address }}&location_id={{ location.location_id }}" class="btn btn-primary">Edit</a>
+                        <button  style="padding:13px 6px 9px 10px;" type="button" onclick="edit_slot()" data-href="{% url 'admin_slot_detail' %}?location_id={{ location.location_id }}" class="btn btn-warning itm-cls" >View SlotDetail</button>
+                         <a href="{% url 'admin_edit_location' %}?name={{ location.name  }}&latitude={{ location.latitude }}&longitude={{ location.longitude }}&address={{ location.address }}&location_id={{ location.location_id }}" class="btn btn-primary itm-cls" style="padding: 9px 35px 10px 38px;">Edit</a>
 
-                        <button type="button" class="btn btn-sm btn-danger delete-button" onclick="deleteLocation({{ location.location_id }})">Delete</button>
+                        <button type="button" class="btn btn-danger delete-button itm-cls" style="padding: 7px 31px 9px 20px;" onclick="deleteLocation({{ location.location_id }})">Delete</button>
 
-                        <a href="{% url 'admin_add_slot_detail' %}?location_id={{ location.location_id }}" class="btn btn-success">Add Slot</a>
+                        <a style="padding:7px 20px 9px 17px;" href="{% url 'admin_add_slot_detail' %}?location_id={{ location.location_id }}" class="btn btn-success itm-cls">Add Slot</a>
 
                     </td>
                 </tr>

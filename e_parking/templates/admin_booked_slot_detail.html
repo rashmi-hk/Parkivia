@@ -40,6 +40,8 @@
             position:fixed;
             bottom: 0;
             width:100%;
+
+
     </style>
 </head>
 <body>
@@ -95,12 +97,13 @@
                     <td>{{ slot.amount }}</td>
                     <td>
 <!--                        <a class="btn btn-primary" href="{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}"  {% if  slot.check_out_time %}disabled{% endif %}>Edit</a>-->
-                       <button class="btn btn-primary" {% if slot.check_out_time %}disabled{% endif %}
+                       <button class="btn btn-primary btn-stl"  style="padding: 5px 16px 9px 20px;" {% if slot.check_out_time %}disabled{% endif %}
                         onclick="location.href='{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}';">
                         Edit
                     </button>
-                        <button class="btn btn-success" onclick="freeSpace('{{slot.vehicle_type}}','{{slot.slot_detail_id}}','{{ slot.booking_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Slot Open</button>
-                        <button class="btn btn-danger" onclick="generateBill('{{ slot.booking_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Bill</button>
+
+<!--                         <button class="btn btn-danger" onclick="generateBill('{{ slot.booking_id }}','{{ slot.vehicle_type }}','{{ slot.slot_detail_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Bill</button>-->
+                            <button class="btn btn-danger" style="padding: 5px 16px 9px 20px;" onclick="generateBill('{{ slot.booking_id }}','{{ slot.vehicle_type }}','{{ slot.slot_detail_id }}')" {% if  slot.is_bill_generated %}disabled{% endif %}>Bill</button>
 
                     </td>
 
@@ -115,12 +118,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 
-        function generateBill(booking_id) {
+        function generateBill(booking_id,vehical_type, slot_id) {
             var url = "/generate_bill";
             var method = 'GET';
 
             var params = new URLSearchParams();
             params.append('booking_id', booking_id);
+            params.append('vehical_type', vehical_type);
+            params.append('slot_id', slot_id);
 
 
             fetch(url + '?' + params.toString(), {
@@ -133,46 +138,17 @@
                 .then(response => response.text())  // Convert response to text
                 .then(html => {
                     // Render the HTML response
-                    var billWindow = window.open('', '_blank');
+                    var billWindow = window.open('', '_self');
                     billWindow.document.open();
                     billWindow.document.write(html);
                     billWindow.document.close();
                 })
                 .catch(error => {
                     // Handle any errors that occur during the request
+                     console.error('Fetch error:', error);
                 });
         }
 
-function freeSpace(vehical_type, slot_id,bookind_id) {
-    var url = "/free_slot";
-    var method = 'GET';
-
-    var params = new URLSearchParams();
-    params.append('vehical_type', vehical_type);
-    params.append('bookind_id', bookind_id);
-    params.append('slot_id', slot_id);
-
-    fetch(url + '?' + params.toString(), {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            // Successful response, show an alert
-            alert('Parking space freed successfully');
-        } else {
-            // Handle other response statuses if needed
-            alert('Failed to free parking space');
-        }
-    })
-    .catch(error => {
-        // Handle any errors that occur during the request
-        alert('An error occurred');
-    });
-}
 
 
  const searchInput = document.getElementById('searchVehicleNumber');

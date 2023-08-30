@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from ...models import CustomUser,SlotBooking
+from ...models import CustomUser,SlotBooking,SlotDetail,SlotDetailVariant
 from ...serializers import CustomUserSerializer
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
@@ -23,16 +23,25 @@ class GenerateBillFormAPIList(APIView):
     def get(self,request):
         print("Inside GenerateBillFormAPIList",request)
         print("Inside GenerateBillFormAPIList",request.data)
-
+        slot_id = request.GET.get('slot_id')
+        vehicle_type = request.GET.get('vehicle_type')
         booking_id = request.GET.get('booking_id')
-        vehicle_number = request.GET.get('vehicle_number')
 
-        book_obj = SlotBooking.objects.get(id=booking_id)
 
         user_email = request.session.get('email')
         user = CustomUser.objects.get(email=user_email)
+        book_obj = SlotBooking.objects.get(id=booking_id)
+        book_obj.is_bill_generated = True
+        book_obj.save()
 
-
+        slot_obj = SlotDetail.objects.get(id=slot_id)
+        variants = SlotDetailVariant.objects.filter(slot__id=slot_obj.id, vehicle_type=vehicle_type)
+        print("variants", variants)
+        # Iterate through the variants and update available_slots
+        for variant in variants:
+            print("Inside for")
+            variant.available_slots += 1
+            variant.save()
 
         context = {"slot" : book_obj.slot,
                    "check_in_time" : book_obj.check_in_time,

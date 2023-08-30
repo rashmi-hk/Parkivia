@@ -60,7 +60,6 @@ class AdminSlotBookingAPIList(APIView):
                              "amount":data.amount,
                              "booking_id":data.id,
                              "slot_detail_id": slot_obj.id,
-                             "is_slot_relese": data.is_slot_relese,
                              "is_bill_generated":data.is_bill_generated,
 
                              }
@@ -75,6 +74,7 @@ class AdminSlotBookingAPIList(APIView):
 
             print("User is admin")
             return render(request, 'admin_booked_slot_detail.html',context)
+
 
         except TemplateDoesNotExist:
             return JsonResponse(
