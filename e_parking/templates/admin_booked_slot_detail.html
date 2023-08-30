@@ -96,15 +96,18 @@
                     <td>{{ slot.vehicle_type }}</td>
                     <td>{{ slot.amount }}</td>
                     <td>
-<!--                        <a class="btn btn-primary" href="{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}"  {% if  slot.check_out_time %}disabled{% endif %}>Edit</a>-->
-                       <button class="btn btn-primary btn-stl"  style="padding: 5px 16px 9px 20px;" {% if slot.check_out_time %}disabled{% endif %}
+                       <button class="btn btn-primary btn-stl"  style="padding: 5px 16px 9px 20px;{% if slot.check_out_time %}background-color: lightgray; color: white;{% endif %}" {% if slot.check_out_time %}disabled{% endif %}
                         onclick="location.href='{% url 'edit_booking' %}?slot={{ slot.slot }}&check_in_time={{ slot.check_in_time }}&check_out_time={{ slot.check_out_time }}&vehicle_number={{ slot.vehicle_number }}&vehicle_type={{ slot.vehicle_type }}&booking_id={{ slot.slot_id }}';">
                         Edit
-                    </button>
+                       </button>
 
-<!--                         <button class="btn btn-danger" onclick="generateBill('{{ slot.booking_id }}','{{ slot.vehicle_type }}','{{ slot.slot_detail_id }}')" {% if not slot.check_out_time %}disabled{% endif %}>Bill</button>-->
-                            <button class="btn btn-danger" style="padding: 5px 16px 9px 20px;" onclick="generateBill('{{ slot.booking_id }}','{{ slot.vehicle_type }}','{{ slot.slot_detail_id }}')" {% if  slot.is_bill_generated %}disabled{% endif %}>Bill</button>
-
+<!--                            <button class="btn btn-danger" style="padding: 5px 16px 9px 20px;{% if slot.check_out_time %}background-color: lightgray; color: white;{% endif %}" onclick="generateBill('{{ slot.booking_id }}','{{ slot.vehicle_type }}','{{ slot.slot_detail_id }}')" {% if  slot.is_bill_generated %}disabled{% endif %}>Bill</button>-->
+                        <button class="btn btn-danger" style="padding: 5px 16px 9px 20px;
+                                {% if slot.is_bill_generated or not slot.check_out_time %}background-color: lightgray; color: white;{% endif %}"
+                                {% if slot.is_bill_generated or not slot.check_out_time %}disabled{% endif %}
+                                onclick="generateBill('{{ slot.booking_id }}','{{ slot.vehicle_type }}','{{ slot.slot_detail_id }}')" >
+                                Bill
+                        </button>
                     </td>
 
 

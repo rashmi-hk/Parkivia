@@ -59,13 +59,12 @@ class SlotBookingAPIList(APIView):
                              "amount":data.amount,
                              "booking_id":data.id,
                              "slot_detail_id": slot_obj.id,
+                             "is_bill_generated": data.is_bill_generated,
                              }
 
                 resulting_list.append(data_dict)
 
             context = {'slot_detail': resulting_list,
-                       # 'slot_detail_list': slot_detail_list,
-                       # 'all_vehicle_types': all_vehicle_types
                        }
             print("context", context)
             if user.is_superuser:
@@ -156,14 +155,7 @@ class SlotBookingFormAPIList(APIView):
 
             unique_vehicle_types = set()
 
-            # Iterate through the SlotDetail objects and retrieve the related vehicle types
-            # for slot_detail in slot_details:
-            #     slot_variants = SlotDetailVariant.objects.filter(slot=slot_detail)
-            #     slot_vehicle_types = slot_variants.values_list("vehicle_type", flat=True)
-            #     unique_vehicle_types.update(slot_vehicle_types)
 
-
-            # all_vehicle_types = [choice[0] for choice in SlotDetail.VEHICLE_CHOICES]
             slot_detail_list = []
             for slot_data in slot_details:
                 slot_variants = SlotDetailVariant.objects.filter(slot=slot_data)

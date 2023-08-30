@@ -102,11 +102,9 @@
 
       </div> -->
       <span class="navbar-brand "  href="#"><img  src="/static/images/LOGO_PARKING.webp" class="" height="50" width="150" alt="..."></span>
-<!--      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--      </button>-->
 
-        <p class="nav-link text-dark m-0 d-sm-block d-md-block d-block-none">Hello <span id="username">{{ user.username }}</span> </p>
+        <p class="nav-link text-dark m-0 d-sm-block d-md-none d-block-none">Hello <span id="username">{{ user.username }}</span> </p>
+
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -129,7 +127,7 @@
         <div class="text-right">
             <ul class="navbar-nav">
 
-<!--                <li><p class="nav-link text-dark m-0 d-sm-none d-block">Hello <span id=user>{{ user.username }}</span> </p></li>-->
+
                 <li class="nav-item px-3 d-none d-sm-block">
     <p class="nav-link text-dark m-0">Hello <span id="user">{{ user.username }}</span></p>
 </li>
@@ -185,7 +183,7 @@
 
      <div class="row">
          <div class="col-md-3">
-              <ul class="list-unstyled"><li> <img  src="/static/images/LOGO_PARKING.webp"></li>
+              <ul class="list-unstyled img-clr"><li> <img  src="/static/images/LOGO_PARKING.webp" ></li>
                   <li>We Provide The Cheap And Best</li>
                   <li>Parking Spot In India.</li>
                   <li>You Can't Park Cheaper!</li>

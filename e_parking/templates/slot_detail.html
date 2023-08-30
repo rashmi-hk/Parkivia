@@ -47,6 +47,8 @@
 
 <div class="container mt-5">
     <h2 class="text-center">Slot Detail List</h2>
+    <h3 class="text-center">{{slot_detail.0.location}}</h3>
+
     <table class="table table-success table-striped">
         <thead class="table-dark">
             <tr>
@@ -54,9 +56,11 @@
                 <th>capacity</th>
                 <th>available_slots</th>
                 <th>vehicle_type</th>
-                <th>hourly_rate</th>
-                <th>opening_hours</th>
-                <th>location</th>
+                <th>Hourly_rate_1_hour</th>
+                <th>Hourly_rate_3_hours</th>
+                <th>Hourly_rate_6_hours</th>
+                <th>Hourly_rate_12_hours</th>
+                <th>Per day</th>
 
             </tr>
         </thead>
@@ -68,9 +72,11 @@
                         <td>{{ variant.capacity }}</td>
                         <td>{{ variant.available_slots }}</td>
                         <td>{{ variant.vehicle_type }}</td>
-                        <td>{{ variant.hourly_rate }}</td>
-                        <td>{{ slot_data.opening_hours }}</td>
-                        <td>{{ slot_data.location }}</td>
+                        <td>{{ variant.hourly_rate_1_hour }}</td>
+                        <td>{{ variant.hourly_rate_3_hours }}</td>
+                        <td>{{ variant.hourly_rate_6_hours }}</td>
+                        <td>{{ variant.hourly_rate_12_hours }}</td>
+                        <td>{{ variant.daily_rate }}</td>
 
                     </tr>
                 {% endfor %}

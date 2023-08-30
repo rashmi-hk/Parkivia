@@ -104,6 +104,9 @@
             if (response.ok) {
                 window.location.reload();
                 alert('booking edit successfully');
+                 window.location.reload()
+                window.location.href = "{% url 'slot_booking' %}"
+
             } else {
                 console.error('Error adding data to Location:', response.statusText);
             }

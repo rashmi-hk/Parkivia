@@ -101,8 +101,11 @@
 <script>
     function updateVehicleTypes() {
     const slotDropdown = document.getElementById('slot');
+
     const selectedSlot = slotDropdown.options[slotDropdown.selectedIndex];
+    console.log("selectedSlot:", selectedSlot);
     const vehicleChoices = selectedSlot.getAttribute('data-vehicle-choices').split(',');
+    console.log("vehicleChoices:", vehicleChoices);
 
     const vehicleTypeDropdown = document.getElementById('vehicle_type');
     vehicleTypeDropdown.innerHTML = '';
@@ -115,8 +118,7 @@
     });
 }
 
-// Call this function initially to populate vehicle types for the first selected slot
-updateVehicleTypes();
+
 
 
 
@@ -154,6 +156,7 @@ updateVehicleTypes();
             if (response.ok) {
                 alert('Booking successful!');
                 window.location.reload();
+                window.location.href = "{% url 'slot_booking' %}"
             } else {
                 alert('Booking failed. Please try again.');
             }
@@ -163,6 +166,8 @@ updateVehicleTypes();
             alert('An error occurred while processing the booking.');
         });
     }
+// Call this function initially to populate vehicle types for the first selected slot
+updateVehicleTypes();
 
 </script>
 {% endblock %}

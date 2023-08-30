@@ -157,6 +157,8 @@ updateVehicleTypes();
             if (response.ok) {
                 alert('Booking successful!');
                 window.location.reload();
+                 window.location.reload();
+                window.location.href = "{% url 'slot_booking' %}"
             } else {
                 alert('Booking failed. Please try again.');
             }

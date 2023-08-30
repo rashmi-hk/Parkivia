@@ -82,7 +82,7 @@
     </div>
 <div class="location-button" style="position:relative">
         {% csrf_token %}
-        <button id="selectLocation" style="">Select Location</button>
+
         </div>
 </div>
 <div class="location-button" style="position:relative">
@@ -92,11 +92,11 @@
             <form id="locationForm">
                 <div class="mb-3">
                     <label for="nameInput" class="form-label">Name:</label>
-                    <input type="text" id="nameInput" class="form-control" placeholder="Enter Name">
+                    <input type="text" id="nameInput" class="form-control" placeholder="Enter Name" required>
                 </div>
                 <div class="mb-3">
                     <label for="addressInput" class="form-label">Address:</label>
-                    <input type="text" id="addressInput" class="form-control" placeholder="Enter Address">
+                    <input type="text" id="addressInput" class="form-control" placeholder="Enter Address" required>
                 </div>
                 <div class="mb-3">
 
@@ -106,10 +106,10 @@
 
                     <input type="hidden" id="longitudeInput" class="form-control" placeholder="Longitude">
                 </div>
-                <div class="mb-3">
-                    <label for="imageInput" class="form-label">Location Picture:</label>
-                    <input type="file" id="imageInput" class="form-control" accept="image/*">
-                </div>
+<!--                <div class="mb-3">-->
+<!--                    <label for="imageInput" class="form-label">Location Picture:</label>-->
+<!--                    <input type="file" id="imageInput" class="form-control" accept="image/*">-->
+<!--                </div>-->
                 <button type="submit" class="btn btn-success mt-2" onclick="submitForm()">Submit</button>
             </form>
         </div>
@@ -220,18 +220,18 @@
                 });
         });
 
-        document.getElementById('selectLocation').addEventListener('click', function () {
-            if (marker) {
-                var selectedLatLng = marker.getLatLng();
-                document.getElementById('latitudeInput').value = selectedLatLng.lat;
-                document.getElementById('longitudeInput').value = selectedLatLng.lng;
+<!--        document.getElementById('selectLocation').addEventListener('click', function () {-->
+<!--            if (marker) {-->
+<!--                var selectedLatLng = marker.getLatLng();-->
+<!--                document.getElementById('latitudeInput').value = selectedLatLng.lat;-->
+<!--                document.getElementById('longitudeInput').value = selectedLatLng.lng;-->
 
-                reverseGeocode(selectedLatLng.lat, selectedLatLng.lng)
-                    .then(address => {
-                        document.getElementById('addressInput').value = address;
-                    });
-            }
-        });
+<!--                reverseGeocode(selectedLatLng.lat, selectedLatLng.lng)-->
+<!--                    .then(address => {-->
+<!--                        document.getElementById('addressInput').value = address;-->
+<!--                    });-->
+<!--            }-->
+<!--        });-->
     }
 
     window.onload = initMap;
