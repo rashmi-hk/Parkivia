@@ -104,7 +104,7 @@ class AdminUserAPIList(APIView):
 
             if user_id is None:
                 print("Inside admin get all users")
-                user_data = CustomUser.objects.all()
+                user_data = CustomUser.objects.filter(is_staff=True,is_superuser=False)
                 resulting_list = []
                 for user in user_data:
                     resulting_dict = {

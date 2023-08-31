@@ -17,7 +17,7 @@ class AdminLocationAPIList(APIView):
 
     def get(self,request):
         try:
-            print("Inside get AdminCustomAPIList")
+            print("Inside get AdminLocationAPIList")
             return render(request, 'admin_select_location.html')
         except TemplateDoesNotExist:
             return JsonResponse(
@@ -28,8 +28,8 @@ class AdminLocationAPIList(APIView):
 
     def post(self, request):
         try:
-            print("Inside post location ", request)
-            print("Inside post location ", request.data)
+            print("Inside post AdminLocationAPIList ", request)
+            print("Inside post AdminLocationAPIList ", request.data)
             name = request.data["name"]
             address = request.data["address"]
             latitude = request.data["latitude"]
