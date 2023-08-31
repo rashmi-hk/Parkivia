@@ -115,17 +115,28 @@ class SlotBookingAPIList(APIView):
 
             print("Row created")
 
-            variants = SlotDetailVariant.objects.filter(slot__id=slot_detail_obj.id)
-            print("variants", variants)
-            # Iterate through the variants and update available_slots
-            for variant in variants:
-                print("Inside for")
-                variant.available_slots -= 1
-                variant.save()
+            variants = SlotDetailVariant.objects.filter(slot__id=slot_detail_obj.id,vehicle_type=vehicle_type)
+            print("variants", len(variants))
+            print("variants",variants)
+            if len(variants):
+                print("Slot available*********************************************")
+                # Iterate through the variants and update available_slots
+                for variant in variants:
+                    print("Inside for",variant.available_slots)
+                    if variant.available_slots:
+                        variant.available_slots -= 1
+                        variant.save()
+                        print("saved sucess")
+                    else:
+                        response_data = {'message': 'Parking slot not availables'}
+                        return JsonResponse(response_data, status=status.HTTP_404_NOT_FOUND)
 
-            print("saved sucess")
-            response_data = {'message': 'Request processed successfully'}
-            return JsonResponse(response_data, status=status.HTTP_201_CREATED)
+                response_data = {'message': 'Request processed successfully'}
+                return JsonResponse(response_data, status=status.HTTP_201_CREATED)
+            else:
+                print("Slot not available************************")
+                response_data = {'message': 'Parking slot not availables'}
+                return JsonResponse(response_data, status=status.HTTP_404_NOT_FOUND)
 
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly

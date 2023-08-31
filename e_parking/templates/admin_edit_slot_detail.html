@@ -299,7 +299,8 @@ function addNewVariant() {
                 console.log(response)
                 console.log(response.data)
                 if (response.ok) {
-
+                    window.location.reload()
+                    window.location.reload()
                     window.location.href = "{% url 'admin_slot_detail' %}" + "?location_id=" + location_id;
 
                      alert('Slot Detail Edited Successfully');

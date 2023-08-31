@@ -24,7 +24,9 @@ class GenerateBillFormAPIList(APIView):
         print("Inside GenerateBillFormAPIList",request)
         print("Inside GenerateBillFormAPIList",request.data)
         slot_id = request.GET.get('slot_id')
-        vehicle_type = request.GET.get('vehicle_type')
+        vehical_type = request.GET.get('vehical_type')
+        print("vehicle_type", vehical_type)
+        print("vehicle_type", type(vehical_type))
         booking_id = request.GET.get('booking_id')
 
 
@@ -35,11 +37,12 @@ class GenerateBillFormAPIList(APIView):
         book_obj.save()
 
         slot_obj = SlotDetail.objects.get(id=slot_id)
-        variants = SlotDetailVariant.objects.filter(slot__id=slot_obj.id, vehicle_type=vehicle_type)
+        print("slot_obj", slot_obj)
+        variants = SlotDetailVariant.objects.filter(slot=slot_obj, vehicle_type=vehical_type)
         print("variants", variants)
         # Iterate through the variants and update available_slots
         for variant in variants:
-            print("Inside for")
+            print("Inside for incresed ***********************")
             variant.available_slots += 1
             variant.save()
 

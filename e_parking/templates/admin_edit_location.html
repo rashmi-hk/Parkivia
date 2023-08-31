@@ -56,7 +56,8 @@
         .then(response => {
                 if (response.ok) {
                     console.log("Ok");
-
+                    window.location.reload()
+                     window.location.reload()
                      window.location.href = "{% url 'admin_get_location' %}";
                 } else {
                     console.error('Error editing data to Location:', response.statusText);

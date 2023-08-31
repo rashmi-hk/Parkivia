@@ -58,7 +58,7 @@ class SingleSlotAPIList(APIView):
                         "available_slots": variant.available_slots,
                         "vehicle_type": variant.vehicle_type,
                         "capacity": variant.capacity,
-                        "hourly_rate": variant.hourly_rate,
+
                         "name": variant.slot,
                         "latitude":lat,
                         "longitude": lng,
@@ -75,7 +75,7 @@ class SingleSlotAPIList(APIView):
                 {
                     "name": slot_name,
                     "variant_dict": variant_list,
-                    "opening_hours": data.opening_hours,  # Include opening_hours
+
                     "location": data.location,  # Include location
                 }
                 for slot_name, variant_list in grouped_data.items()

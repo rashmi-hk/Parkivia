@@ -35,7 +35,7 @@ class SlotDetailAPIList(APIView):
 
                 for variant in slot_variant_obj:
                     # Update available_slots and vehicle_type
-                    percent_val  = variant.available_slots/variant.capacity
+                    percent_val  = variant.available_slots/variant.capacity   
                     variant_dict = {"available_slots" : variant.available_slots,
                     "vehicle_type" : variant.vehicle_type,
                     "capacity" :  variant.capacity,

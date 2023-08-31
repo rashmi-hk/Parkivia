@@ -88,8 +88,9 @@
 
                             </div>
 
-                            <button type="submit" class="btn btn-primary" onclick="slotBook()" >Submit</button>
+
                         </form>
+                         <button type="submit" class="btn btn-primary" onclick="slotBook()" >Submit</button>
                     </div>
                 </div>
             </div>
@@ -159,7 +160,11 @@ updateVehicleTypes();
                 window.location.reload();
                  window.location.reload();
                 window.location.href = "{% url 'slot_booking' %}"
-            } else {
+            }
+            else if (response.status === 404) {
+                    alert('Slot not available. Please choose another slot.');
+                }
+            else {
                 alert('Booking failed. Please try again.');
             }
         })
