@@ -18,7 +18,12 @@ class AdminLocationAPIList(APIView):
     def get(self,request):
         try:
             print("Inside get AdminLocationAPIList")
-            return render(request, 'admin_select_location.html')
+            YOUR_API_KEY = config('YOUR_API_KEY')
+            context = {
+                YOUR_API_KEY:YOUR_API_KEY
+
+            }
+            return render(request, 'admin_select_location.html', context)
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template admin_select_location.html does not exist'},
