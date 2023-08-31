@@ -264,7 +264,7 @@ class SlotBookingEditAPIList(APIView):
 
 
 
-            check_in_time_obj = parser.parse(check_in_time, dayfirst=True)
+            check_in_time_obj = parser.parse(check_in_time)
             print("Parsed check-in time:", check_in_time)
 
             slot_booking_obj = SlotBooking.objects.get(id=booking_id)
@@ -272,7 +272,7 @@ class SlotBookingEditAPIList(APIView):
             check_out_time_obj = 0
             payable_amount = 0
             if check_out_time:
-                check_out_time_obj = parser.parse(check_out_time, dayfirst=True)
+                check_out_time_obj = parser.parse(check_out_time)
                 print("check_out_time_obj", check_out_time_obj)
 
                 duration = check_out_time_obj - check_in_time_obj

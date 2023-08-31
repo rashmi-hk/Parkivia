@@ -34,7 +34,7 @@ class GMapsGeocoding(APIView):
         current_latitude = request.GET.get('current_lat')
         current_longitude = request.GET.get('current_lng')
         print("***********", latitude,longitude)
-        travling_mode =  request.GET.get('travelmode')
+
         end_location = 0
         if latitude and longitude:
             lat = float(latitude)
@@ -80,7 +80,7 @@ class GMapsGeocoding(APIView):
         # ]
 
         return render(request, 'direction.html',
-                      {'directions': directions_result[0]['legs'][0]['steps'], 'fixed_locations': fixed_locations,'google_maps_api_key': YOUR_API_KEY,'travling_mode':travling_mode})
+                      {'directions': directions_result[0]['legs'][0]['steps'], 'fixed_locations': fixed_locations,'google_maps_api_key': YOUR_API_KEY})
 
 
 class AllLocationGeocoding(APIView):

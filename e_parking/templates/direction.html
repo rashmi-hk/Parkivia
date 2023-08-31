@@ -38,7 +38,7 @@
             var request = {
                 origin: directions[0].start_location,
                 destination: directions[directions.length - 1].end_location,
-                travelMode: '{{travling_mode}}'
+                travelMode: 'DRIVING'
             };
 
             var directionsService = new google.maps.DirectionsService();

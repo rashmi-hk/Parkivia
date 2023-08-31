@@ -62,6 +62,11 @@ class SingleSlotAPIList(APIView):
                         "name": variant.slot,
                         "latitude":lat,
                         "longitude": lng,
+                        "hourly_rate_1_hour" : variant.hourly_rate_1_hour,
+                        "hourly_rate_3_hours" : variant.hourly_rate_3_hours,
+                        "hourly_rate_6_hours" : variant.hourly_rate_6_hours,
+                        "hourly_rate_12_hours" : variant.hourly_rate_12_hours,
+                        "daily_rate" : variant.daily_rate
                     }
 
                     # Group data by slot name

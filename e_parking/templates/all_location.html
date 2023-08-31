@@ -348,6 +348,9 @@ height:100%;
                          anchor.textContent = location.title;
 
                         marker.addListener('click', function() {
+                               if (location.title === "Me") {
+                                    return; // Exit the event handler
+                                }
                               window.location.href = anchor.href;
 
                         });

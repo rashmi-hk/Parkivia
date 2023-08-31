@@ -61,6 +61,8 @@ function fetchLocation() {
                 console.log("Sucess")
                 alert('Location updated successful!');
                 window.location.reload();
+                window.location.reload();
+                window.location.href = "{% url 'staff_home' %}";
             }
         else {
                 alert('Location update failed. Please try again.');
