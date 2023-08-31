@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a8cbf2ee-2300-41e3-bd54-eeeffd54947e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/e_parking/templates/demo.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/geo_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/geo_map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/single_slot_detail.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/single_slot_detail.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/slot_booking.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/slot_booking.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/slot_detail.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/slot_detail.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/e_parking/templates/all_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/all_location.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/direction.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/direction.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/staff_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/staff_location.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/current_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/current_location.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/e_parking/templates/user_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/user_login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/user_slot_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/user_slot_detail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +15,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
