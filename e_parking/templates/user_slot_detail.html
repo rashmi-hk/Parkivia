@@ -39,9 +39,9 @@
             background-color: black;
             color: white;
             text-align: center;
-            position:sticky;
+            position:fixed;
             bottom: 0;
-            width:100%;
+            width:100%;}
     </style>
 
 
@@ -57,7 +57,7 @@
         {% for slot_data in slot_detail %}
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" style="height: 400px;overflow-y: scroll;">
                         <h5 class="card-title">{{ slot_data.name }}</h5>
 
 
@@ -99,9 +99,9 @@
         {% for slot_data in slot_detail %}
         {% for variant in slot_data.variant_dict %}
     <!-- ... Other card content ... -->
-            <div class="card-footer">
+            <div class="">
                  <div class="center-screen">
-                    <div class="fixed-bottom p-3 d-flex justify-content-center direction-serch" style="background-color: #e9ecef!important;">
+                    <div class="p-3 d-flex justify-content-center direction-serch" style="background-color: #e9ecef!important;">
 
 
                         <a href="#" class="btn btn-primary mt-2" onclick="showDirection('{{ variant.latitude }}', '{{ variant.longitude }}', '{{ variant.vehicle_type }}','{{ current_lat }}','{{ current_lng }}')">Show Direction</a>
@@ -109,7 +109,7 @@
 
                     </div>
                  </div>
-                </div>
+            </div>
         {% endfor %}
         {% endfor %}
     </div>
