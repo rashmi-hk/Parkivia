@@ -16,6 +16,8 @@ from django.core.serializers import serialize
 from dateutil import parser
 from datetime import datetime
 from decimal import Decimal
+import pytz
+
 
 class SlotBookingAPIList(APIView):
 
@@ -264,14 +266,18 @@ class SlotBookingEditAPIList(APIView):
 
 
 
+            # check_in_time_obj = parser.parse(check_in_time)
+            # print("Parsed check-in time:", check_in_time)
             check_in_time_obj = parser.parse(check_in_time)
-            print("Parsed check-in time:", check_in_time)
+            print("Parsed check-in time:", check_in_time_obj)
 
             slot_booking_obj = SlotBooking.objects.get(id=booking_id)
             print("!!!!1")
             check_out_time_obj = 0
             payable_amount = 0
             if check_out_time:
+                # check_out_time_obj = parser.parse(check_out_time)
+                # print("check_out_time_obj", check_out_time_obj)
                 check_out_time_obj = parser.parse(check_out_time)
                 print("check_out_time_obj", check_out_time_obj)
 
@@ -284,11 +290,11 @@ class SlotBookingEditAPIList(APIView):
                 slot_obj = SlotDetailVariant.objects.filter(slot=slot_booking_obj.slot , vehicle_type=vehicle_type).first()
                 print("$$$$$$2", slot_obj)
 
-                rate_1_day = slot_obj.daily_rate
-                rate_1_hour = slot_obj.hourly_rate_1_hour
-                rate_3_hours = slot_obj.hourly_rate_3_hours
-                rate_6_hours = slot_obj.hourly_rate_6_hours
-                rate_12_hours = slot_obj.hourly_rate_12_hours
+                rate_1_day = round(slot_obj.daily_rate)
+                rate_1_hour = round(slot_obj.hourly_rate_1_hour)
+                rate_3_hours = round(slot_obj.hourly_rate_3_hours)
+                rate_6_hours = round(slot_obj.hourly_rate_6_hours)
+                rate_12_hours = round(slot_obj.hourly_rate_12_hours)
 
                 print("rate_1_day",rate_1_day)
                 print("rate_1_hour",rate_1_hour)
@@ -296,21 +302,37 @@ class SlotBookingEditAPIList(APIView):
                 print("rate_6_hours",rate_6_hours)
                 print("rate_12_hours",rate_12_hours)
 
+                # Assuming total_hours is the total duration in hours
+                payable_amount = 0
 
+                if total_hours >= 24:
+                    # Calculate for full days (24 hours)
+                    full_days = total_hours // 24
+                    payable_amount += full_days * rate_1_day
+                    total_hours %= 24
 
-                # Calculate amount based on rates
-                payable_amount = (
-                        float(rate_1_day) * (total_hours // 24) +
-                        float(rate_1_hour) * (total_hours % 24) +
-                        float(rate_3_hours) * (total_hours // 3) +
-                        float(rate_6_hours) * (total_hours // 6) +
-                        float(rate_12_hours) * (total_hours // 12)
-                )
+                if total_hours >= 12:
+                    # Calculate for 12-hour slots
+                    twelve_hour_slots = total_hours // 12
+                    payable_amount += twelve_hour_slots * rate_12_hours
+                    total_hours %= 12
 
-                print("Total Amount:*******************", payable_amount)
-                # payable_amount = fixed_price_per_hour * Decimal(duration_in_hours)
-                #
-                # print("payable_amount", round(payable_amount))
+                if total_hours >= 6:
+                    # Calculate for 6-hour slots
+                    six_hour_slots = total_hours // 6
+                    payable_amount += six_hour_slots * rate_6_hours
+                    total_hours %= 6
+
+                if total_hours >= 3:
+                    # Calculate for 3-hour slots
+                    three_hour_slots = total_hours // 3
+                    payable_amount += three_hour_slots * rate_3_hours
+                    total_hours %= 3
+
+                # Calculate for remaining hours using the hourly rate
+                payable_amount += total_hours * rate_1_hour
+
+                print("payable_amount", payable_amount)
 
 
             else:

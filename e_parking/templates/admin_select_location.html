@@ -196,12 +196,13 @@
 
                     <input type="hidden" id="longitudeInput" class="form-control" placeholder="Longitude">
                 </div>
-                <div class="mb-3">
-                    <label for="imageInput" class="form-label">Location Picture:</label>
-                    <input type="file" id="imageInput" class="form-control" accept="image/*">
-                </div>
-                <button type="submit" class="btn btn-success mt-2" onclick="submitForm()">Submit</button>
+<!--                <div class="mb-3">-->
+<!--                    <label for="imageInput" class="form-label">Location Picture:</label>-->
+<!--                    <input type="file" id="imageInput" class="form-control" accept="image/*">-->
+<!--                </div>-->
+
             </form>
+            <button type="submit" class="btn btn-success mt-2" onclick="submitForm()">Submit</button>
         </div>
     </div>
 </div>
@@ -273,22 +274,7 @@
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
 
-  function initAutocomplete() {
-        var input = document.getElementById('addressInput');
-        var autocomplete = new google.maps.places.Autocomplete(input);
 
-        autocomplete.addListener('place_changed', function () {
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                // User entered an invalid place; clear input
-                input.value = '';
-            } else {
-                // Update latitude and longitude fields
-                document.getElementById('latitudeInput').value = place.geometry.location.lat();
-                document.getElementById('longitudeInput').value = place.geometry.location.lng();
-            }
-        });
-    }
 
   document.addEventListener("DOMContentLoaded", function () {
   console.log("Inside username")
@@ -308,23 +294,28 @@
 });
 
 
-         function submitForm() {
-          var imageInput = document.getElementById('imageInput');
+        async function submitForm(e) {
+        //e.preventDefault()
+          //var imageInput = document.getElementById('imageInput');
 
-          console.log("********************",imageInput)
+          //console.log("********************",imageInput)
 
-          console.log("imageInput",imageInput)
-          console.log("imageInput filed",imageInput.files)
-         var imageFile = imageInput.files[0]; // Get the selected image file
-         console.log("imageFile",imageFile)
+          //console.log("imageInput",imageInput)
+          //console.log("imageInput filed",imageInput.files)
+         //var imageFile = imageInput.files[0]; // Get the selected image file
+        //console.log("imageFile",imageFile)
 
         var name = document.getElementById('nameInput').value;
+        console.log("---name",name)
         var address = document.getElementById('addressInput').value;
+        console.log("---address",address)
         var latitude = document.getElementById('latitudeInput').value;
+        console.log("---latitude",latitude)
         var longitude = document.getElementById('longitudeInput').value;
+        console.log("---longitude",longitude)
+
          if (!latitude || !longitude) {
-                alert('Both latitude and longitude are required. Please select both.');
-                return;
+
             }
 
         // Create the data object to send in the AJAX request
@@ -334,35 +325,36 @@
         formData.append('address', address);
         formData.append('latitude', latitude);
         formData.append('longitude', longitude);
-        formData.append('image', imageFile);
 
-        // Make an AJAX POST request to the API
-        fetch('/admin_add_location', {
+        try{
+        let response =  await fetch('/admin_add_location', {
             method: 'POST',
 
             body: formData
         })
-           .then(response => {
-           console.log("******",response.status)
+        console.log("******",response)
             if (response.ok) {
 
                 alert('Location added successfully');
                  window.location.reload()
-                 window.location.reload()
-                 window.location.reload()
+
                  window.location.href = "{% url 'admin_get_location' %}";
             }
             else if (response.status === 409) {
                 console.error('Data already exists:', response.statusText);
                 alert('Error: Data already exists');
+                window.location.reload()
             } else {
                 console.error('Error adding data to Location:', response.statusText);
                 alert('Error adding data to Location');
+                window.location.reload()
             }
-        })
-        .catch(error => {
+        }
+        catch(err){
+            console.log("-------error",error)
             console.error('Error adding data to Location:', error);
-        });
+             console.log('Fetch error:', error);
+        }
     }
 
     function reverseGeocode(lat, lng) {
@@ -433,7 +425,7 @@
 
   window.onload = function () {
         initMap();
-        initAutocomplete();
+
     };
 
 </script>

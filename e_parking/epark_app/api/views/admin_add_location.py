@@ -12,8 +12,32 @@ from rest_framework.response import Response
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+import requests
 
 class AdminLocationAPIList(APIView):
+
+    def get_lat_lng_from_address(address):
+        print("Inside get_lat_lng_from_address")
+        YOUR_API_KEY = config('YOUR_API_KEY')
+        base_url = "https://maps.googleapis.com/maps/api/geocode/json"
+        params = {
+            "address": address,
+            "key": YOUR_API_KEY
+        }
+
+        response = requests.get(base_url, params=params)
+        print("response", response)
+        data = response.json()
+        print("data", data)
+
+        if data["status"] == "OK":
+            location = data["results"][0]["geometry"]["location"]
+            latitude = location["lat"]
+            longitude = location["lng"]
+            return latitude, longitude
+        else:
+            print("Geocoding failed. Status:", data["status"])
+            return None, None
 
     def get(self,request):
         try:
@@ -37,10 +61,14 @@ class AdminLocationAPIList(APIView):
             print("Inside post AdminLocationAPIList ", request.data)
             name = request.data["name"]
             address = request.data["address"]
-            latitude = request.data["latitude"]
-            longitude = request.data["longitude"]
-            image = request.data["image"]
-            print("image", image)
+            latitude = request.data.get("latitude")
+            longitude = request.data.get("longitude")
+            print("latitude", latitude)
+            print("latitude", len(latitude))
+            print("longitude", longitude)
+            print("longitude", len(longitude))
+            # image = request.data["image"]
+            # print("image", image)
 
             try:
                 user_email = request.session.get('email')
@@ -63,29 +91,69 @@ class AdminLocationAPIList(APIView):
                 return JsonResponse(
                     {'message': 'Unauthorized', 'error': 'You do not have permission to access this resource'},
                     status=status.HTTP_403_FORBIDDEN)
+
+            if len(latitude) == 0 and len(longitude) == 0:
+                print("Lat and lng not there in request,so generate")
+                YOUR_API_KEY = config('YOUR_API_KEY')
+                base_url = "https://maps.googleapis.com/maps/api/geocode/json"
+                params = {
+                    "address": address,
+                    "key": YOUR_API_KEY
+                }
+                print("before request")
+                response = requests.get(base_url, params=params)
+                print("response", response)
+                data = response.json()
+                print("data", data)
+
+                if data["status"] == "OK":
+                    location = data["results"][0]["geometry"]["location"]
+                    latitude = location["lat"]
+                    longitude = location["lng"]
+
+                else:
+                    print("Geocoding failed. Status:", data["status"])
+                    return JsonResponse(
+                        {'message': 'Address not found', 'error': 'Address not found in geocode'},
+                        status=status.HTTP_409_CONFLICT
+                    )
+
+            print("latitude, longitude", type(latitude), type(longitude))
+            print("latitude, longitude", latitude,longitude)
             try:
                 already_exist = Location.objects.get(name=name, address=address, latitude=latitude, longitude=longitude)
                 print("already_exist", already_exist)
             except:
                 already_exist = None
 
+
             if already_exist:
+                print("already exist ,so 404")
                 return JsonResponse(
                     {'message': 'Data already exists', 'error': 'The provided data already exists'},
                     status=status.HTTP_409_CONFLICT
                 )
-            new_location = Location(name=name, address=address, latitude=latitude, longitude=longitude)
-            new_location.save()
-            print("Saved sucess")
+            try:
+                new_location = Location(name=name, address=address, latitude=latitude, longitude=longitude)
+                new_location.save()
+                print("Saved sucess")
+            except:
+                return JsonResponse(
+                    {'message': 'Location name already exists,try different', 'error': 'Location name already exists,try different'},
+                    status=status.HTTP_409_CONFLICT
+                )
             # Return a success response
             response_data = {'message': 'Request processed successfully'}
+            print("response_data", response_data)
             return JsonResponse(response_data, status=status.HTTP_201_CREATED)
 
         except CustomUser.DoesNotExist:
+            print("cust not present")
             return JsonResponse(
                 {'message': 'User not found', 'error': 'User with the provided email does not exist'},
                 status=404)
         except Exception as e:
+            print("In exception", e)
             return Response(
                 {'message': 'An error occurred', 'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
