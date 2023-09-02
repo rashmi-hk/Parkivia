@@ -3,19 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a8cbf2ee-2300-41e3-bd54-eeeffd54947e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/admin_add_location.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/admin_add_location.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/single_slot_detail.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/single_slot_detail.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/slot_booking.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/slot_booking.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_edit_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_edit_location.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_booked_slot_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_booked_slot_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_get_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_get_location.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_select_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_select_location.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/booked_slot_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/booked_slot_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/demo.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/demo.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/slot_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/slot_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/staff_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/staff_index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/staff_location.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/staff_location.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/user_slot_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/user_slot_detail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
