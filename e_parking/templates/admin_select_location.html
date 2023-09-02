@@ -58,7 +58,9 @@
      .hide-button {
             display: none;
         }
-
+      .day-list{
+      display:flex;
+      }
         .footer {
             background-color: black;
             color: white;
@@ -176,7 +178,7 @@
         </div>
 </div>
 <div class="location-button pt-5 pb-5" style="position:relative">
-    <div class="card text-center" style="width: 300px; margin: auto;">
+    <div class="card text-center" style="width: 500px; margin: auto;">
         <div class="card-body">
             <h2 class="card-title">Add Location Details</h2>
             <form id="locationForm">
@@ -196,10 +198,69 @@
 
                     <input type="hidden" id="longitudeInput" class="form-control" placeholder="Longitude">
                 </div>
-<!--                <div class="mb-3">-->
-<!--                    <label for="imageInput" class="form-label">Location Picture:</label>-->
-<!--                    <input type="file" id="imageInput" class="form-control" accept="image/*">-->
-<!--                </div>-->
+
+                <div class="mb-3">
+                    <input type="radio" id="twentyFourHours" name="timeOption" class="form-check-input" value="24">
+                    <label for="twentyFourHours" class="form-check-label">24 Hours</label>
+                </div>
+                <div class="mb-3">
+                    <input type="radio" id="selectTime" name="timeOption" class="form-check-input" value="select">
+                    <label for="selectTime" class="form-check-label">Select Time</label>
+                </div>
+
+                <!-- Add the "Select Time" button initially hidden -->
+                <button type="button" class="btn btn-primary hide-button" id="selectTimeBtn">Select Time</button>
+
+             <div class="mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Open Time</th>
+                        <th>Closing Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td><input type="time" id="mondayOpenTime" name="mondayOpenTime" class="form-control" placeholder="Opening Time"></td>
+                        <td><input type="time" id="mondayCloseTime" name="mondayCloseTime" class="form-control" placeholder="Closing Time"></td>
+                    </tr>
+                    <tr>
+                        <td>Tuesday</td>
+                        <td><input type="time" id="tuesdayOpenTime" name="tuesdayOpenTime" class="form-control" placeholder="Opening Time"></td>
+                        <td><input type="time" id="tuesdayCloseTime" name="tuesdayCloseTime" class="form-control" placeholder="Closing Time"></td>
+                    </tr>
+                     <tr>
+                        <td>Wednesday</td>
+                        <td><input type="time" id="wednesdayOpenTime" name="wednesdayOpenTime" class="form-control" placeholder="Opening Time"></td>
+                        <td><input type="time" id="wednesdayCloseTime" name="wednesdayCloseTime" class="form-control" placeholder="Closing Time"></td>
+                    </tr>
+                     <tr>
+                        <td>Thursday</td>
+                        <td><input type="time" id="thursdayOpenTime" name="thursdayOpenTime" class="form-control" placeholder="Opening Time"></td>
+                        <td><input type="time" id="thursdayCloseTime" name="thursdayCloseTime" class="form-control" placeholder="Closing Time"></td>
+                    </tr>
+                     <tr>
+                        <td>Friday</td>
+                        <td><input type="time" id="fridayOpenTime" name="fridayOpenTime" class="form-control" placeholder="Opening Time"></td>
+                        <td><input type="time" id="fridayCloseTime" name="fridayCloseTime" class="form-control" placeholder="Closing Time"></td>
+                    </tr>
+                     <tr>
+                        <td>Saturday</td>
+                        <td><input type="time" id="saturdayOpenTime" name="saturdayOpenTime" class="form-control" placeholder="Opening Time"></td>
+                        <td><input type="time" id="saturdayCloseTime" name="saturdayCloseTime" class="form-control" placeholder="Closing Time"></td>
+                    </tr>
+                     <tr>
+                        <td>Sunday</td>
+                        <td><input type="time" id="sundayOpenTime" name="sundayOpenTime" class="form-control" placeholder="Opening Time"></td>
+                        <td><input type="time" id="sundayCloseTime" name="sundayCloseTime" class="form-control" placeholder="Closing Time"></td>
+                    </tr>
+                    <!-- Repeat the structure for the remaining weekdays -->
+                </tbody>
+            </table>
+        </div>
+
 
             </form>
             <button type="submit" class="btn btn-success mt-2" onclick="submitForm()">Submit</button>
@@ -273,7 +334,37 @@
 
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
+ document.addEventListener("DOMContentLoaded", function () {
+    // ... Your existing code ...
 
+    const table = document.querySelector(".table");
+    const selectTimeRadio = document.getElementById("selectTime");
+    const twentyFourHoursRadio = document.getElementById("twentyFourHours"); // Add this line
+
+    // Initially hide the table
+    table.style.display = "none";
+
+    // Add an event listener to the "Select Time" radio button
+    selectTimeRadio.addEventListener("change", function () {
+        if (selectTimeRadio.checked) {
+            // Show the table when the "Select Time" radio button is checked
+            table.style.display = "table";
+        } else {
+            // Hide the table if the "Select Time" radio button is unchecked
+            table.style.display = "none";
+        }
+    });
+
+    // Add an event listener to the "24 Hours" radio button
+    twentyFourHoursRadio.addEventListener("change", function () {
+        if (twentyFourHoursRadio.checked) {
+            // Hide the table when the "24 Hours" radio button is checked
+            table.style.display = "none";
+        }
+    });
+});
+
+// Rest of your code...
 
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -295,24 +386,42 @@
 
 
         async function submitForm(e) {
-        //e.preventDefault()
-          //var imageInput = document.getElementById('imageInput');
 
-          //console.log("********************",imageInput)
 
-          //console.log("imageInput",imageInput)
-          //console.log("imageInput filed",imageInput.files)
-         //var imageFile = imageInput.files[0]; // Get the selected image file
-        //console.log("imageFile",imageFile)
 
         var name = document.getElementById('nameInput').value;
+         if (!name) {
+        alert('Please enter a Name.');
+        return;
+        }
         console.log("---name",name)
         var address = document.getElementById('addressInput').value;
         console.log("---address",address)
+
+        if (!address) {
+            alert('Please enter an Address.');
+            return;
+        }
         var latitude = document.getElementById('latitudeInput').value;
         console.log("---latitude",latitude)
         var longitude = document.getElementById('longitudeInput').value;
         console.log("---longitude",longitude)
+        var twentyFourHoursRadio = document.getElementById("twentyFourHours");
+        var twentyFourHoursRadio = twentyFourHoursRadio.checked
+        var mondayOpenTime = document.getElementById('mondayOpenTime').value;
+        var mondayCloseTime = document.getElementById('mondayCloseTime').value;
+        var tuesdayOpenTime = document.getElementById('tuesdayOpenTime').value;
+        var tuesdayCloseTime = document.getElementById('tuesdayCloseTime').value;
+        var wednesdayOpenTime = document.getElementById('wednesdayOpenTime').value;
+        var wednesdayCloseTime = document.getElementById('wednesdayCloseTime').value;
+        var thursdayOpenTime = document.getElementById('thursdayOpenTime').value;
+        var thursdayCloseTime = document.getElementById('thursdayCloseTime').value;
+        var fridayOpenTime = document.getElementById('fridayOpenTime').value;
+        var fridayCloseTime = document.getElementById('fridayCloseTime').value;
+        var saturdayOpenTime = document.getElementById('saturdayOpenTime').value;
+        var saturdayCloseTime = document.getElementById('saturdayCloseTime').value;
+        var sundayOpenTime = document.getElementById('sundayOpenTime').value;
+        var sundayCloseTime = document.getElementById('sundayCloseTime').value;
 
          if (!latitude || !longitude) {
 
@@ -325,6 +434,23 @@
         formData.append('address', address);
         formData.append('latitude', latitude);
         formData.append('longitude', longitude);
+        formData.append('mondayOpenTime', mondayOpenTime);
+        formData.append('mondayCloseTime', mondayCloseTime);
+        formData.append('tuesdayOpenTime', tuesdayOpenTime);
+        formData.append('tuesdayCloseTime', tuesdayCloseTime);
+        formData.append('wednesdayOpenTime', wednesdayOpenTime);
+        formData.append('wednesdayCloseTime', wednesdayCloseTime);
+        formData.append('thursdayOpenTime', thursdayOpenTime);
+        formData.append('thursdayCloseTime', thursdayCloseTime);
+        formData.append('fridayOpenTime', fridayOpenTime);
+        formData.append('fridayCloseTime', fridayCloseTime);
+        formData.append('saturdayOpenTime', saturdayOpenTime);
+        formData.append('saturdayCloseTime', saturdayCloseTime);
+        formData.append('sundayCloseTime', sundayCloseTime);
+        formData.append('sundayOpenTime', sundayOpenTime);
+
+
+        formData.append('twentyFourHoursRadio', twentyFourHoursRadio);
 
         try{
         let response =  await fetch('/admin_add_location', {

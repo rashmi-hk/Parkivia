@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import CustomUser,Location
+from ...models import CustomUser,Location,OpeningHours
 from django.core.mail import send_mail,EmailMultiAlternatives
 from decouple import config
 from django.utils.crypto import get_random_string
@@ -13,6 +13,8 @@ from django.http import HttpResponseBadRequest
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 import requests
+import calendar
+from datetime import datetime
 
 class AdminLocationAPIList(APIView):
 
@@ -142,6 +144,29 @@ class AdminLocationAPIList(APIView):
                     {'message': 'Location name already exists,try different', 'error': 'Location name already exists,try different'},
                     status=status.HTTP_409_CONFLICT
                 )
+
+            for day, day_name in OpeningHours.DAYS_OF_WEEK:
+                print("inside")
+                open_time = request.POST.get(f'{day_name.lower()}OpenTime')
+                close_time = request.POST.get(f'{day_name.lower()}CloseTime')
+                print("open_time", day_name,open_time)
+                print("close_time", day_name, close_time)
+
+                if open_time == "":
+                    open_time = '00:00'
+                if close_time == "":
+                    close_time = '23:59'
+
+                print("open_time",day_name , open_time)
+                print("close_time", day_name , close_time)
+                opening_hours = OpeningHours(
+                    location=new_location,
+                    day_of_week=day,
+                    opening_time=open_time,
+                    closing_time=close_time
+                )
+                opening_hours.save()
+
             # Return a success response
             response_data = {'message': 'Request processed successfully'}
             print("response_data", response_data)
@@ -202,16 +227,36 @@ class AdminEditLocationAPIList(APIView):
             longitude = request.GET.get('longitude')
             location_id = request.GET.get('location_id')
 
+
+            opening_hours_list = []
+            loc_obj = Location.objects.get(id=location_id)
+            opening_hours  = OpeningHours.objects.filter(location=loc_obj)
+            for hours in opening_hours:
+                print("hours", hours)
+                opening_time_str = hours.opening_time.strftime('%H:%M')
+                print("opening_time_str", opening_time_str)
+
+                closing_time_str = hours.closing_time.strftime('%H:%M')
+                print("closing_time_str", closing_time_str)
+
+                day_of_week = hours.day_of_week
+                opening_hours_list.append({
+                    'day_of_week': calendar.day_name[day_of_week] ,
+                    'opening_time': opening_time_str,
+                    'closing_time': closing_time_str,
+                })
+
+
             context = {
                 "location_id": location_id,
                 "name": name,
                 "address": address,
                 "latitude": latitude,
-                "longitude": longitude
+                "longitude": longitude,
+                "opening_hours":opening_hours_list
             }
 
-
-
+            print("context", context)
 
             return render(request, 'admin_edit_location.html', context)
         except TemplateDoesNotExist:
@@ -219,6 +264,21 @@ class AdminEditLocationAPIList(APIView):
                 {'message': 'Template not found',
                  'error': 'The template admin_edit_location.html does not exist'},
                 status=404)
+
+    def get_day_index(self,day_name):
+        DAYS_OF_WEEK = (
+            (0, 'Monday'),
+            (1, 'Tuesday'),
+            (2, 'Wednesday'),
+            (3, 'Thursday'),
+            (4, 'Friday'),
+            (5, 'Saturday'),
+            (6, 'Sunday'),
+        )
+        for index, name in DAYS_OF_WEEK:
+            if name == day_name:
+                return index
+        return None
 
     def patch(self, request):
 
@@ -231,6 +291,11 @@ class AdminEditLocationAPIList(APIView):
             latitude = request.data["latitude"]
             longitude = request.data["longitude"]
             location_id = request.data["location_id"]
+            opening_times = request.POST.getlist('OpenTime')
+            print("opening_times", opening_times)
+
+            closing_times = request.POST.getlist('CloseTime')
+            print("closing_times", closing_times)
 
             loc_obj = Location.objects.get(id=location_id)
             loc_obj.name = name
@@ -238,6 +303,20 @@ class AdminEditLocationAPIList(APIView):
             loc_obj.address = address
             loc_obj.longitude = longitude
             loc_obj.save()
+            print("Location saved")
+            for day_index, opening_time, closing_time in zip(
+                    [self.get_day_index('Monday'), self.get_day_index('Tuesday'), self.get_day_index('Wednesday'),
+                     self.get_day_index('Thursday'), self.get_day_index('Friday'), self.get_day_index('Saturday'),
+                     self.get_day_index('Sunday')], opening_times, closing_times):
+                print("day_index, opening_time, closing_time", day_index, opening_time, closing_time)
+
+                opening_hours, created = OpeningHours.objects.get_or_create(location=loc_obj, day_of_week=day_index)
+                opening_hours.opening_time = opening_time
+                opening_hours.closing_time = closing_time
+                opening_hours.save()
+                print("One save")
+
+
 
             print("Saved sucess")
             return JsonResponse({'message': 'location updated successfully'}, status=status.HTTP_201_CREATED)

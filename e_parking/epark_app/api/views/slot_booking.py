@@ -31,7 +31,13 @@ class SlotBookingAPIList(APIView):
             print("user_email",user_email)
             user = CustomUser.objects.get(email=user_email)
 
-            all_booked_obj = SlotBooking.objects.all()
+            user_location = user.parking_lot_location
+
+
+            # all_booked_obj = SlotBooking.objects.filter(slot__parking_lot_location=user_location)
+            all_booked_obj = SlotBooking.objects.filter(
+                slot__location=user_location
+            )
 
 
             resulting_list = []
@@ -69,12 +75,12 @@ class SlotBookingAPIList(APIView):
             context = {'slot_detail': resulting_list,
                        }
             print("context", context)
-            if user.is_superuser:
-                print("User is admin")
-                return render(request, 'admin_booked_slot_detail.html',context)
-            else:
-                print("user is staff")
-                return render(request, 'booked_slot_detail.html',context)
+            # if user.is_superuser:
+            #     print("User is admin")
+            #     return render(request, 'admin_booked_slot_detail.html',context)
+            # else:
+            print("user is staff")
+            return render(request, 'booked_slot_detail.html',context)
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},

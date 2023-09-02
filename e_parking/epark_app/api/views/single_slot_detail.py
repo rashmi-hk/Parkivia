@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Count, Sum, F, Q
-from ...models import CustomUser,SlotDetail, SlotDetailVariant
+from ...models import CustomUser,SlotDetail, SlotDetailVariant, OpeningHours
 from datetime import timedelta
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -46,6 +46,21 @@ class SingleSlotAPIList(APIView):
             lng = request.GET.get('user_lng')
             location_id = request.GET.get('location_id')
 
+            opn_obj = OpeningHours.objects.filter(location=location_id)
+            print("opn_obj", opn_obj)
+
+            opn_list = []
+            for hours in opn_obj:
+                print("Day of the week:", hours.get_day_of_week_display())
+                print("Opening time:", hours.opening_time)
+                print("Closing time:", hours.closing_time)
+                opn_dict = { "day":hours.get_day_of_week_display(),
+                             "opening_time":hours.opening_time,
+                           "closing_time":hours.closing_time
+                         }
+                opn_list.append(opn_dict)
+
+
             slot_detail_obj = SlotDetail.objects.filter(location=location_id)
             print("slot_detail_obj", slot_detail_obj)
 
@@ -82,13 +97,15 @@ class SingleSlotAPIList(APIView):
                     "variant_dict": variant_list,
 
                     "location": data.location,  # Include location
+
                 }
                 for slot_name, variant_list in grouped_data.items()
             ]
 
             context = {'slot_detail': resulting_list,
                        'current_lat': current_lat,
-                       'current_lng': current_lng
+                       'current_lng': current_lng,
+                       "opening_data": opn_list,
                        }
             print("context", context)
             return render(request, 'user_slot_detail.html', context)

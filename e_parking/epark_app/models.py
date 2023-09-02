@@ -16,12 +16,34 @@ class Location(models.Model):
     address = models.CharField(max_length=255)
     image =  CloudinaryField(blank=True)
     opening_hours = models.CharField(max_length=100, default=0)
+    closing_hours = models.CharField(max_length=100, default=0)
 
     def __str__(self):
         return self.name
 
     class Meta:
         db_table = 'location'
+
+
+class OpeningHours(models.Model):
+    DAYS_OF_WEEK = (
+        (0, 'Monday'),
+        (1, 'Tuesday'),
+        (2, 'Wednesday'),
+        (3, 'Thursday'),
+        (4, 'Friday'),
+        (5, 'Saturday'),
+        (6, 'Sunday'),
+    )
+
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    day_of_week = models.IntegerField(choices=DAYS_OF_WEEK)
+    opening_time = models.TimeField()
+    closing_time = models.TimeField()
+
+    class Meta:
+        unique_together = ('location', 'day_of_week')
+        db_table = 'openinghours'
 
 class CustomUser(AbstractUser, PermissionsMixin):
     VEHICLE_CHOICES = [

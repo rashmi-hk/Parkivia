@@ -53,6 +53,27 @@
 <div class="container mt-5">
     <h2 class="text-center">Slot Detail List</h2>
         <h5 class="text-center"> Location: {{ slot_detail.0.location }}</h5>
+        <div class="text-center opening-closing-info">
+            <table class="table table-success mx-auto" style="width: 30%;">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Opening Time</th>
+                        <th>Closing Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for opening_data_entry in opening_data %}
+                        <tr>
+                            <td>{{ opening_data_entry.day }}</td>
+                            <td>{{ opening_data_entry.opening_time|time:"H:i" }}</td>
+                            <td>{{ opening_data_entry.closing_time|time:"H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     <div class="row justify-content-center">
         {% for slot_data in slot_detail %}
             <div class="col-md-4 mb-4">

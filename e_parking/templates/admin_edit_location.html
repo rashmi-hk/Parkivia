@@ -36,36 +36,58 @@
                     <label for="address" class="form-label">Address</label>
                     <textarea class="form-control" id="address" name="address" rows="3">{{ address }}</textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" onclick="submitForm()">Update</button>
+                <!-- Add this code block inside the form -->
+{% for closing_time in opening_hours %}
+
+
+    <div class="row mb-2">
+        <div class="col-2">
+            <label for="{{ day|lower }}-open" class="form-label">{{ closing_time.day_of_week }}</label>
+        </div>
+        <div class="col-5">
+            <input type="time" class="form-control" id="{{ day|lower }}-open" name="{{ day|lower }}OpenTime" value="{{ closing_time.opening_time }}">
+        </div>
+        <div class="col-5">
+            <input type="time" class="form-control" id="{{ day|lower }}-close" name="{{ day|lower }}CloseTime" value="{{ closing_time.closing_time }}">
+        </div>
+    </div>
+{% endfor %}
+
+
+
             </form>
+            <button type="submit" class="btn btn-primary" onclick="submitForm()">Update</button>
         </div>
     </div>
 </div>
 <script>
-    function submitForm() {
-        const editForm = document.getElementById("edit-location-form");
 
-        // Fetch method to submit form data
-        fetch("{% url 'admin_edit_location' %}", {
+  async function submitForm(e) {
+
+
+    const editForm = document.getElementById("edit-location-form");
+    const csrfToken = "{{ csrf_token }}"; // Replace with your actual CSRF token
+
+    try {
+        const response = await fetch("{% url 'admin_edit_location' %}", {
             method: "PATCH",
             body: new FormData(editForm),
             headers: {
-                "X-CSRFToken": "{{ csrf_token }}"
+                "X-CSRFToken": csrfToken
             }
-        })
-        .then(response => {
-                if (response.ok) {
-                    console.log("Ok");
-                    window.location.reload()
-                     window.location.reload()
-                     window.location.href = "{% url 'admin_get_location' %}";
-                } else {
-                    console.error('Error editing data to Location:', response.statusText);
-                }
-            })
-        .catch(error => {
-            console.error("Error:", error);
         });
+
+        if (response.ok) {
+            console.log("Ok");
+            window.location.reload();
+            window.location.reload();
+            window.location.href = "{% url 'admin_get_location' %}";
+        } else {
+            console.error('Error editing data to Location:', response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
     }
+}
 </script>
 {% endblock %}
