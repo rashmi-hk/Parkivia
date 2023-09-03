@@ -106,10 +106,12 @@ margin:0 auto;
   <div class="container-fluid">
 <!--    <a class="navbar-brand" href="#">Navbar</a>-->
       <span class="navbar-brand "  href="#"><img  src="/static/images/LOGO_PARKING.webp" class="" height="50" width="150" alt="..."></span>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <p class="nav-link text-dark m-0 d-sm-block d-md-none d-block-none">Hello <span id="username">{{ user.username }}</span> </p>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item px-3">
             <a class="nav-link active nav-data" aria-current="page" href="{% url 'staff_home' %}">Home</a>
@@ -125,7 +127,9 @@ margin:0 auto;
         </li>
       </ul>
 <div class="d-md-flex gap-2">
-<div><p class="nav-link text-dark m-0">Hello <span id=username>{{ user.username }}</span> </p></div>
+ <li class="nav-item px-3 d-none d-sm-block">
+                    <p class="nav-link text-dark m-0">Hello <span id="user">{{ user.username }}</span></p>
+                </li>
   <div>   <a class="nav-link nav-data" href="{% url 'staff_logout' %}">Logout</a></div>
 
         </div>
@@ -197,7 +201,7 @@ margin:0 auto;
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+   document.addEventListener("DOMContentLoaded", function () {
   console.log("Inside username")
   // Perform an AJAX request to your Django URL endpoint
   fetch("{% url 'admin_identity' %}")
@@ -205,10 +209,17 @@ margin:0 auto;
     .then(data => {
       // Assuming your response contains a "username" field
       const username = data.username;
-      // Now you can use the username as needed, e.g., update a DOM element
+
+      // Update the first element with id "username"
       const usernameElement = document.getElementById("username");
       if (usernameElement) {
         usernameElement.textContent = username;
+      }
+
+      // Update the second element with id "user"
+      const userElement = document.getElementById("user");
+      if (userElement) {
+        userElement.textContent = username;
       }
     })
     .catch(error => console.error("Error fetching username:", error));

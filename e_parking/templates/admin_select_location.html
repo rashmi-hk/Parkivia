@@ -87,6 +87,16 @@
         max-width: 100%;
     }
 }
+@media (max-width: 992px) {
+  .navbar-nav {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .navbar-nav .nav-item {
+    padding: 1rem 0;
+  }
+}
 
     </style>
 </head>
@@ -388,7 +398,24 @@
 // Rest of your code...
 
 
-  document.addEventListener("DOMContentLoaded", function () {
+<!--  document.addEventListener("DOMContentLoaded", function () {-->
+<!--  console.log("Inside username")-->
+<!--  // Perform an AJAX request to your Django URL endpoint-->
+<!--  fetch("{% url 'admin_identity' %}")-->
+<!--    .then(response => response.json())-->
+<!--    .then(data => {-->
+<!--      // Assuming your response contains a "username" field-->
+<!--      const username = data.username;-->
+<!--      // Now you can use the username as needed, e.g., update a DOM element-->
+<!--      const usernameElement = document.getElementById("username");-->
+<!--      if (usernameElement) {-->
+<!--        usernameElement.textContent = username;-->
+<!--      }-->
+<!--    })-->
+<!--    .catch(error => console.error("Error fetching username:", error));-->
+<!--});-->
+
+document.addEventListener("DOMContentLoaded", function () {
   console.log("Inside username")
   // Perform an AJAX request to your Django URL endpoint
   fetch("{% url 'admin_identity' %}")
@@ -396,10 +423,17 @@
     .then(data => {
       // Assuming your response contains a "username" field
       const username = data.username;
-      // Now you can use the username as needed, e.g., update a DOM element
+
+      // Update the first element with id "username"
       const usernameElement = document.getElementById("username");
       if (usernameElement) {
         usernameElement.textContent = username;
+      }
+
+      // Update the second element with id "user"
+      const userElement = document.getElementById("user");
+      if (userElement) {
+        userElement.textContent = username;
       }
     })
     .catch(error => console.error("Error fetching username:", error));

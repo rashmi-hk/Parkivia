@@ -66,7 +66,11 @@ margin-top: 30px;
       color: white;
       background-color: green;
     }
-
+@media screen and (max-width: 320px) {
+    .img-cls {
+        padding: 50px; /* Adjust the padding value as needed */
+    }
+}
     </style>
     <title>Title</title>
 
@@ -86,7 +90,9 @@ margin-top: 30px;
 
 {% block content %}
  <div style="position: relative; display:block;">
+     <div class="img-cls">
         <img src='/static/images/strip_prking1.jpg' class="img-fluid" alt="...">
+     </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
