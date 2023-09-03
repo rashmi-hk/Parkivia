@@ -23,6 +23,10 @@ class AdminGetSlotDetailAPIList(APIView):
         def get(self, request):
             try:
                 print("Inside get AdminGetSlotDetailAPIList", request)
+                user_email = request.session.get('email')
+                print("user_email", user_email)
+                user = CustomUser.objects.get(email=user_email)
+
                 location  = request.GET.get('location_id')
                 print("location", location)
                 location_obj = Location.objects.get(id=location)
@@ -63,12 +67,20 @@ class AdminGetSlotDetailAPIList(APIView):
                     {'message': 'Template not found',
                      'error': 'The template admin_get_slot_detail.html does not exist'},
                     status=404)
+            except CustomUser.DoesNotExist:
+                return JsonResponse(
+                    {'message': 'User not found', 'error': 'User not found'},
+                    status=404)
+
 
         def patch(self, request):
 
             try:
                 print(" PATCH admin slot detail request", request)
                 print(" patch admin slot detail  request", request.data)
+                user_email = request.session.get('email')
+                print("user_email", user_email)
+                user = CustomUser.objects.get(email=user_email)
 
                 slot_detail_id = request.data["slot_detail_id"]
                 name = request.data["name"]
@@ -108,7 +120,8 @@ class AdminGetSlotDetailAPIList(APIView):
 
                     var_slot_data_id = var_data["var_slot_id"]
                     try:
-
+                        print("var_slot_data_id", var_slot_data_id)
+                        print("var_slot_data_id length ", len(var_slot_data_id))
                         if var_slot_data_id:
 
                             exist_data_slot = SlotDetailVariant.objects.get(
@@ -127,7 +140,11 @@ class AdminGetSlotDetailAPIList(APIView):
                             print("This SlotDetailVariant data already present no need to edit")
                         else:
                             # Create new SlotDetailVariant
+                            print("id not exist")
                             if vehicle_type != '':
+                                print("available_slots", available_slots)
+                                if len(available_slots)==0:
+                                    available_slots = 0
                                 new_variant_obj = SlotDetailVariant.objects.create(
                                     slot=slot_obj,
                                     capacity=capacity,
@@ -143,6 +160,7 @@ class AdminGetSlotDetailAPIList(APIView):
 
 
                     except:
+
                         print("SlotDetailVariant Editing is done")
                         slot_var_obj = SlotDetailVariant.objects.get(id=var_slot_data_id)
                         slot_var_obj.capacity = capacity
@@ -171,6 +189,9 @@ class AdminEditSlotDetailAPIList(APIView):
     def get(self, request):
         try:
             print("Inside get AdminEditSlotDetailAPIList", request)
+            user_email = request.session.get('email')
+            print("user_email", user_email)
+            user = CustomUser.objects.get(email=user_email)
 
 
             slot_detail_id = request.GET.get('slot_id')
@@ -234,6 +255,10 @@ class AdminEditSlotDetailAPIList(APIView):
                 {'message': 'Template not found',
                  'error': 'The template admin_edit_location.html does not exist'},
                 status=404)
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
+                status=404)
 
 
 
@@ -242,6 +267,7 @@ class AdminEditSlotDetailAPIList(APIView):
 
         print("inside delete slotvariant item", request.data)
         print("inside delete slotdetail ", request)
+
 
         variant_id =  request.data.get('variant_id')
         print("variant_id", variant_id)
@@ -280,12 +306,20 @@ class AdminEditSlotDetailAPIList(APIView):
 
         except SlotDetail.DoesNotExist:
             return HttpResponseBadRequest("SlotDetail not found.")
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
+                status=404)
 
 class AddSlotDetailAPIList(APIView):
 
     def get(self, request):
         try:
             print("Inside get AddSlotDetailAPIList", request)
+            user_email = request.session.get('email')
+            print("user_email", user_email)
+            user = CustomUser.objects.get(email=user_email)
+
             location_id = request.GET.get("location_id")
             all_location = Location.objects.filter(id=location_id)
             context = {}
@@ -309,10 +343,22 @@ class AddSlotDetailAPIList(APIView):
                 {'message': 'Template not found',
                  'error': 'The template admin_edit_location.html does not exist'},
                 status=404)
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
+                status=404)
 
     def post(self, request, format=None):
         print("Inside create ", request)
         print("Inside create ", request.data)
+        try:
+            user_email = request.session.get('email')
+            print("user_email", user_email)
+            user = CustomUser.objects.get(email=user_email)
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
+                status=404)
 
         name = request.data.get('name')
 

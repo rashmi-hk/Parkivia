@@ -47,6 +47,8 @@ class StaffLocationAPIList(APIView):
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template staff_location.html does not exist'},
                 status=404)
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'error': 'CustomUser not found'}, status=404)
 
 
 

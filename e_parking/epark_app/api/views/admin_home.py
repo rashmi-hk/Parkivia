@@ -20,13 +20,25 @@ class AdminHomeAPIList(APIView):
 
     def get(self,request):
         print("Inside admin get homeapi")
+        try:
+            user_email = request.session.get('email')
+            user = CustomUser.objects.get(email=user_email)
 
-        return render(request, 'admin_home.html')
+            return render(request, 'admin_home.html')
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
+                status=404)
 
 class AdminIdentity(APIView):
     def get(self, request):
-        print("Inside admin get AdminIdentity")
-        user_email = request.session.get('email')
-        user = CustomUser.objects.get(email=user_email)
+        try:
+            print("Inside admin get AdminIdentity")
+            user_email = request.session.get('email')
+            user = CustomUser.objects.get(email=user_email)
 
-        return JsonResponse({"username": user.username})
+            return JsonResponse({"username": user.username})
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
+                status=404)

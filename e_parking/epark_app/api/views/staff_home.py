@@ -22,6 +22,15 @@ LOGGER = logging.getLogger(__name__)
 class HomeAPIList(APIView):
 
     def get(self,request):
-        print("Inside get homeapi")
-        return render(request, 'staff_home.html')
-        # return render(request, 'demo.html')
+        try:
+
+            print("Inside get homeapi")
+            user_email = request.session.get('email')
+            user = CustomUser.objects.get(email=user_email)
+
+            return render(request, 'staff_home.html')
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+        except Exception as e:
+            print("Error:", e)
+            return render(request, 'staff_home.html', {'errors': str(e)})

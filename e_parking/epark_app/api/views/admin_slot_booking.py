@@ -80,5 +80,9 @@ class AdminSlotBookingAPIList(APIView):
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},
                 status=404)
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
+                status=404)
 
 

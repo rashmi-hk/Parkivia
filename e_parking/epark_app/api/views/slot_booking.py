@@ -85,6 +85,11 @@ class SlotBookingAPIList(APIView):
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},
                 status=404)
+        except CustomUser.DoesNotExist:
+            # If the user does not exist, you can handle it accordingly
+            # For example, you might want to return an error response
+            return JsonResponse({'message': 'User not found', 'error': 'User with the provided email does not exist'},
+                                status=404)
 
     def post(self, request):
         print("Inside slot_booking post", request)
@@ -203,6 +208,9 @@ class SlotBookingFormAPIList(APIView):
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},
                 status=404)
 
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'error': 'CustomUser not found'}, status=404)
+
 
 class SlotBookingEditAPIList(APIView):
 
@@ -251,6 +259,8 @@ class SlotBookingEditAPIList(APIView):
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template slot_booking.html does not exist'},
                 status=404)
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'error': 'CustomUser not found'}, status=404)
 
 
 

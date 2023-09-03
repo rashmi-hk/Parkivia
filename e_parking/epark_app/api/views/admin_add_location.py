@@ -44,12 +44,17 @@ class AdminLocationAPIList(APIView):
     def get(self,request):
         try:
             print("Inside get AdminLocationAPIList")
+            user_email = request.session.get('email')
+            user = CustomUser.objects.get(email=user_email)
+
             YOUR_API_KEY = config('YOUR_API_KEY')
             context = {
                 YOUR_API_KEY:YOUR_API_KEY
-
             }
             return render(request, 'admin_select_location.html', context)
+
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found', 'error': 'The template admin_select_location.html does not exist'},
@@ -191,26 +196,37 @@ class AdminGetLocationAPIList(APIView):
         def get(self, request):
             try:
                 print("Inside get AdminEditLocationAPIList")
-                loc_obj = Location.objects.all()
-                print("loc_obj", loc_obj)
-                resulting_list = []
-                for data in loc_obj:
-                    resulting_dict = {
-                        "location_id":data.id,
-                        "name": data.name,
-                        "address": data.address,
-                        "latitude": data.latitude,
-                        "longitude": data.longitude
+                user_email = request.session.get('email')
+                user = CustomUser.objects.get(email=user_email)
+                if user.is_superuser:
+                    loc_obj = Location.objects.all()
+                    print("loc_obj", loc_obj)
+                    resulting_list = []
+                    for data in loc_obj:
+                        resulting_dict = {
+                            "location_id":data.id,
+                            "name": data.name,
+                            "address": data.address,
+                            "latitude": data.latitude,
+                            "longitude": data.longitude
 
-                    }
-                    resulting_list.append(resulting_dict)
-                context = {"resulting_list" : resulting_list}
-                print("context", context)
-                return render(request, 'admin_get_location.html', context)
+                        }
+                        resulting_list.append(resulting_dict)
+                    context = {"resulting_list" : resulting_list}
+                    print("context", context)
+                    return render(request, 'admin_get_location.html', context)
+                else:
+                    return JsonResponse(
+                        {'message': 'User is not a admin', 'error': 'User is not a admin'},
+                        status=404)
             except TemplateDoesNotExist:
                 return JsonResponse(
                     {'message': 'Template not found',
                      'error': 'The template admin_get_location.html does not exist'},
+                    status=404)
+            except CustomUser.DoesNotExist:
+                return JsonResponse(
+                    {'message': 'User not found', 'error': 'User not found'},
                     status=404)
 
 
@@ -218,51 +234,65 @@ class AdminEditLocationAPIList(APIView):
 
     def get(self, request):
         try:
-            print("Inside get AdminEditLocationAPIList")
-            address = request.GET.get('address')
+            print("Inside get admin AdminEditLocationAPIList")
+            user_email = request.session.get('email')
+            print("user_email", user_email)
+            user = CustomUser.objects.get(email=user_email)
+            print("*********************************** super",user.is_superuser)
+            if user.is_superuser:
+                address = request.GET.get('address')
 
-            name = request.GET.get('name')
-            latitude = request.GET.get('latitude')
-            address = request.GET.get('address')
-            longitude = request.GET.get('longitude')
-            location_id = request.GET.get('location_id')
-
-
-            opening_hours_list = []
-            loc_obj = Location.objects.get(id=location_id)
-            opening_hours  = OpeningHours.objects.filter(location=loc_obj)
-            for hours in opening_hours:
-                print("hours", hours)
-                opening_time_str = hours.opening_time.strftime('%H:%M')
-                print("opening_time_str", opening_time_str)
-
-                closing_time_str = hours.closing_time.strftime('%H:%M')
-                print("closing_time_str", closing_time_str)
-
-                day_of_week = hours.day_of_week
-                opening_hours_list.append({
-                    'day_of_week': calendar.day_name[day_of_week] ,
-                    'opening_time': opening_time_str,
-                    'closing_time': closing_time_str,
-                })
+                name = request.GET.get('name')
+                latitude = request.GET.get('latitude')
+                address = request.GET.get('address')
+                longitude = request.GET.get('longitude')
+                location_id = request.GET.get('location_id')
 
 
-            context = {
-                "location_id": location_id,
-                "name": name,
-                "address": address,
-                "latitude": latitude,
-                "longitude": longitude,
-                "opening_hours":opening_hours_list
-            }
+                opening_hours_list = []
+                loc_obj = Location.objects.get(id=location_id)
+                opening_hours  = OpeningHours.objects.filter(location=loc_obj)
+                for hours in opening_hours:
+                    print("hours", hours)
+                    opening_time_str = hours.opening_time.strftime('%H:%M')
+                    print("opening_time_str", opening_time_str)
 
-            print("context", context)
+                    closing_time_str = hours.closing_time.strftime('%H:%M')
+                    print("closing_time_str", closing_time_str)
 
-            return render(request, 'admin_edit_location.html', context)
+                    day_of_week = hours.day_of_week
+                    opening_hours_list.append({
+                        'day_of_week': calendar.day_name[day_of_week] ,
+                        'opening_time': opening_time_str,
+                        'closing_time': closing_time_str,
+                    })
+
+
+                context = {
+                    "location_id": location_id,
+                    "name": name,
+                    "address": address,
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "opening_hours":opening_hours_list
+                }
+
+                print("context", context)
+
+                return render(request, 'admin_edit_location.html', context)
+            else:
+
+                return JsonResponse(
+                    {'message': 'User is not admin', 'error': 'User is not admin'},
+                    status=404)
         except TemplateDoesNotExist:
             return JsonResponse(
                 {'message': 'Template not found',
                  'error': 'The template admin_edit_location.html does not exist'},
+                status=404)
+        except CustomUser.DoesNotExist:
+            return JsonResponse(
+                {'message': 'User not found', 'error': 'User not found'},
                 status=404)
 
     def get_day_index(self,day_name):
