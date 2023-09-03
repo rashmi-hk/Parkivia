@@ -20,9 +20,9 @@
     .nav-section{background-color: white;
     width:100%;}
     .first-icon{display: flex;}
+
     .title_cls{
-      position: absolute;
-      top: 30%;
+margin-top: 30px;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
@@ -85,14 +85,19 @@
 <body>
 
 {% block content %}
-  <div style="position: relative; display:block;">
-    <img src='/static/images/strip_prking1.jpg' class="d-block w-30" style="height: 30%; width: 100%;" alt="...">
-    <div class="title_cls">
-        Parking Lot Staff Management Dashboard<br>
-        <div style="font-size: 14px;">Overview of parking lot metrics and revenue</div>
+ <div style="position: relative; display:block;">
+        <img src='/static/images/strip_prking1.jpg' class="img-fluid" alt="...">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title_cls">
+                        Parking Lot Staff Management Dashboard<br>
+                        <div style="font-size: 14px;">Overview of parking lot metrics and revenue</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-</div>
 
 
 

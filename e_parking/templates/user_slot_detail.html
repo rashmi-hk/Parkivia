@@ -51,7 +51,7 @@
 {% block content %}
 
 <div class="container mt-5">
-    <h2 class="text-center">Slot Detail List</h2>
+    <h2 class="text-center">User Slot Detail List</h2>
         <h5 class="text-center"> Location: {{ slot_detail.0.location }}</h5>
         <div class="text-center opening-closing-info">
             <table class="table table-success mx-auto" style="width: 30%;">
@@ -117,22 +117,20 @@
         {% endfor %}
 
 
-        {% for slot_data in slot_detail %}
-        {% for variant in slot_data.variant_dict %}
+
     <!-- ... Other card content ... -->
             <div class="">
                  <div class="center-screen">
                     <div class="p-3 d-flex justify-content-center direction-serch" style="background-color: #e9ecef!important;">
 
 
-                        <a href="#" class="btn btn-primary mt-2" onclick="showDirection('{{ variant.latitude }}', '{{ variant.longitude }}', '{{ variant.vehicle_type }}','{{ current_lat }}','{{ current_lng }}')">Show Direction</a>
+                        <a href="#" class="btn btn-primary mt-2" onclick="showDirection('{{ slot_detail.0.variant_dict.0.latitude }}', '{{ slot_detail.0.variant_dict.0.longitude }}', '{{ variant.vehicle_type }}','{{ current_lat }}','{{ current_lng }}')">Show Direction</a>
 
 
                     </div>
                  </div>
             </div>
-        {% endfor %}
-        {% endfor %}
+
     </div>
 </div>
 
