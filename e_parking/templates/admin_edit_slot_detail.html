@@ -263,7 +263,7 @@ function addNewVariant() {
             const hourlyrate_12_hours = document.getElementById("variantHourlyRate12Hours" + varSlotId).value;
             const dailyrate = document.getElementById("variantDailyRate" + varSlotId).value;
 
-            
+
 
 
             data.push({
@@ -309,7 +309,9 @@ function addNewVariant() {
 
 
                 } else {
+                    alert('Please fill all required field')
                     throw new Error('Failed to edit slot detail'); // You can customize the error message
+                    alert('Please fill all required field')
                 }
             })
             .catch(error => {

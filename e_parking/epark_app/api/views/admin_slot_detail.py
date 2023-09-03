@@ -141,6 +141,20 @@ class AdminGetSlotDetailAPIList(APIView):
                         else:
                             # Create new SlotDetailVariant
                             print("id not exist")
+                            if (
+                                    len(capacity) == 0
+                                    or len(vehicle_type) == 0
+                                    or len(hourly_rate_1_hours) == 0
+                                    or len(hourly_rate_3_hours) == 0
+                                    or len(hourly_rate_6_hours) == 0
+                                    or len(hourly_rate_12_hours) == 0
+                                    or len(daily_rate) == 0
+                            ):
+                                return JsonResponse(
+                                    {"error": "Required fields are missing in the variant data"},
+                                    status=400,  # Bad Request
+                                )
+
                             if vehicle_type != '':
                                 print("available_slots", available_slots)
                                 if len(available_slots)==0:
