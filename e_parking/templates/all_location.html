@@ -119,7 +119,12 @@ height:100%;
     <title>Map with Fixed Locations</title>
 
 </head>
-<body onload="initMap()">
+<body>
+    <input id="location-search" type="text" placeholder="Enter an address">
+    <button onclick="searchLocation()">Search</button>
+
+
+
     <div id="map" style="width: 100%; height: 500px;"></div>
     <div class="hero-swipe">
 
@@ -286,123 +291,92 @@ height:100%;
 
         </div>
     </section>
-<!--        <section>-->
-<!--            <div class="container">-->
-<!--            <div class="hero-help-container" >-->
-<!--         <div class="row d-flex flex-direction-column flex-nowrap m-0 pt-5 pb-5">-->
-<!--             <div class="col-md-5 bg-color">-->
-<!--                 <div class="row m-0">-->
-<!--                 <div class="col-md-6">-->
-
-<!--                 </div>-->
-<!--                 <div class="col-md-6 p-5"> <h5>How ParkingRhino Helps?</h5>-->
-<!--                    <p class="para-cls">Smart Parking Platform provides a full-stack approach to solving for parking related problems in today's cities. Products based off its platform solves problems of parking lot operators & owners, urban motorists, corporates, city planners and administrators</p>-->
-<!--                 </div>-->
-
-<!--                </div>-->
-<!--             </div>-->
-<!--             <div class="col">-->
-<!--                <div class="row m-0">-->
-
-<!--                     <div class="col-md-4">-->
-<!--                         <div class="card card-info">-->
-<!--                              <img src="/static/images/parking_static.jpg" class="card-img-top" alt="...">-->
-<!--                              <div class="card-body">-->
-<!--                                <p class="card-text">-->
-<!--                                  <ul>-->
-<!--                                        <li>Increase Revenue</li>-->
-<!--                                        <li>More Business Traffic</li>-->
-<!--                                        <li>Optimize Employee Traffic</li>-->
-<!--                                    </ul>-->
-<!--                                  </p>-->
-<!--                              </div>-->
-<!--                         </div>-->
-<!--                     </div>-->
-<!--                      <div class="col-md-4">-->
-<!--                            <div class="card card-info">-->
-<!--                              <img src="/static/images/parking_nav.jpg" class="card-img-top" alt="...">-->
-<!--                              <div class="card-body">-->
-<!--                                <p class="card-text">-->
-<!--                                  <ul>-->
-<!--                                        <li>Find Nearby Parking</li>-->
-<!--                                        <li>Real Time Guidance</li>-->
-<!--                                        <li>No More Circling</li>-->
-<!--                                    </ul>-->
-<!--                                  </p>-->
-<!--                              </div>-->
-<!--                         </div>-->
-<!--                      </div>-->
-<!--                      <div class="col-md-4">-->
-<!--                           <div class="card card-info">-->
-<!--                              <img src="/static/images/parking_car.jpg" class="card-img-top" alt="...">-->
-<!--                              <div class="card-body">-->
-<!--                                <p class="card-text">-->
-<!--                                  <ul>-->
-<!--                                        <li>Improve Compliance</li>-->
-<!--                                        <li>Smart City Tracking</li>-->
-<!--                                        <li>Increase Turnover</li>-->
-<!--                                   </ul>-->
-<!--                                  </p>-->
-<!--                              </div>-->
-<!--                         </div>-->
-<!--                      </div>-->
-<!--                  </div>-->
-<!--                  </div>-->
-<!--         </div>-->
-
-<!--     <section id="news-container" class="pt-5 pb-5">-->
-<!--         <h4 class="hear-data">We've Got Coverage In</h4>-->
-<!--         <div class="news-container">-->
-<!--         <div class="row m-0">-->
-<!--         <div class="col-md-2">-->
-<!--           <div class="news-data">-->
-<!--                 <img src="/static/images/news1.png" class="img-fluid">-->
-<!--            </div>-->
-<!--         </div>-->
-<!--         <div class="col-md-2">-->
-<!--                <div class="news-data">-->
-<!--                     <img src="/static/images/news3.png" class="img-fluid">-->
-<!--                </div>-->
-<!--         </div>-->
-<!--         <div class="col-md-2">-->
-<!--            <div class="news-data">-->
-<!--                 <img src="/static/images/news4.png" class="img-fluid">-->
-<!--            </div>-->
-<!--         </div>-->
-<!--         <div class="col-md-2">-->
-<!--            <div class="news-data">-->
-<!--                 <img src="/static/images/news5.png" class="img-fluid">-->
-<!--            </div>-->
-<!--         </div>-->
-<!--          <div class="col-md-2">-->
-<!--                <div class="news-data">-->
-<!--                 <img src="/static/images/news6.png" class="img-fluid">-->
-<!--            </div>-->
-<!--         </div>-->
-<!--         <div class="col-md-2">-->
-<!--            <div class="news-data">-->
-<!--                 <img src="/static/images/news7.png" class="img-fluid">-->
-<!--            </div>-->
-<!--         </div>-->
-<!--             </div>-->
-<!--             </div>-->
-<!--     </section>-->
 
        <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwlaOn54SWFxclJZ7dBJ9sNFutLYcOwxA&libraries=places"></script>
 
 <script>
 
+// Function to get the user's location
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            // Initialize the map with the user's location
+            initMap(userLocation);
+        }, function(error) {
+            // Handle any errors that occur when trying to get the user's location
+            console.error('Error getting user location:', error);
+        });
+    } else {
+        alert('Geolocation is not supported by your browser.');
+    }
+}
+
+
+        function checkUserLocation() {
+            // Check if the user has visited before and shared location
+            const hasVisited = localStorage.getItem('visited');
+            const hasSharedLocation = localStorage.getItem('location_shared');
+
+            if (!hasVisited) {
+                // First-time visitor, show location sharing prompt
+                showLocationPrompt();
+                // Set a flag to indicate that the user has visited
+                localStorage.setItem('visited', 'true');
+            } else if (!hasSharedLocation) {
+                // Returning visitor who hasn't shared location, show prompt again
+                showLocationPrompt();
+            }
+        }
+
+
+        // Call the function to check user location on page load
+        window.onload = checkUserLocation;
+
+
+         function searchLocation() {
+        var input = document.getElementById('location-search');
+        var address = input.value;
+
+        // Use the Google Places API to geocode the address
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === 'OK' && results.length > 0) {
+                var location = results[0].geometry.location;
+                // Initialize the map with the selected location
+                initMap(location);
+            } else {
+                alert('Address not found');
+            }
+        });
+    }
+
+
+
 
 
 
             var fixedLocations = {{ fixed_locations|safe }};
             var infoWindow = new google.maps.InfoWindow(); // Create an InfoWindow instance
+            var map;
 
-            function initMap() {
+            function initMap(serchLocation) {
+                var input = document.getElementById('location-search');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+
+
                 var centerLocation = fixedLocations.find(function(location) {
                     return location.title === "Me";
                 });
+
+                if (serchLocation){
+                centerLocation = serchLocation
+                }
 
                 if (centerLocation) {
                     var mapOptions = {
@@ -497,11 +471,13 @@ height:100%;
             });
 
 
-
+        window.onload = function() {
+            initMap(); // Call initMap when the page loads
+            getUserLocation(); // Call getUserLocation when the page loads
+        };
 
     </script>
-<!--        </div>-->
-<!--        </section>-->
+
 </body>
 </html>
 {% endblock %}

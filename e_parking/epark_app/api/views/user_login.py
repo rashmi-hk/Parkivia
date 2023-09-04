@@ -35,6 +35,7 @@ class UserSignInAPIList(APIView):
             password_matched = check_password(password, customer.password)
             print("password_matched", password_matched)
 
+
             if not password_matched:
                 print("invalid")
 
@@ -48,7 +49,8 @@ class UserSignInAPIList(APIView):
                 request.session['customer_id'] = customer.id
                 request.session['email'] = email
 
-            return redirect('current_location')
+                return redirect('all_location')
+
         except CustomUser.DoesNotExist:
             # If the user does not exist, you can handle it accordingly
             # For example, you might want to return an error response

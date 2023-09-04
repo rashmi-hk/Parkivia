@@ -109,6 +109,10 @@ class AllLocationGeocoding(APIView):
             user_email = request.session.get('email')
 
             user = CustomUser.objects.get(email=user_email)
+            user.current_location = True
+            user.save()
+
+
 
             address = request.GET.get('address')
             print("address", address)

@@ -365,6 +365,8 @@
 
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
+
+
  document.addEventListener("DOMContentLoaded", function () {
     // ... Your existing code ...
 
@@ -573,23 +575,67 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-   function initMap() {
+<!--   function initMap() {-->
+<!--    initAutocomplete();-->
+
+<!--    var initialPosition = { lat: 15.3173, lng: 75.7139 };-->
+<!--    var mapOptions = {-->
+<!--        center: initialPosition,-->
+<!--        zoom: 7,-->
+<!--        mapTypeId: google.maps.MapTypeId.SATELLITE // Set map type to satellite-->
+<!--    };-->
+
+<!--    map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);-->
+
+<!--    marker = new google.maps.Marker({-->
+<!--        position: initialPosition,-->
+<!--        map: map,-->
+<!--        draggable: true-->
+<!--    });-->
+
+<!--    marker.addListener('dragend', function(event) {-->
+<!--        var position = marker.getPosition();-->
+<!--        var lat = position.lat();-->
+<!--        var lng = position.lng();-->
+
+<!--        document.getElementById('latitudeInput').value = lat;-->
+<!--        document.getElementById('longitudeInput').value = lng;-->
+
+<!--        reverseGeocode(lat, lng)-->
+<!--            .then(address => {-->
+<!--                document.getElementById('addressInput').value = address;-->
+<!--            });-->
+<!--    });-->
+<!--}-->
+
+<!--  window.onload = function () {-->
+<!--        initMap();-->
+
+<!--    };-->
+var map;
+var marker;
+var autocomplete;
+
+function initMap() {
+    // Initialize the map
     var initialPosition = { lat: 15.3173, lng: 75.7139 };
     var mapOptions = {
         center: initialPosition,
         zoom: 7,
-        mapTypeId: google.maps.MapTypeId.SATELLITE // Set map type to satellite
+        mapTypeId: google.maps.MapTypeId.SATELLITE
     };
 
     map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
 
+    // Initialize the marker
     marker = new google.maps.Marker({
         position: initialPosition,
         map: map,
         draggable: true
     });
 
-    marker.addListener('dragend', function(event) {
+    // Set up event listener for marker dragend
+    marker.addListener('dragend', function (event) {
         var position = marker.getPosition();
         var lat = position.lat();
         var lng = position.lng();
@@ -597,17 +643,41 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('latitudeInput').value = lat;
         document.getElementById('longitudeInput').value = lng;
 
-        reverseGeocode(lat, lng)
-            .then(address => {
-                document.getElementById('addressInput').value = address;
-            });
+        reverseGeocode(lat, lng).then(function (address) {
+            document.getElementById('addressInput').value = address;
+        });
+    });
+
+    // Initialize the autocomplete
+    var addressInput = document.getElementById('addressInput');
+    autocomplete = new google.maps.places.Autocomplete(addressInput);
+
+    // Add a listener for when the place changes in the autocomplete input
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+
+        if (!place.geometry) {
+            // Handle the case where the place details request failed or no result is found.
+            return;
+        }
+
+        // Update the map's center to the selected place
+        map.setCenter(place.geometry.location);
+
+        // Move the marker to the new location
+        marker.setPosition(place.geometry.location);
+
+        // Optionally, update the latitude and longitude input fields
+        document.getElementById('latitudeInput').value = place.geometry.location.lat();
+        document.getElementById('longitudeInput').value = place.geometry.location.lng();
     });
 }
 
-  window.onload = function () {
-        initMap();
+// Initialize the map when the page loads
+window.onload = function () {
+    initMap();
+};
 
-    };
 
 </script>
 </body>
