@@ -50,10 +50,20 @@
                       <label for="vehicle_number" class="form-label">Vehicle Number:</label>
                       <input type="text" id="vehicle_number" name="vehicle_number" class="form-control" value="{{ vehicle_number }}">
                   </div>
-                  <div class="mb-3">
-                      <label for="vehicle_type" class="form-label">Vehicle Type:</label>
-                      <input type="text" id="vehicle_type" name="vehicle_type" class="form-control" value="{{ vehicle_type }}">
-                  </div>
+                   <div class="mb-3">
+                        <label for="vehicle_type" class="form-label">Vehicle Type:</label>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="vehicleTypeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select Vehicle Type
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="vehicleTypeDropdown">
+                                {% for vehicle_type_option in unique_vehicle_types %}
+                                    <a class="dropdown-item" href="#" onclick="selectVehicleType('{{ vehicle_type_option }}')">{{ vehicle_type_option }}</a>
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" id="vehicle_type" name="vehicle_type" class="form-control" value="{{ vehicle_type }}">
+                        </div>
+                    </div>
 
                    <div class="mb-3" style="display: none;">
 
@@ -68,7 +78,17 @@
           </div>
       </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+         function selectVehicleType(vehicleType) {
+            document.getElementById('vehicle_type').value = vehicleType;
+            document.getElementById('vehicleTypeDropdown').textContent = vehicleType;
+        }
+
+        // Call the selectVehicleType function to initially set the selected vehicle type
+        selectVehicleType("{{ vehicle_type }}");
 
 
          function   edit_booking() {

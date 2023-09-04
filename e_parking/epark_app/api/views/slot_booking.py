@@ -111,10 +111,22 @@ class SlotBookingAPIList(APIView):
 
 
             print("User athenticated n superuser")
-            slot = request.data["slot"]
-            check_in_time = request.data["check_in_time"]
-            vehicle_number = request.data["vehicle_number"]
-            vehicle_type = request.data["vehicle_type"]
+            slot = request.data.get("slot")
+            print("slot", slot)
+            check_in_time = request.data.get("check_in_time")
+            print("check_in_time", check_in_time)
+            print("check_in_time", len(check_in_time))
+            vehicle_number = request.data.get("vehicle_number")
+            print("vehicle_number", vehicle_number)
+            vehicle_type = request.data.get("vehicle_type")
+            print("vehicle_type", vehicle_type)
+
+            if len(vehicle_number)== 0 and len(check_in_time)==0 :
+                print("no vehical n number")
+                return JsonResponse(
+                    {'message': 'Please provide vehicle_number and check_in_time', 'error': 'Please provide vehicle_number and check_in_time'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
             print("slot", slot)
 
             slot_detail_obj = SlotDetail.objects.filter(id=slot).first()
@@ -230,6 +242,8 @@ class SlotBookingEditAPIList(APIView):
             vehicle_number = request.GET.get('vehicle_number')
             vehicle_type = request.GET.get('vehicle_type')
             amount = request.GET.get('amount')
+            slot_detail_id = request.GET.get('slot_detail_id')
+
 
             booking_id = request.GET.get('booking_id')
 
@@ -238,6 +252,9 @@ class SlotBookingEditAPIList(APIView):
 
             check_in_date_time_obj = date_time_obj.strftime(format_string)
             print(date_time_obj)
+
+
+
 
             context = {
                'slot': slot,
@@ -249,11 +266,27 @@ class SlotBookingEditAPIList(APIView):
                 "booking_id": booking_id,
                 "current_datetime": datetime.now().strftime('%Y-%m-%dT%H:%M')
             }
+            slot_details = SlotDetail.objects.filter(id=slot_detail_id)
+            print("############### slot_variants ", slot_details)
+
+            unique_vehicle_types = set()
+
+            slot_detail_list = []
+            for slot_data in slot_details:
+                slot_variants = SlotDetailVariant.objects.filter(slot=slot_data)
+                slot_vehicle_types = slot_variants.values_list("vehicle_type", flat=True)
+                unique_vehicle_types.update(slot_vehicle_types)
+            context.update({"unique_vehicle_types": unique_vehicle_types})
+
+            print("context", context)
             if user.is_superuser:
                 print("super user")
                 return render(request, 'admin_booked_slot_edit.html', context)
             else:
                 print("Not super user")
+
+
+                print("context", context)
                 return render(request, 'booked_slot_edit.html', context)
         except TemplateDoesNotExist:
             return JsonResponse(

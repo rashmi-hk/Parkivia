@@ -67,17 +67,17 @@
 
                             <div class="form-group">
                                 <label for="check_in_time">Check-in Time:</label>
-                                <input type="datetime-local" id="check_in_time" name="check_in_time" class="form-control" min="{{ current_datetime }}">
+                                <input type="datetime-local" id="check_in_time" name="check_in_time" class="form-control" min="{{ current_datetime }}" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="check_out_time">Check-out Time:</label>
-                                <input type="datetime-local" id="check_out_time" name="check_out_time" class="form-control" min="{{ current_datetime }}">
+
+                                <input type="hidden" id="check_out_time" name="check_out_time" class="form-control" min="{{ current_datetime }}">
                             </div>
 
                             <div class="form-group">
                                 <label for="vehicle_number">Vehicle Number:</label>
-                                <input type="text" id="vehicle_number" name="vehicle_number" class="form-control">
+                                <input type="text" id="vehicle_number" name="vehicle_number" class="form-control" required>
                             </div>
 
                             <div class="form-group">
@@ -150,17 +150,25 @@
             },
             body: JSON.stringify(data)
         })
-        .then(response => {
-            console.log("response",response)
-            console.log("response",{{response}})
+       .then(response => {
+            console.log("response", response);
             if (response.ok) {
                 alert('Booking successful!');
                 window.location.reload();
-                window.location.href = "{% url 'slot_booking' %}"
-            } else {
+                window.location.href = "{% url 'slot_booking' %}";
+            }
+            else if (response.status == 400) {
+               console.log("response inside",response.status)
+
+               alert('Please fill in both Check-in Time and Vehicle Number.');
+
+
+            }
+            else {
                 alert('Booking failed. Please try again.');
             }
         })
+
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred while processing the booking.');

@@ -71,8 +71,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="check_out_time">Check-out Time:</label>
-                                <input type="datetime-local" id="check_out_time" name="check_out_time" class="form-control" min="{{ current_datetime }}">
+
+                                <input type="hidden" id="check_out_time" name="check_out_time" class="form-control" min="{{ current_datetime }}">
                             </div>
 
                             <div class="form-group">
@@ -160,6 +160,13 @@ updateVehicleTypes();
                 window.location.reload();
                  window.location.reload();
                 window.location.href = "{% url 'slot_booking' %}"
+            }
+             else if (response.status == 400) {
+               console.log("response inside",response.status)
+
+               alert('Please fill in both Check-in Time and Vehicle Number.');
+
+
             }
             else if (response.status === 404) {
                     alert('Slot not available. Please choose another slot.');
