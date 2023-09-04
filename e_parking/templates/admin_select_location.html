@@ -365,7 +365,64 @@
 
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
+  let initialSelectionMade = false;
+let initialSelectionClosingMade = false;
 
+const openTimeFields = [
+    document.getElementById('mondayOpenTime'),
+    document.getElementById('tuesdayOpenTime'),
+    document.getElementById('wednesdayOpenTime'),
+    document.getElementById('thursdayOpenTime'),
+    document.getElementById('fridayOpenTime'),
+    document.getElementById('saturdayOpenTime'),
+    document.getElementById('sundayOpenTime')
+];
+
+const closeTimeFields = [
+    document.getElementById('mondayCloseTime'),
+    document.getElementById('tuesdayCloseTime'),
+    document.getElementById('wednesdayCloseTime'),
+    document.getElementById('thursdayCloseTime'),
+    document.getElementById('fridayCloseTime'),
+    document.getElementById('saturdayCloseTime'),
+    document.getElementById('sundayCloseTime')
+];
+
+openTimeFields.forEach(openTimeField => {
+    openTimeField.addEventListener('change', function () {
+        // Check if the initial selection has been made
+        if (!initialSelectionMade) {
+            // Get the selected open time value
+            const selectedOpenTime = this.value;
+
+            // Set the same open time value for all days
+            openTimeFields.forEach(field => {
+                field.value = selectedOpenTime;
+            });
+
+            // Set the initial selection flag to true
+            initialSelectionMade = true;
+        }
+    });
+});
+
+closeTimeFields.forEach(closeTimeField => {
+    closeTimeField.addEventListener('change', function () {
+        // Check if the initial selection has been made
+        if (!initialSelectionClosingMade) {
+            // Get the selected close time value
+            const selectedCloseTime = this.value;
+
+            // Set the same close time value for all days
+            closeTimeFields.forEach(field => {
+                field.value = selectedCloseTime;
+            });
+
+            // Set the initial selection flag to true
+            initialSelectionClosingMade = true;
+        }
+    });
+});
 
  document.addEventListener("DOMContentLoaded", function () {
     // ... Your existing code ...
@@ -400,22 +457,7 @@
 // Rest of your code...
 
 
-<!--  document.addEventListener("DOMContentLoaded", function () {-->
-<!--  console.log("Inside username")-->
-<!--  // Perform an AJAX request to your Django URL endpoint-->
-<!--  fetch("{% url 'admin_identity' %}")-->
-<!--    .then(response => response.json())-->
-<!--    .then(data => {-->
-<!--      // Assuming your response contains a "username" field-->
-<!--      const username = data.username;-->
-<!--      // Now you can use the username as needed, e.g., update a DOM element-->
-<!--      const usernameElement = document.getElementById("username");-->
-<!--      if (usernameElement) {-->
-<!--        usernameElement.textContent = username;-->
-<!--      }-->
-<!--    })-->
-<!--    .catch(error => console.error("Error fetching username:", error));-->
-<!--});-->
+
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Inside username")
@@ -540,6 +582,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+
     function reverseGeocode(lat, lng) {
         var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
@@ -575,43 +618,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-<!--   function initMap() {-->
-<!--    initAutocomplete();-->
-
-<!--    var initialPosition = { lat: 15.3173, lng: 75.7139 };-->
-<!--    var mapOptions = {-->
-<!--        center: initialPosition,-->
-<!--        zoom: 7,-->
-<!--        mapTypeId: google.maps.MapTypeId.SATELLITE // Set map type to satellite-->
-<!--    };-->
-
-<!--    map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);-->
-
-<!--    marker = new google.maps.Marker({-->
-<!--        position: initialPosition,-->
-<!--        map: map,-->
-<!--        draggable: true-->
-<!--    });-->
-
-<!--    marker.addListener('dragend', function(event) {-->
-<!--        var position = marker.getPosition();-->
-<!--        var lat = position.lat();-->
-<!--        var lng = position.lng();-->
-
-<!--        document.getElementById('latitudeInput').value = lat;-->
-<!--        document.getElementById('longitudeInput').value = lng;-->
-
-<!--        reverseGeocode(lat, lng)-->
-<!--            .then(address => {-->
-<!--                document.getElementById('addressInput').value = address;-->
-<!--            });-->
-<!--    });-->
-<!--}-->
-
-<!--  window.onload = function () {-->
-<!--        initMap();-->
-
-<!--    };-->
 var map;
 var marker;
 var autocomplete;
