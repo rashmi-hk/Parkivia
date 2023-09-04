@@ -65,7 +65,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     is_logged_in = models.BooleanField(default=False)
     display_picture = CloudinaryField('Display Picture', null=True, blank=True)
     vehicle_type = models.CharField(max_length=20,choices=VEHICLE_CHOICES,default='2_wheeler')
-    parking_lot_location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
+    parking_lot_location = models.ForeignKey(Location, on_delete=models.PROTECT, null=True)
     objects = CustomUserManager()
 
     # Use 'phone_number' as the unique identifier for authentication
