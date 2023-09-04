@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body, html {
             min-height: 2000px;
@@ -70,6 +71,24 @@
         }
         .error-message {
             color: red;
+        }
+        @media screen and (max-width: 600px) {
+            header {
+                padding: 5px;
+            }
+
+            .main-body {
+                padding: 10px;
+            }
+
+            input[type="email"],
+            input[type="password"] {
+                width: 100%;
+            }
+
+            button[type="submit"] {
+                width: 100%;
+            }
         }
     </style>
        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
