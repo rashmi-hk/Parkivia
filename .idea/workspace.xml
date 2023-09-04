@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a8cbf2ee-2300-41e3-bd54-eeeffd54947e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/epark_app/api/views/admin_slot_detail.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/epark_app/api/views/admin_slot_detail.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_edit_slot_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_edit_slot_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/admin_sign_up.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/admin_sign_up.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/staff_home.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/staff_home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_parking/templates/staff_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/e_parking/templates/staff_login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
